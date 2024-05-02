@@ -12,11 +12,11 @@
 
 
 <script setup>
-import Hero from "../components/Hero.vue";
-import Footer from "../components/Footer.vue";
-import Section1 from "../components/Section1.vue";
-import Section2 from "../components/Section2.vue";
-import Section3 from "../components/Section3.vue";
+import Hero from "@/components/Hero.vue";
+import Footer from "@/components/Footer.vue";
+import Section1 from "@/components/Section1.vue";
+import Section2 from "@/components/Section2.vue";
+import Section3 from "@/components/Section3.vue";
 
 
 </script>

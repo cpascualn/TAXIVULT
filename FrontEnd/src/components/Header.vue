@@ -28,7 +28,7 @@
           >
         </div>
 
-        <div class="buttons" v-if="false">
+        <div class="buttons" v-if="$route.path === '/viaja'">
           <!-- CUANDO ESTE IMPLEMENTADO LOS USUARIOS, HACER QUE SI NO ESTA SE MUESTRA LO DE ABAJO-->
           <router-link to="/viajes" class="viajes">
             <img

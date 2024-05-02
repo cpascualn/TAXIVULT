@@ -1,7 +1,7 @@
 <script></script>
 
 <template>
-  <div class="div">
+  <section class="div">
     <div class="container1">
       <div class="separador--flex">
         <div class="container2">
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
@@ -69,7 +69,7 @@
 
 .container1 {
   display: flex;
-  width: 1257px;
+  width: 1222px;
   max-width: 100%;
   flex-direction: column;
   margin: 41px 0 14px;
