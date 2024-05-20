@@ -1,8 +1,14 @@
 <template>
   <div class="regForm">
-    <section class="register" v-if="!hasSeenCongrats">
-      <h2 class="register-title">{{ titulos[step - 1] }}</h2>
 
+    <router-link
+            to="/"
+            :class="{ 'nav__link active': $route.path === '/' }"
+            class="nav__link"
+          >
+            INICIO</router-link
+          >
+    <section class="register" v-if="!hasSeenCongrats">
       <div class="register-stepper">
         <div
           class="step"
@@ -30,40 +36,25 @@
         </div>
       </div>
 
+      <h2 class="register-title">{{ titulos[step - 1] }}</h2>
+
       <transition name="slide-fade">
         <section v-show="step === 1">
-          <form class="form" method="post" action="#" @submit.prevent="next">
-            <div class="form-group">
-              <input
-                id="loyaltyCivilityMr"
-                type="radio"
-                value="1"
-                v-model="customer.gender"
-              />
-              <label class="input-label" for="loyaltyCivilityMr">Mr.</label>
-
-              <input
-                id="loyaltyCivilityMrs"
-                type="radio"
-                value="2"
-                v-model="customer.gender"
-              />
-              <label class="input-label" for="loyaltyCivilityMrs">Mrs.</label>
-            </div>
-
+          <form class="form" method="post" @submit.prevent="next">
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.firstName"
-                autocomplete="customer.firstName"
-                placeholder="First name"
+                v-model="customer.email"
+                autocomplete="customer.email"
+                placeholder="Email"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                 required
               />
               <input
                 type="text"
-                v-model="customer.lastName"
-                autocomplete="customer.lastName"
-                placeholder="Last name"
+                v-model="customer.nombre"
+                autocomplete="customer.nombre"
+                placeholder="Nombre"
                 required
               />
             </div>
@@ -71,14 +62,51 @@
             <div class="form-group">
               <input
                 type="tel"
-                v-model="customer.phoneNumber"
-                autocomplete="customer.phoneNumber"
-                placeholder="Phone number"
+                v-model="customer.telefono"
+                autocomplete="customer.telefono"
+                placeholder="telefono"
                 minlength="9"
                 maxlength="10"
+                pattern="^\+?[0-9\s\-().]{7,15}$"
+                required
+              />
+              <input
+                type="text"
+                v-model="customer.apellidos"
+                autocomplete="customer.apellidos"
+                placeholder="Apellidos"
                 required
               />
             </div>
+
+            <div class="form-group">
+              <input
+                type="text"
+                v-model="customer.ciudad"
+                autocomplete="customer.ciudad"
+                placeholder="Ciudad"
+                required
+              />
+
+              <input
+                type="password"
+                v-model="customer.password"
+                autocomplete="customer.password"
+                placeholder="Contrasena"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <input
+                type="date"
+                v-model="customer.fechaNac"
+                placeholder="Birthday ('day'/'month'/'year')"
+                required
+              />
+            </div>
+
             <div
               class="cta"
               data-style="see-through"
@@ -87,7 +115,7 @@
             >
               <p class="cta-color">
                 <span class="link_wrap">
-                  <input type="submit" value="Next" class="link_text" />
+                  <input type="submit" value="" class="link_text" />
                   <span class="arrow-next"></span>
                 </span>
               </p>
@@ -101,27 +129,36 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.address"
-                autocomplete="customer.address"
-                placeholder="Address"
+                v-model="customer.cardNumber"
+                autocomplete="customer.cardNumber"
+                placeholder="numero tarjeta"
+                pattern="^\d{4}(?:\s?\d{4}){3}$"
+                required
+              />
+              <input
+                type="text"
+                v-model="customer.cardName"
+                autocomplete="customer.cardName"
+                placeholder="nombre"
                 required
               />
             </div>
+
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.zipCode"
-                autocomplete="customer.zipCode"
-                placeholder="Zip Code"
-                minlength="5"
-                maxlength="5"
+                v-model="customer.cardExpiration"
+                autocomplete="customer.cardExpiration"
+                placeholder="fecha expiracion (mm/yy)"
+                pattern="\d{2}/\d{2}"
                 required
               />
               <input
                 type="text"
-                v-model="customer.city"
-                autocomplete="customer.city"
-                placeholder="City"
+                v-model="customer.cardCVC"
+                autocomplete="customer.cardCVC"
+                placeholder="CVC"
+                pattern="^\d{3,4}$"
                 required
               />
             </div>
@@ -131,7 +168,7 @@
                 <p class="cta-color">
                   <span class="link_wrap">
                     <a class="link_text" href="#" @click.prevent="prev()"
-                      ><span class="arrow-prev"></span>Previous
+                      ><span class="arrow-prev"></span>
                     </a>
                   </span>
                 </p>
@@ -140,7 +177,7 @@
                 <p class="cta-color">
                   <span class="text"></span>
                   <span class="link_wrap">
-                    <input type="submit" value="Next" class="link_text" />
+                    <input type="submit" value="" class="link_text" />
                     <span class="arrow-next"></span>
                   </span>
                 </p>
@@ -149,25 +186,56 @@
           </form>
         </section>
       </transition>
+
       <transition name="slide-fade">
         <section v-show="step === 3">
-          <form class="form" action="#" @submit.prevent="customerRegister">
+          <form class="form" method="post" action="#" @submit.prevent="next">
             <div class="form-group">
               <input
-                type="email"
-                v-model="customer.eMail"
-                autocomplete="customer.eMail"
-                placeholder="Email"
+                type="text"
+                v-model="customer.dni"
+                autocomplete="customer.dni"
+                placeholder="dni"
+                pattern="^\d{8}[A-Za-z]$"
+                required
+              />
+              <input
+                type="text"
+                v-model="customer.licenciaVTC"
+                autocomplete="customer.licenciaVTC"
+                placeholder="licencia VTC (VTC-123456)"
+                pattern="^[A-Za-z]{3}-?\d{6}$"
                 required
               />
             </div>
             <div class="form-group">
-              <input
-                type="date"
-                v-model="customer.birthDay"
-                placeholder="Birthday ('day'/'month'/'year')"
-                required
-              />
+              <select name="ubicacion" v-model="customer.horario" required>
+                <option disabled selected value="">Horario</option>
+                <option v-for="item in horarios" :key="item.id" :value="item">
+                  {{ item }}
+                </option>
+              </select>
+              <div class="buscador">
+                <input
+                  type="text"
+                  id="cityInput"
+                  v-model="cityName"
+                  placeholder="Ubicacion de espera..."
+                  @input="searchLocations"
+                  required
+                />
+                <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
+
+                <ul v-if="locations.length > 0" class="desplegable">
+                  <li
+                    v-for="location in locations"
+                    :key="location.place_id"
+                    @click="selectLocation(location)"
+                  >
+                    {{ location.display_name }}
+                  </li>
+                </ul>
+              </div>
             </div>
 
             <div class="form-group cta-step">
@@ -175,14 +243,84 @@
                 <p class="cta-color">
                   <span class="link_wrap">
                     <a class="link_text" href="#" @click.prevent="prev()"
-                      ><span class="arrow-prev"></span>Previous
+                      ><span class="arrow-prev"></span>
+                    </a>
+                  </span>
+                </p>
+              </div>
+              <div class="cta">
+                <p class="cta-color">
+                  <span class="text"></span>
+                  <span class="link_wrap">
+                    <input type="submit" value="" class="link_text" />
+                    <span class="arrow-next"></span>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </form>
+        </section>
+      </transition>
+
+      <transition name="slide-fade">
+        <section v-show="step === 4">
+          <form class="form" action="#" @submit.prevent="register">
+            <div class="form-group">
+              <input
+                type="text"
+                v-model="customer.matricula"
+                autocomplete="customer.matricula"
+                placeholder="matricula"
+                pattern="/^\d{4}[ -]?[BCDFGHJKLMNPRSTVWXYZ]{3}$/i"
+                required
+              />
+              <input
+                type="number"
+                v-model="customer.capacidad"
+                autocomplete="customer.capacidad"
+                placeholder="capacidad"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                v-model="customer.fabricante"
+                autocomplete="customer.fabricante"
+                placeholder="fabricante"
+                required
+              />
+              <input
+                type="text"
+                v-model="customer.modelo"
+                autocomplete="customer.modelo"
+                placeholder="modelo"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <select name="tipo" v-model="customer.tipo" required>
+                <option disabled selected value="">tipo</option>
+                <option v-for="item in tiposVehi" :key="item.id" :value="item">
+                  {{ item }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group cta-step">
+              <div class="cta prev">
+                <p class="cta-color">
+                  <span class="link_wrap">
+                    <a class="link_text" href="#" @click.prevent="prev()"
+                      ><span class="arrow-prev"></span>
                     </a>
                   </span>
                 </p>
               </div>
             </div>
             <div class="register-btn">
-              <input type="submit" value="Créer mon compte" />
+              <input type="submit" value="REGISTRARE" />
             </div>
           </form>
         </section>
@@ -201,50 +339,83 @@
 <script setup>
 import { ref } from "vue";
 
-const steps = ref({});
 const step = ref(1);
 const titulos = ["PERSONAL", "TARJETA", "CONDUCTOR", "INFO VEHICULO"];
+const tiposVehi = ["comun", "van"];
 
+const cityName = ref("");
+const latitude = ref(null);
+const longitude = ref(null);
+const errorMessage = ref("");
+const locations = ref([]);
+
+// se reemplazaran por la llamada a la api
+const horarios = ["diurno", "nocturno"];
 const customer = ref({
-  gender: "1",
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  address: "",
-  zipCode: "",
-  city: "",
-  birthDay: "",
-  termOfService: "",
-  pinCode: "",
-  eMail: "",
+  //step 1
+  email: "",
+  nombre: "",
+  apellidos: "",
+  telefono: "",
+  ciudad: "",
+  password: "",
+  fechaNac: "",
+  //step 2
+  cardNumber: "",
+  cardName: "",
+  cardExpiration: "",
+  cardCVC: "",
+  //step 3
+  dni: "",
+  licenciaVTC: "",
+  latEspera: "",
+  lonEspera: "",
+  horario: "", // desplegable con los valores que llegen del servidor
+  //step 4
+  matricula: "",
+  capacidad: "",
+  fabricante: "",
+  modelo: "",
+  tipo: "", // desplegable con los valores que llegen del servidor
 });
+
+async function searchLocations() {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${cityName.value}`
+    );
+    const data = await response.json();
+    locations.value = data;
+    errorMessage.value = "";
+  } catch (error) {
+    console.error("Error al buscar ubicaciones:", error);
+    errorMessage.value = "Hubo un error al buscar las ubicaciones.";
+  }
+}
+
+function selectLocation(location) {
+  cityName.value = location.display_name;
+  latitude.value = location.lat;
+  longitude.value = location.lon;
+  locations.value = [];
+
+  customer.value.latEspera = location.lat;
+  customer.value.lonEspera = location.lon;
+}
 
 const hasSeenCongrats = ref(false);
 
-const tempCustomer = ref({
-  gender: "",
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  address: "",
-  zipCode: "",
-  city: "",
-  birthDay: "",
-  termOfService: "",
-  pinCode: "",
-  eMail: "",
-});
-
-// Métodos del componente
 const prev = () => {
   step.value--;
 };
 
 const next = () => {
+  console.log(customer.value);
   step.value++;
 };
 
-const customerRegister = () => {
+const register = () => {
+  console.log(customer.value);
   hasSeenCongrats.value = true;
 };
 </script>
@@ -252,7 +423,6 @@ const customerRegister = () => {
 <style>
 body {
   background-color: var(--oscuro1, #162430);
-  /* font: italic 800 30px K2D, sans-serif; */
   font-family: "K2D", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -265,7 +435,7 @@ body {
   display: flex;
   flex-flow: column;
   align-items: center;
-  font-family: "Montserrat", sans-serif;
+  font-family: "K2D", sans-serif;
 }
 
 .pen-description h1 {
@@ -322,8 +492,8 @@ body {
   text-align: center;
   color: #fff;
   padding: 0 2rem;
-  margin-top: 2rem;
-  margin-bottom: 3rem;
+
+  margin-bottom: 2rem;
 }
 
 .register-stepper {
@@ -332,17 +502,7 @@ body {
   width: 100%;
   position: relative;
   margin: 0 auto 1.5em;
-}
-
-.register-stepper::before {
-  z-index: 0;
-  content: "";
-  display: block;
-  position: absolute;
-  height: 2px;
-  top: calc(50% - 1px);
-  background: #cecece;
-  width: calc(100% - 20px);
+  margin-top: 2rem;
 }
 
 .register-stepper .step {
@@ -350,29 +510,55 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 2;
-  border: 2px solid #cecece;
-  color: #cecece;
+  color: black;
   background-color: #fff;
   border-radius: 50%;
-  min-width: 25px;
-  min-height: 25px;
+  min-width: 30px;
+  min-height: 30px;
   line-height: 20px;
   font-size: 16px;
 }
 
 .register-stepper .step-active {
-  color: #00c4b5;
-  background-color: #fff;
-  border-color: #00c4b5;
+  color: black;
+  background-color: #ffc000;
 }
 
 .register-stepper .step-done {
-  color: #a7e4b5;
-  border-color: #a7e4b5;
+  color: black;
+  background-color: #ffc000;
+}
+
+.register-stepper .step::before {
+  z-index: 0;
+  content: "";
+  display: block;
+  position: absolute;
+  height: 4px;
+  top: calc(50% - 1px);
+  background: white;
+  width: calc(30% - 50px);
+  margin-left: 130px;
+}
+
+.register-stepper .step-done::before {
+  z-index: 0;
+  content: "";
+  display: block;
+  position: absolute;
+  height: 4px;
+  top: calc(50% - 1px);
+  background: #ffc000;
+  width: calc(30% - 50px);
+  margin-left: 130px;
+}
+
+.register-stepper .step:last-child:before {
+  display: none;
 }
 
 .register-stepper .step-number {
-  font-family: "Montserrat", sans-serif;
+  font-family: "K2D", sans-serif;
   font-weight: 800;
   line-height: 1;
   vertical-align: middle;
@@ -394,7 +580,8 @@ body {
 
 .register .form-group.cta-step {
   color: #fff;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
 }
 
 .register .form-group.cta-step .cta.prev {
@@ -409,7 +596,7 @@ body {
 .register .cta-color input,
 .register .cta-color .link_text {
   color: #fff;
-  font-family: "Montserrat", sans-serif;
+  font-family: "K2D", sans-serif;
   font-size: 1.1rem;
   text-decoration: none;
 }
@@ -430,8 +617,10 @@ body {
 }
 
 .register .cta-color .link_wrap .arrow-prev::before {
-  content: "<";
+  color: #ffc000;
+  content: "<-";
   position: absolute;
+
   top: -17px;
   left: -25px;
 }
@@ -444,7 +633,8 @@ body {
 }
 
 .register .cta-color .link_wrap .arrow-next::before {
-  content: ">";
+  color: #ffc000;
+  content: "->";
   position: absolute;
   top: -10px;
   left: -25px;
@@ -458,17 +648,55 @@ body {
   transform: translate(5px);
 }
 
+.buscador {
+  border: 0;
+  padding: 0;
+  width: 100%;
+  margin: 0;
+}
+
+.desplegable {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  list-style: none;
+  max-height: 100px;
+  padding: 0;
+  position: absolute;
+  background-color: #d4d4d4;
+  min-width: 160px;
+  max-height: 200px; /* Altura máxima del desplegable */
+  overflow-y: auto; /* Habilitar desplazamiento vertical */
+  border: 1px solid #ccc;
+  z-index: 1;
+}
+.desplegable li {
+  color: black;
+  background: white;
+  border: 0;
+  border-radius: 5px;
+  padding: 0.4rem;
+  width: 200px;
+  margin: 0.2rem 0.5rem;
+}
+.desplegable li:hover {
+  background: #ffc000;
+}
+
+select,
 input[type="submit"],
+input[type="number"],
 input[type="text"],
 input[type="tel"],
 input[type="email"],
+input[type="password"],
 input[type="date"] {
-  -webkit-appearance: none;
   border: 0;
   border-radius: 5px;
   padding: 1.3rem 1rem;
   width: 100%;
   margin: 0.5rem;
+  max-width: 12rem;
 }
 
 input[type="submit"] {
@@ -500,20 +728,19 @@ input[type="submit"]::after {
   transition: all 0.33s cubic-bezier(0.12, 0.75, 0.4, 1);
 }
 
+.register-btn {
+  display: flex;
+  justify-content: center;
+}
+
 .register-btn input {
   color: #fff;
   font-size: 1.2rem;
-  font-family: "Montserrat", sans-serif;
+  font-family: "K2D", sans-serif;
   font-weight: 800;
   line-height: 1;
   width: fit-content;
-  background: linear-gradient(145deg, #1b3c05, #173205);
-  box-shadow: 20px 20px 60px #142c04, -20px -20px 60px #1f4406;
-}
-
-.register-btn input:hover {
-  background: linear-gradient(145deg, #173205, #1b3c05);
-  box-shadow: 20px 20px 60px #142c04, -20px -20px 60px #1f4406;
+  background: #ffc000;
 }
 
 /* Transition SLIDE FADE */

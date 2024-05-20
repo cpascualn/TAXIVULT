@@ -21,7 +21,7 @@
             <div class="element__icon">3</div>
             <div class="element__txt">Ventajas exclusivas</div>
           </div>
-          <router-link to="/register" class="button"
+          <router-link to="/conduce" class="button"
             >PRIMEROS PASOS</router-link
           >
         </div>
