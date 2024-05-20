@@ -155,6 +155,7 @@
   line-height: 133%;
   justify-content: space-between;
   margin: auto 0;
+  flex-direction: column;
 }
 
 .logIn {

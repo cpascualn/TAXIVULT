@@ -1,13 +1,29 @@
 <template>
-  <div>
-    <Hero></Hero>
-    <Footer></Footer>
+  <div class="container">
+    
+    <RegisterForm></RegisterForm>
   </div>
 </template>
 
 <script setup>
-import Hero from "@/components/Hero.vue";
-import Footer from "@/components/Footer.vue";
+import RegisterForm from "@/components/RegisterForm.vue";
+
 </script>
 
-<style scoped></style>
+<style scoped>
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+
+</style>

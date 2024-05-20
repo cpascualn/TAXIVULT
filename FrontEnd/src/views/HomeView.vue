@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Hero></Hero>
+    <Hero imagen="/img/hero.jpg" :botones="true"></Hero>
     <main>
       <Section1></Section1>
       <Section2></Section2>

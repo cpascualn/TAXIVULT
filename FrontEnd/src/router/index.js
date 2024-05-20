@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ViajarView from '@/views/ViajarView.vue'
+import ConduceView from '@/views/ConduceView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/viaja',
       name: 'viaja',
       component: ViajarView
+    },
+    {
+      path: '/conduce',
+      name: 'conduce',
+      component: ConduceView
     },
     // {
     //   path: '/about',

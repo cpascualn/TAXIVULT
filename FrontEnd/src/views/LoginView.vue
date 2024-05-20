@@ -1,4 +1,4 @@
-import { RouterLink } from 'vue-router';
+
 <template>
   <div class="login-page">
     <div class="login-container">
@@ -116,6 +116,7 @@ import { RouterLink } from 'vue-router';
 </template>
 
 <script setup>
+import { RouterLink } from 'vue-router';
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 

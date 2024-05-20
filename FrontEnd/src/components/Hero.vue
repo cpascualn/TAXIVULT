@@ -1,12 +1,28 @@
 <script setup>
 import Header from "@/components/Header.vue";
+
+import { defineProps } from "vue";
+
+const props = defineProps({
+  imagen: {
+    type: String,
+    required: true,
+  },
+  botones: {
+    type: Boolean,
+    required: true,
+  },
+});
 </script>
 
 <template>
   <div class="div">
-    <img loading="lazy" srcSet="/img/hero.jpg" class="img" />
+    <img loading="lazy" :srcSet="imagen" class="img" />
     <Header></Header>
-    <router-link to="login" class="button">RESERVA YA</router-link>
+
+    <router-link :to="botones ? 'login' : 'register'" class="button">{{
+      botones ? "RESERVA YA" : "REGISTRATE"
+    }}</router-link>
   </div>
 </template>
 
