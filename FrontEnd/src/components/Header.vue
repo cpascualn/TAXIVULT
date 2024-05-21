@@ -155,7 +155,7 @@
   line-height: 133%;
   justify-content: space-between;
   margin: auto 0;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 
 .logIn {
@@ -199,7 +199,7 @@
   display: flex;
   gap: 10px;
   margin: auto 0;
-  padding: 0 52px;
+  padding: 0 0.1rem;
   text-decoration: none;
 }
 @media (max-width: 991px) {
