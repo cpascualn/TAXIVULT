@@ -4,9 +4,11 @@
     <section class="trip-booking">
       <div class="trip-booking__container">
         <div class="trip-booking__content">
-          <SearchTrip></SearchTrip>
-          <LeafMap></LeafMap>
-
+          <SearchTrip
+            :data="entradas"
+            v-if="entradas && entradas.length > 0"
+          ></SearchTrip>
+          <LeafMap @send-data="handleFromMap"></LeafMap>
         </div>
       </div>
     </section>
@@ -17,7 +19,13 @@
 import Header from "@/components/Header.vue";
 import SearchTrip from "@/components/SearchTrip.vue";
 import LeafMap from "@/components/LeafMap.vue";
+import { ref } from "vue";
 
+let entradas = ref();
+
+const handleFromMap = (data) => {
+  entradas.value = data;
+};
 </script>
 
 <style scoped>

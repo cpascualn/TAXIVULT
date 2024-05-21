@@ -3,29 +3,29 @@
     <div class="trip-booking__form-container">
       <h2 class="trip-booking__title">Consigue un viaje</h2>
       <div class="trip-booking__inputs">
-        <div class="trip-booking__input-group">
+        <div class="trip-booking__input-group" id="start">
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/fcafba4e0cf3c74e2c7474823eb15a538cfd1653ff2bbf1f023eedf28fd4d5b7?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
             alt="Pickup location icon"
             class="trip-booking__icon"
           />
-          <input
+          <!-- <input
             type="text"
             class="trip-booking__input-label"
-            placeholder=" Ubicación de recogida"
-          />
+            placeholder=" aUbicación de recogida"
+          /> -->
         </div>
-        <div class="trip-booking__input-group">
+        <div class="trip-booking__input-group" id="end">
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/1556693e9937325d0df6c1ed8d094db6e780f90308f699ba09080b0679612811?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
             alt="Destination location icon"
             class="trip-booking__icon trip-booking__icon--destination"
           />
-          <input
+          <!-- <input
             type="text"
             class="trip-booking__input-label"
             placeholder="  Ubicación de destino"
-          />
+          /> -->
         </div>
         <div
           class="trip-booking__input-group trip-booking__input-group--datetime"
@@ -55,7 +55,31 @@
   </form>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, defineProps, onMounted, onUpdated } from "vue";
+
+const props = defineProps(["data"]); // Definir las props esperadas
+const entradas = ref(props.data);
+let start, end;
+
+onMounted(() => {
+  if (entradas.value) {
+    const array = [...entradas.value];
+    start = array[0];
+    if (start) {
+      const input = start.querySelector("input");
+      input.placeholder = "Ubicacion de salida";
+      document.getElementById("start").appendChild(start);
+    }
+    end = array[1];
+    if (end) {
+      const input = end.querySelector("input");
+      input.placeholder = "Ubicacion destino";
+      document.getElementById("end").appendChild(end);
+    }
+  }
+});
+</script>
 
 <style>
 .trip-booking__form {
@@ -103,6 +127,10 @@
   gap: 24px;
 }
 
+.trip-booking__inputs input {
+  background: transparent;
+  border: none;
+}
 .trip-booking__input-group {
   border-radius: 6px;
   background-color: rgba(242, 242, 242, 1);

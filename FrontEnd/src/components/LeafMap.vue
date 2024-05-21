@@ -1,19 +1,9 @@
 <template>
   <div class="trip-booking__map">
     <div class="trip-booking__map-container">
-      <div>
-        <input v-model="startLocation" placeholder="Enter start location" />
-        <input v-model="endLocation" placeholder="Enter end location" />
-        <button @click="setRoute">Set Route</button>
-      </div>
+      <div></div>
       <div class="leafMap">
         <l-map ref="map" :zoom="zoom" :center="center" @ready="onMapReady()">
-          <!-- :useGlobalLeaflet="false"
-        
-                  :zoomControl="false"
-          :scrollWheelZoom="false"
-          :touchZoom="false"
-          :doubleClickZoom="false"-->
           <l-tile-layer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             layer-type="base"
@@ -45,7 +35,6 @@ export default {
     endLocation: "",
     zoom: 5,
     center: [40.422476, -3.696139],
-    geocoder: L.Control.Geocoder.nominatim(),
     distance: "", // en metros
     time: "", // en segundos
   }),
@@ -60,20 +49,36 @@ export default {
       this.map = this.$refs.map.leafletObject;
       this.map.setMaxZoom(16);
       this.map.setMinZoom(6);
-
-      //   this.map.touchZoom.disable();
-      //   this.map.doubleClickZoom.disable();
-      //   this.map.scrollWheelZoom.disable();
-      //   this.map.boxZoom.disable();
-      //   this.map.keyboard.disable();
-      //   this.map.zoomControl.remove();
-
       this.initializeRouter();
+
+      // You can also use the ready event
+      // this.router.geocoder.on("ready", () => {
+      //   console.log("Geocoder is ready");
+      // });
+
+      let entradas = document.getElementsByClassName(
+        "leaflet-routing-geocoder"
+      );
+      this.$emit("send-data", entradas);
+    },
+    hideOptions() {
+      const options = document.getElementsByClassName(
+        "leaflet-routing-geocoder-result"
+      );
+      console.log(options);
+      // Iterar sobre los elementos y cambiar las clases
+      for (const option of options) {
+        if (option.classList.contains("leaflet-routing-geocoder-result-none")) {
+          option.classList.remove("leaflet-routing-geocoder-result-none");
+        }
+        option.classList.add("leaflet-routing-geocoder-result-none");
+      }
     },
     initializeRouter() {
       this.router = L.Routing.control({
         waypoints: [],
         routeWhileDragging: true,
+
         createMarker: function (i, waypoint, n) {
           return L.marker(waypoint.latLng, {
             draggable: false,
@@ -90,6 +95,8 @@ export default {
         },
         // fitSelectedRoutes: false,
         showAlternatives: false,
+
+        geocoder: L.Control.Geocoder.nominatim(),
       }).addTo(this.map);
 
       this.router.on("routesfound", (event) => {
@@ -97,20 +104,24 @@ export default {
         this.distance = route.summary.totalDistance;
         this.time = route.summary.totalTime;
       });
-    },
-    setRoute() {
-      if (!this.map || !this.router) {
-        console.error("Map or router is not initialized");
-        return;
-      }
 
-      this.router.setWaypoints([]);
+      this.router.on("routeselected", function (event) {
+        console.log("Ruta seleccionada:", event.route);
+      });
 
-      this.addWaypoint(this.startLocation, 0);
-      this.addWaypoint(this.endLocation, 1);
+      this.router.on("waypointschanged", (event) => {
+        this.hideOptions(); // Oculta la div solo si el segundo punto de ruta no ha sido cambiado antes
+        secondWaypointChanged = true; // Marca el segundo punto de ruta como cambiado
+      });
+
+      this.router.on("geocodestatechange", function (event) {
+        // Manejar el evento de cambio de estado del geocodificador
+        console.log("Estado del geocodificador cambiado:", event);
+      });
     },
+
     addWaypoint(query, index) {
-      this.geocoder.geocode(query, (results) => {
+      L.Control.Geocoder.nominatim().geocode(query, (results) => {
         if (results && results.length > 0) {
           const result = results[0];
           const latlng = result.center;
@@ -121,7 +132,7 @@ export default {
           } else {
             waypoints[index] = L.Routing.waypoint(latlng);
           }
-        //   L.marker(latlng).addTo(this.map);
+          //   L.marker(latlng).addTo(this.map);
 
           this.router.setWaypoints(waypoints);
 
@@ -177,7 +188,43 @@ export default {
   width: 100%;
   height: 75vh;
 }
+/* .leaflet-routing-alternatives-container {
+  display: none;
+} */
+
+.leaflet-routing-geocoders {
+  display: block;
+}
+.leaflet-routing-geocoder-result {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  list-style: none;
+  max-height: 100px;
+  padding: 0;
+  position: absolute;
+  background-color: white;
+  color: black;
+  min-width: 160px;
+  max-height: 200px; /* Altura máxima del desplegable */
+  overflow-y: auto; /* Habilitar desplazamiento vertical */
+  border: 1px solid #ccc;
+  z-index: 1;
+}
+
+.leaflet-routing-geocoder-result-none {
+  display: none;
+}
+
+.leaflet-routing-geocoder-result tr:hover {
+  background: #ffc000;
+}
+
 .leaflet-routing-alternatives-container {
+  display: none;
+}
+
+.leaflet-routing-add-waypoint {
   display: none;
 }
 </style>
