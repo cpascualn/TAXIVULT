@@ -6,6 +6,7 @@
         <div class="trip-booking__content">
           <SearchTrip></SearchTrip>
           <LeafMap></LeafMap>
+
         </div>
       </div>
     </section>
@@ -16,6 +17,7 @@
 import Header from "@/components/Header.vue";
 import SearchTrip from "@/components/SearchTrip.vue";
 import LeafMap from "@/components/LeafMap.vue";
+
 </script>
 
 <style scoped>
