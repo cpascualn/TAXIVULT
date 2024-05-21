@@ -2,7 +2,6 @@
   <div>
     <Hero imagen="/img/heroConducir.jpg" :botones="false"></Hero>
     <main class="main-content">
-
       <section class="intro-section">
         <h2>¿Por qué conducir para Taxivult?</h2>
         <img
@@ -82,22 +81,20 @@
               Consulta nuestras pautas para obtener más información.
             </p>
           </div>
-          
         </div>
       </section>
     </main>
     <Footer></Footer>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-</div>
-
-  
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </div>
 </template>
 
 <script setup>
 import Hero from "@/components/Hero.vue";
 import Footer from "@/components/Footer.vue";
-
 </script>
 
 <style scoped>
@@ -212,7 +209,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 50px;
-  padding: 0px 500px ;
+  max-width: 50vw;
 }
 
 .step {
@@ -231,8 +228,6 @@ h2 {
   object-fit: auto;
   object-position: center;
 }
-
-
 
 @media (max-width: 991px) {
   .step img + img {
@@ -267,5 +262,3 @@ h2 {
   font-style: italic;
 }
 </style>
-
-

@@ -1,38 +1,31 @@
 <template>
   <div class="regForm">
-
-    <router-link
-            to="/"
-            :class="{ 'nav__link active': $route.path === '/' }"
-            class="nav__link"
-          >
-            INICIO</router-link
-          >
     <section class="register" v-if="!hasSeenCongrats">
+      <h3 class="title">REGISTRESE COMO CONDUCTOR</h3>
       <div class="register-stepper">
         <div
-          class="step"
-          :class="{ 'step-active': step === 1, 'step-done': step > 1 }"
+          class="stepp"
+          :class="{ 'stepp-active': step === 1, 'stepp-done': step > 1 }"
         >
-          <span class="step-number">1</span>
+          <span class="stepp-number">1</span>
         </div>
         <div
-          class="step"
-          :class="{ 'step-active': step === 2, 'step-done': step > 2 }"
+          class="stepp"
+          :class="{ 'stepp-active': step === 2, 'stepp-done': step > 2 }"
         >
-          <span class="step-number">2</span>
+          <span class="stepp-number">2</span>
         </div>
         <div
-          class="step"
-          :class="{ 'step-active': step === 3, 'step-done': step > 3 }"
+          class="stepp"
+          :class="{ 'stepp-active': step === 3, 'stepp-done': step > 3 }"
         >
-          <span class="step-number">3</span>
+          <span class="stepp-number">3</span>
         </div>
         <div
-          class="step"
-          :class="{ 'step-active': step === 4, 'step-done': step > 4 }"
+          class="stepp"
+          :class="{ 'stepp-active': step === 4, 'stepp-done': step > 4 }"
         >
-          <span class="step-number">4</span>
+          <span class="stepp-number">4</span>
         </div>
       </div>
 
@@ -44,16 +37,16 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.email"
-                autocomplete="customer.email"
+                v-model="usuario.email"
+                autocomplete="usuario.email"
                 placeholder="Email"
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                 required
               />
               <input
                 type="text"
-                v-model="customer.nombre"
-                autocomplete="customer.nombre"
+                v-model="usuario.nombre"
+                autocomplete="usuario.nombre"
                 placeholder="Nombre"
                 required
               />
@@ -62,8 +55,8 @@
             <div class="form-group">
               <input
                 type="tel"
-                v-model="customer.telefono"
-                autocomplete="customer.telefono"
+                v-model="usuario.telefono"
+                autocomplete="usuario.telefono"
                 placeholder="telefono"
                 minlength="9"
                 maxlength="10"
@@ -72,8 +65,8 @@
               />
               <input
                 type="text"
-                v-model="customer.apellidos"
-                autocomplete="customer.apellidos"
+                v-model="usuario.apellidos"
+                autocomplete="usuario.apellidos"
                 placeholder="Apellidos"
                 required
               />
@@ -82,16 +75,16 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.ciudad"
-                autocomplete="customer.ciudad"
+                v-model="usuario.ciudad"
+                autocomplete="usuario.ciudad"
                 placeholder="Ciudad"
                 required
               />
 
               <input
                 type="password"
-                v-model="customer.password"
-                autocomplete="customer.password"
+                v-model="usuario.password"
+                autocomplete="usuario.password"
                 placeholder="Contrasena"
                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
                 required
@@ -101,7 +94,7 @@
             <div class="form-group">
               <input
                 type="date"
-                v-model="customer.fechaNac"
+                v-model="usuario.fechaNac"
                 placeholder="Birthday ('day'/'month'/'year')"
                 required
               />
@@ -129,16 +122,16 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.cardNumber"
-                autocomplete="customer.cardNumber"
+                v-model="usuario.cardNumber"
+                autocomplete="usuario.cardNumber"
                 placeholder="numero tarjeta"
                 pattern="^\d{4}(?:\s?\d{4}){3}$"
                 required
               />
               <input
                 type="text"
-                v-model="customer.cardName"
-                autocomplete="customer.cardName"
+                v-model="usuario.cardName"
+                autocomplete="usuario.cardName"
                 placeholder="nombre"
                 required
               />
@@ -147,16 +140,16 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.cardExpiration"
-                autocomplete="customer.cardExpiration"
+                v-model="usuario.cardExpiration"
+                autocomplete="usuario.cardExpiration"
                 placeholder="fecha expiracion (mm/yy)"
                 pattern="\d{2}/\d{2}"
                 required
               />
               <input
                 type="text"
-                v-model="customer.cardCVC"
-                autocomplete="customer.cardCVC"
+                v-model="usuario.cardCVC"
+                autocomplete="usuario.cardCVC"
                 placeholder="CVC"
                 pattern="^\d{3,4}$"
                 required
@@ -193,23 +186,23 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.dni"
-                autocomplete="customer.dni"
+                v-model="usuario.dni"
+                autocomplete="usuario.dni"
                 placeholder="dni"
                 pattern="^\d{8}[A-Za-z]$"
                 required
               />
               <input
                 type="text"
-                v-model="customer.licenciaVTC"
-                autocomplete="customer.licenciaVTC"
+                v-model="usuario.licenciaVTC"
+                autocomplete="usuario.licenciaVTC"
                 placeholder="licencia VTC (VTC-123456)"
                 pattern="^[A-Za-z]{3}-?\d{6}$"
                 required
               />
             </div>
             <div class="form-group">
-              <select name="ubicacion" v-model="customer.horario" required>
+              <select name="ubicacion" v-model="usuario.horario" required>
                 <option disabled selected value="">Horario</option>
                 <option v-for="item in horarios" :key="item.id" :value="item">
                   {{ item }}
@@ -268,16 +261,16 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.matricula"
-                autocomplete="customer.matricula"
+                v-model="usuario.matricula"
+                autocomplete="usuario.matricula"
                 placeholder="matricula"
                 pattern="/^\d{4}[ -]?[BCDFGHJKLMNPRSTVWXYZ]{3}$/i"
                 required
               />
               <input
                 type="number"
-                v-model="customer.capacidad"
-                autocomplete="customer.capacidad"
+                v-model="usuario.capacidad"
+                autocomplete="usuario.capacidad"
                 placeholder="capacidad"
                 required
               />
@@ -285,22 +278,22 @@
             <div class="form-group">
               <input
                 type="text"
-                v-model="customer.fabricante"
-                autocomplete="customer.fabricante"
+                v-model="usuario.fabricante"
+                autocomplete="usuario.fabricante"
                 placeholder="fabricante"
                 required
               />
               <input
                 type="text"
-                v-model="customer.modelo"
-                autocomplete="customer.modelo"
+                v-model="usuario.modelo"
+                autocomplete="usuario.modelo"
                 placeholder="modelo"
                 required
               />
             </div>
 
             <div class="form-group">
-              <select name="tipo" v-model="customer.tipo" required>
+              <select name="tipo" v-model="usuario.tipo" required>
                 <option disabled selected value="">tipo</option>
                 <option v-for="item in tiposVehi" :key="item.id" :value="item">
                   {{ item }}
@@ -320,7 +313,7 @@
               </div>
             </div>
             <div class="register-btn">
-              <input type="submit" value="REGISTRARE" />
+              <input type="submit" value="REGISTRATE" />
             </div>
           </form>
         </section>
@@ -351,7 +344,7 @@ const locations = ref([]);
 
 // se reemplazaran por la llamada a la api
 const horarios = ["diurno", "nocturno"];
-const customer = ref({
+const usuario = ref({
   //step 1
   email: "",
   nombre: "",
@@ -399,8 +392,8 @@ function selectLocation(location) {
   longitude.value = location.lon;
   locations.value = [];
 
-  customer.value.latEspera = location.lat;
-  customer.value.lonEspera = location.lon;
+  usuario.value.latEspera = location.lat;
+  usuario.value.lonEspera = location.lon;
 }
 
 const hasSeenCongrats = ref(false);
@@ -410,12 +403,12 @@ const prev = () => {
 };
 
 const next = () => {
-  console.log(customer.value);
+  console.log(usuario.value);
   step.value++;
 };
 
 const register = () => {
-  console.log(customer.value);
+  console.log(usuario.value);
   hasSeenCongrats.value = true;
 };
 </script>
@@ -483,7 +476,9 @@ body {
 .register-icon-item {
   width: 100%;
 }
-
+.title {
+  text-align: center;
+}
 .register-title {
   font-weight: 400;
   font-size: 1.5rem;
@@ -505,7 +500,7 @@ body {
   margin-top: 2rem;
 }
 
-.register-stepper .step {
+.register-stepper .stepp {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -519,17 +514,17 @@ body {
   font-size: 16px;
 }
 
-.register-stepper .step-active {
+.register-stepper .stepp-active {
   color: black;
   background-color: #ffc000;
 }
 
-.register-stepper .step-done {
+.register-stepper .stepp-done {
   color: black;
   background-color: #ffc000;
 }
 
-.register-stepper .step::before {
+.register-stepper .stepp::before {
   z-index: 0;
   content: "";
   display: block;
@@ -541,7 +536,7 @@ body {
   margin-left: 130px;
 }
 
-.register-stepper .step-done::before {
+.register-stepper .stepp-done::before {
   z-index: 0;
   content: "";
   display: block;
@@ -553,11 +548,11 @@ body {
   margin-left: 130px;
 }
 
-.register-stepper .step:last-child:before {
+.register-stepper .stepp:last-child:before {
   display: none;
 }
 
-.register-stepper .step-number {
+.register-stepper .stepp-number {
   font-family: "K2D", sans-serif;
   font-weight: 800;
   line-height: 1;
@@ -702,7 +697,6 @@ input[type="date"] {
 input[type="submit"] {
   cursor: pointer;
   position: relative;
-  padding-right: 36px;
   background: none;
   width: fit-content;
 }

@@ -17,7 +17,6 @@ class Vehiculo extends Model
         'fabricante',
         'modelo',
         'tipo',
-        'imagen',
-        'conductor',
+        'conductor'
     ];
 }
