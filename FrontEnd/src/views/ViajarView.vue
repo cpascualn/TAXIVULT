@@ -5,10 +5,14 @@
       <div class="trip-booking__container">
         <div class="trip-booking__content">
           <SearchTrip
+            @send-datos="handleFromSearch"
             :data="entradas"
             v-if="entradas && entradas.length > 0"
           ></SearchTrip>
-          <LeafMap @send-data="handleFromMap"></LeafMap>
+          <LeafMap
+            @send-entrys="handleFromMap"
+            @send-data="handleMapData"
+          ></LeafMap>
         </div>
       </div>
     </section>
@@ -22,9 +26,33 @@ import LeafMap from "@/components/LeafMap.vue";
 import { ref } from "vue";
 
 let entradas = ref();
+let searchParams = ref({
+  date: "",
+  time: "",
+  startLocation: "",
+  endLocation: "",
+  distance: "",
+  duration: "",
+});
 
 const handleFromMap = (data) => {
   entradas.value = data;
+};
+
+const handleMapData = (data) => {
+  searchParams.value.startLocation = data.startLocation;
+  searchParams.value.endLocation = data.endLocation;
+  searchParams.value.distance = data.distance;
+  searchParams.value.duration = data.duration;
+};
+
+const handleFromSearch = (data) => {
+  searchParams.value.date = data.date;
+  searchParams.value.time = data.time;
+
+  console.log(searchParams.value);
+
+  //procesar el envio al servidor
 };
 </script>
 

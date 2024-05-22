@@ -51,7 +51,7 @@ export default {
       this.map.setMinZoom(6);
       this.initializeRouter();
       const entradas = this.setupInputs();
-      this.$emit("send-data", entradas);
+      this.$emit("send-entrys", entradas);
     },
     setupInputs() {
       let entradas = document.getElementsByClassName(
@@ -70,7 +70,7 @@ export default {
       });
 
       inputSalida.addEventListener("focus", (event) => {
-        // console.log("entra");
+
         this.showOptions(0);
       });
 
@@ -80,7 +80,7 @@ export default {
       });
 
       inputDestino.addEventListener("focus", (event) => {
-        // console.log("entra");
+
         this.showOptions(1);
       });
 
@@ -95,14 +95,14 @@ export default {
       const options = document.getElementsByClassName(
         "leaflet-routing-geocoder-result"
       );
-      if (options && options.length > 0)
+      if (options && options.length > 0 && options[index])
         options[index].classList.add("leaflet-routing-geocoder-result-none");
     },
     showOptions(index = 0) {
       const options = document.getElementsByClassName(
         "leaflet-routing-geocoder-result"
       );
-      if (options && options.length > 0)
+      if (options && options.length > 0 && options[index])
         options[index].classList.remove("leaflet-routing-geocoder-result-none");
     },
     initializeRouter() {
@@ -137,8 +137,27 @@ export default {
 
       this.router.on("routesfound", (event) => {
         const route = event.routes[0];
+
         this.distance = route.summary.totalDistance;
         this.time = route.summary.totalTime;
+
+        this.startLocation = {
+          name: route.waypoints[0].name,
+          latLng: route.waypoints[0].latLng,
+        };
+        this.endLocation = {
+          name: route.waypoints[1].name,
+          latLng: route.waypoints[1].latLng,
+        };
+
+        let data = {
+          startLocation: this.startLocation,
+          endLocation: this.endLocation,
+          distance: this.distance,
+          duration: this.time,
+        };
+
+        this.$emit("send-data", data);
       });
 
       this.router.on("waypointschanged", (event) => {

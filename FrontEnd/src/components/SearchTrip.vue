@@ -1,5 +1,5 @@
 <template>
-  <form class="trip-booking__form">
+  <form class="trip-booking__form" @submit="handleSubmit">
     <div class="trip-booking__form-container">
       <h2 class="trip-booking__title">Consigue un viaje</h2>
       <div class="trip-booking__inputs">
@@ -21,14 +21,11 @@
             alt="Destination location icon"
             class="trip-booking__icon trip-booking__icon--destination"
           />
-          <!-- <input
-            type="text"
-            class="trip-booking__input-label"
-            placeholder="  Ubicación de destino"
-          /> -->
         </div>
-        <div
+        <button
           class="trip-booking__input-group trip-booking__input-group--datetime"
+          type="button"
+          @click="openDatetimeSelection"
         >
           <div class="trip-booking__datetime">
             <img
@@ -36,18 +33,33 @@
               alt="Clock icon"
               class="trip-booking__icon"
             />
-            <!-- esto sera un desplegable q primero te deje coger el dia, luego la hora -->
-            <input
-              type="text"
-              class="trip-booking__input-label"
-              placeholder="Ahora"
-            />
+            <p>¿Cuando?</p>
           </div>
+
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/d0b219658ea78712624c17e2878d82d65be05f6c6dc9275f9736d106b1708a3a?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
             alt="Right arrow icon"
             class="trip-booking__arrow-icon"
           />
+        </button>
+        <div class="datetimeSel">
+          <h2>Seleccione la fecha de recogida</h2>
+          <div class="datetimeWrapper">
+            <div class="trip-booking__dates-group">
+              <label for="dateInput">seleccione una fecha:</label>
+              <input
+                type="date"
+                id="dateInput"
+                v-model="date"
+                :min="minDate"
+                :max="maxDate"
+              />
+            </div>
+            <div class="trip-booking__dates-group">
+              <label for="timeInput">seleccione una hora:</label>
+              <input type="time" id="timeInput" v-model="time" :min="minTime" />
+            </div>
+          </div>
         </div>
       </div>
       <button class="trip-booking__search-button">Buscar</button>
@@ -56,11 +68,49 @@
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted, onUpdated } from "vue";
+import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
 
+// Definir los eventos que puede emitir este componente
+const emits = defineEmits(["send-datos"]);
 const props = defineProps(["data"]); // Definir las props esperadas
 const entradas = ref(props.data);
 let start, end;
+
+const date = ref("");
+const time = ref("");
+
+const openDatetimeSelection = () => {
+  document.querySelector(".datetimeSel").style.display = "flex";
+};
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  let datos = { date: date.value, time: time.value };
+  emits("send-datos", datos);
+};
+
+const minDate = computed(() => {
+  // Calcular la fecha mínima permitida (hoy)
+  const today = new Date();
+  return today.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+});
+
+const maxDate = computed(() => {
+  // Calcular la fecha máxima permitida (hoy + 14 días)
+  const maxDate = new Date();
+  maxDate.setDate(maxDate.getDate() + 14);
+  return maxDate.toISOString().split("T")[0]; // Formato YYYY-MM-DD
+});
+
+const minTime = computed(() => {
+  // Calcular la hora mínima permitida (si es hoy)
+  const today = new Date();
+  const currentHour = today.getHours() + 1;
+  const currentMinute = today.getMinutes();
+  return `${currentHour < 10 ? "0" : ""}${currentHour}:${
+    currentMinute < 10 ? "0" : ""
+  }${currentMinute}`;
+});
 
 onMounted(() => {
   if (entradas.value) {
@@ -140,6 +190,20 @@ onMounted(() => {
   align-items: auto;
 }
 
+.trip-booking__dates-group {
+  display: flex;
+  border-radius: 6px;
+  background-color: rgba(242, 242, 242, 1);
+  gap: 20px;
+  padding: 9px 15px;
+  align-items: center;
+  height: 3.5rem;
+}
+
+.trip-booking__dates-group input {
+  max-height: 2rem;
+}
+
 .trip-booking__icon {
   width: 30px;
   height: 30px;
@@ -176,6 +240,8 @@ onMounted(() => {
 .trip-booking__datetime {
   display: flex;
   gap: 20px;
+  align-items: center;
+  color: #808080;
 }
 
 .trip-booking__arrow-icon {
@@ -223,11 +289,27 @@ onMounted(() => {
   }
 }
 
-.leaflet-routing-geocoder  {
+.leaflet-routing-geocoder {
   width: 100%;
 }
 .leaflet-routing-geocoder input {
   width: 100%;
   height: 100%;
+}
+
+.datetimeSel {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.datetimeWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
 }
 </style>
