@@ -137,6 +137,7 @@ onMounted(() => {
   display: flex;
   gap: 20px;
   padding: 9px 15px;
+  align-items: auto;
 }
 
 .trip-booking__icon {
@@ -220,5 +221,13 @@ onMounted(() => {
   .trip-booking__search-text {
     white-space: initial;
   }
+}
+
+.leaflet-routing-geocoder  {
+  width: 100%;
+}
+.leaflet-routing-geocoder input {
+  width: 100%;
+  height: 100%;
 }
 </style>
