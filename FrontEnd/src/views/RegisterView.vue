@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="head__wrapper">
-      <router-link to="/" class="button-2"> INICIO</router-link>
+      <router-link :to="{ name: 'home' }" class="button-2"> INICIO</router-link>
       <div class="opciones" v-if="$route.path === '/register'">
-        <router-link to="/register/user" class="button"
+        <router-link :to="{ name: 'user' }" class="button"
           >Registrarse Como pasajero</router-link
         >
-        <router-link to="/register/driver" class="button"
+        <router-link :to="{ name: 'driver' }" class="button"
           >Registrarse Como conductor</router-link
         >
       </div>

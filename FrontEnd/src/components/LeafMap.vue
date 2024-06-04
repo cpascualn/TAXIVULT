@@ -70,7 +70,6 @@ export default {
       });
 
       inputSalida.addEventListener("focus", (event) => {
-
         this.showOptions(0);
       });
 
@@ -80,7 +79,6 @@ export default {
       });
 
       inputDestino.addEventListener("focus", (event) => {
-
         this.showOptions(1);
       });
 
@@ -109,10 +107,11 @@ export default {
       this.router = L.Routing.control({
         waypoints: [],
         routeWhileDragging: true,
+        // addWaypoints: false,
 
         createMarker: function (i, waypoint, n) {
           return L.marker(waypoint.latLng, {
-            draggable: true,
+            draggable: false,
             // icon: L.icon({
             //   iconUrl: "ruta/a/tu/icono.png",
             //   iconSize: [0, 0], // Tamaño del icono

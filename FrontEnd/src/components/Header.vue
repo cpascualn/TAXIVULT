@@ -2,26 +2,26 @@
   <header class="div">
     <div class="background">
       <div class="header">
-        <router-link to="/" class="nav__link--active">
+        <router-link :to="{ name: 'home' }" class="nav__link--active">
           <img loading="lazy" srcSet="/img/logo.jpg" class="img" />
         </router-link>
 
         <div class="nav">
           <router-link
-            to="/"
+            :to="{ name: 'home' }"
             :class="{ 'nav__link active': $route.path === '/' }"
             class="nav__link"
           >
             INICIO</router-link
           >
           <router-link
-            to="/viaja"
+            :to="{ name: 'viaja' }"
             :class="{ 'nav__link active': $route.path === '/viaja' }"
             class="nav__link"
             >VIAJA</router-link
           >
           <router-link
-            to="/conduce"
+            :to="{ name: 'conduce' }"
             :class="{ 'nav__link active': $route.path === '/conduce' }"
             class="nav__link"
             >CONDUCE</router-link
@@ -48,8 +48,8 @@
           </router-link>
         </div>
         <div class="buttons" v-else>
-          <router-link to="/login" class="logIn">Iniciar Sesión</router-link>
-          <router-link to="/register" class="Sign">Registrarse</router-link>
+          <router-link :to="{name:'login'}" class="logIn">Iniciar Sesión</router-link>
+          <router-link :to="{name:'register'}" class="Sign">Registrarse</router-link>
         </div>
       </div>
     </div>

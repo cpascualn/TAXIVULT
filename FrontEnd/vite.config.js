@@ -14,5 +14,13 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  // build: {
+  //   rollupOptions: {
+  //     input: {
+  //       index: 'src/main.js',
+  //       dashboard: 'src/dashboard.js',
+  //     },
+  //   },
+  // },
 })

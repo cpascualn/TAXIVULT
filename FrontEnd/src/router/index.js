@@ -5,8 +5,8 @@ import RegisterView from '@/views/RegisterView.vue'
 import ViajarView from '@/views/ViajarView.vue'
 import ConduceView from '@/views/ConduceView.vue'
 import NotFound from '@/views/NotFound.vue'
-import RegisterForm from '@/components/RegisterDriverForm.vue'
-import RegisterUserForm from '@/components/RegisterUserForm.vue'
+// import RegisterForm from '@/components/RegisterDriverForm.vue'
+// import RegisterUserForm from '@/components/RegisterUserForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
