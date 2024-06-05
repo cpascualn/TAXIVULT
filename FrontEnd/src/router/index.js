@@ -5,6 +5,7 @@ import RegisterView from '@/views/RegisterView.vue'
 import ViajarView from '@/views/ViajarView.vue'
 import ConduceView from '@/views/ConduceView.vue'
 import NotFound from '@/views/NotFound.vue'
+import Dash from '@/Dash.vue'
 // import RegisterForm from '@/components/RegisterDriverForm.vue'
 // import RegisterUserForm from '@/components/RegisterUserForm.vue'
 
@@ -48,19 +49,79 @@ const router = createRouter({
       name: 'conduce',
       component: ConduceView
     },
+
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dash,
+      // children: [
+      //   {
+      //     path: "/tables",
+      //     name: "Tables",
+      //     component: Tables,
+      //   },
+      //   {
+      //     path: "/billing",
+      //     name: "Billing",
+      //     component: Billing,
+      //   },
+      //   {
+      //     path: "/notifications",
+      //     name: "Notifications",
+      //     component: Notifications,
+      //   },
+      //   {
+      //     path: "/profile",
+      //     name: "Profile",
+      //     component: Profile,
+      //   },
+      //   {
+      //     path: "/sign-in",
+      //     name: "SignIn",
+      //     component: SignIn,
+      //   },
+      //   {
+      //     path: "/sign-up",
+      //     name: "SignUp",
+      //     component: SignUp,
+      //   },
+      //   {
+      //     path: "/login",
+      //     name: "Login",
+      //     component: Login
+      //   },
+      //   {
+      //     path: "/signup",
+      //     name: "Signup",
+      //     component: Signup
+      //   },
+      //   {
+      //     path: "/password-forgot",
+      //     name: "Password Forgot",
+      //     component: PasswordForgot
+      //   },
+      //   {
+      //     path: "/password-reset",
+      //     name: "Password Reset",
+      //     component: PasswordReset
+      //   },
+      //   {
+      //     path: "/user-profile",
+      //     name: "User Profile",
+      //     component: UserProfile
+      //   },
+      //   {
+      //     path: '/users',
+      //     name: "Users",
+      //     component: Users
+      //   }
+      // ]
+    },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFound
     }
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
   ]
 })
 
