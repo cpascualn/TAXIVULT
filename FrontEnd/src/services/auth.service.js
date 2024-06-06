@@ -1,8 +1,8 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = process.env.VUE_APP_API_BASE_URL
-const BASE_URL = process.env.VUE_APP_BASE_URL
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default {
 
@@ -10,13 +10,13 @@ export default {
     var response = await axios.post(API_URL + '/login', {
       email: user.email,
       password: user.password
-    }, 
-    {
-      headers: {
-        Accept: "application/vnd.api+json",
-        "Content-Type": "application/vnd.api+json",
-      }
-    });
+    },
+      {
+        headers: {
+          Accept: "application/vnd.api+json",
+          "Content-Type": "application/vnd.api+json",
+        }
+      });
     if (response.data.access_token) {
       localStorage.setItem('user_free', JSON.stringify(response.data.access_token));
     }

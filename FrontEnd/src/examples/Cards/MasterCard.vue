@@ -2,9 +2,7 @@
   <div class="card bg-transparent shadow-xl">
     <div
       class="overflow-hidden position-relative border-radius-xl"
-      :style="{
-        backgroundImage: 'url(' + require('@/assets/img/curved14.jpg') + ')',
-      }"
+      :style="{ backgroundImage: `url(${curvedImage})` }"
     >
       <span class="mask" :class="`bg-gradient-${card.background}`"></span>
       <div class="card-body position-relative z-index-1 p-3">
@@ -31,7 +29,7 @@
             class="w-20 d-flex align-items-end justify-content-end"
             :class="isRTL ? 'me-auto' : 'ms-auto'"
           >
-            <material-avatar class="w-60 mt-2" :img="img1" alt="logo" />
+            <!-- <material-avatar class="w-60 mt-2" :img="img1" alt="logo" /> -->
           </div>
         </div>
       </div>
@@ -40,9 +38,10 @@
 </template>
 
 <script>
-import MaterialAvatar from "@/components/MaterialAvatar.vue";
+import MaterialAvatar from "@/components/dashboard/MaterialAvatar.vue";
 import { mapState } from "vuex";
 import img1 from "../../assets/img/logos/mastercard.png";
+import curvedImage from "@/assets/img/curved14.jpg";
 
 export default {
   name: "MasterCard",
@@ -71,6 +70,7 @@ export default {
   data() {
     return {
       img1,
+      curvedImage,
     };
   },
   computed: {

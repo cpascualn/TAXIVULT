@@ -17,14 +17,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // index: resolve(__dirname, 'index.html'),
-        // dashboard: resolve(__dirname, 'dashboard.html'),
-        index: 'src/main.js',
-        dashboard: 'src/dashboard.js',
+        index: resolve(__dirname, 'index.html'),
+        dashboard: resolve(__dirname, 'dashboard/index.html'),
+        // index: 'src/main.js',
+        // dashboard: 'src/dashboard.js',
       },
     },
   },
-  server: {
-    host: true
-  }
 })

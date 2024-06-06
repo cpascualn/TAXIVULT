@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import MaterialButton from "@/components/MaterialButton.vue";
-import showSwal from "../../../mixins/showSwal";
+import MaterialButton from "@/components/dashboard/MaterialButton.vue";
+import showSwal from "@/mixins/showSwal";
 
 
 export default {

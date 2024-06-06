@@ -5,13 +5,13 @@
         <div class="row">
           <div class="col-12">
             <div class="mt-2">
-              <material-input id="password" v-model:value="user.password" type="password" label="Password"
+              <material-input id="password" :value="user.password" type="password" label="Password"
                 name="password" />
   
               <validation-error :errors="apiValidationErrors.password" />
             </div>
             <div class="mt-5">
-              <material-input id="confirmPassword" v-model:value="user.password_confirmation" type="password"
+              <material-input id="confirmPassword" :value="user.password_confirmation" type="password"
                 label="Confirm Password" name="confirmPassword" />
             </div>
           </div>
@@ -25,9 +25,9 @@
   </template>
   
   <script>
-  import MaterialButton from "@/components/MaterialButton.vue";
-  import MaterialInput from "@/components/MaterialInput.vue";
-  import ValidationError from "@/components/ValidationError.vue";
+  import MaterialButton from "@/components/dashboard/MaterialButton.vue";
+  import MaterialInput from "@/components/dashboard/MaterialInput.vue";
+  import ValidationError from "@/components/dashboard/ValidationError.vue";
   import formMixin from "@/mixins/formMixin.js";
   import showSwal from "@/mixins/showSwal.js";
   

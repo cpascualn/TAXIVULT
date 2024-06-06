@@ -176,8 +176,8 @@
 </template>
 
 <script>
-import MaterialAlert from "@/components/MaterialAlert.vue";
-import MaterialSnackbar from "@/components/MaterialSnackbar.vue";
+import MaterialAlert from "@/components/dashboard/MaterialAlert.vue";
+import MaterialSnackbar from "@/components/dashboard/MaterialSnackbar.vue";
 
 export default {
   name: "Notifications",

@@ -3,14 +3,14 @@ import "./assets/css/nucleo-svg.css";
 
 
 import { createApp } from 'vue'
-import Dash from './Dash.vue'
-import router from './router'
+import Dashboard from './Dash.vue'
+import dashboardRouter from './router/dashboardRouter'
 import store from "./store";
 import materialDashboard from "@/material-dashboard";
 
-const app = createApp(Dash)
-app.use(store);
-app.use(router)
-app.use(materialDashboard);
+const appD = createApp(Dashboard)
+appD.use(store);
+appD.use(dashboardRouter)
+appD.use(materialDashboard);
 
-app.mount('#dash-app')
+appD.mount('#dash-app')

@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import MaterialButton from "@/components/MaterialButton.vue";
+import MaterialButton from "@/components/dashboard/MaterialButton.vue";
 
 export default {
   name: "invoice-card",

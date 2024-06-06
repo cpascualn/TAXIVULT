@@ -150,7 +150,7 @@
           href="/login"
           style="text-shadow: 3px 3px 6px rgba(1, 1, 2, 1)"
         >
-          <i class="material-icons ms-2" :class="isRTL ? 'ms-sm-2' : 'me-sm-1'">
+          <i class="material-icons ms-2" :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-1'">
             logout </i
           >Logout
         </a>

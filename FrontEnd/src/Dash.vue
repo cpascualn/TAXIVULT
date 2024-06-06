@@ -1,6 +1,5 @@
 <script>
-import { RouterView } from "vue-router";
-import Sidenav from "@/examples/Sidenav";
+import Sidenav from "@/examples/Sidenav/index.vue";
 import Configurator from "@/examples/Configurator.vue";
 import Navbar from "@/examples/Navbars/Navbar.vue";
 import AppFooter from "@/examples/Footer.vue";
@@ -36,9 +35,11 @@ export default {
     this.$store.state.isTransparent = "bg-transparent";
 
     const sidenav = document.getElementsByClassName("g-sidenav-show")[0];
-
-    if (window.innerWidth > 1200) {
-      sidenav.classList.add("g-sidenav-pinned");
+    if (sidenav) {
+      if (window.innerWidth > 1200) {
+        console.log(sidenav);
+        sidenav.classList.add("g-sidenav-pinned");
+      }
     }
   },
 };
@@ -61,6 +62,7 @@ export default {
         :minNav="navbarMinimize"
         v-if="showNavbar"
       />
+
       <router-view />
       <app-footer v-show="showFooter" />
       <configurator
@@ -70,5 +72,3 @@ export default {
     </main>
   </div>
 </template>
-
-<style scoped></style>

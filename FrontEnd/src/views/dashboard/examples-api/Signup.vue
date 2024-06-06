@@ -35,24 +35,24 @@
                                     <div class="card-body">
                                         <Form role="form" :validation-schema="schema" @submit="handleSignup">
                                             <div class="mb-3">
-                                                <material-input-field id="name" v-model:value="user.name" label="Name"
+                                                <material-input-field id="name" :value="user.name" label="Name"
                                                     name="name" variant="static"/>
                                             </div>
                                             <div class="mb-3">
-                                                <material-input-field id="email" v-model:value="user.email" type="email"
+                                                <material-input-field id="email" :value="user.email" type="email"
                                                     label="Email" name="email" variant="static"/>
                                             </div>
                                             <div class="mb-3">
-                                                <material-input-field id="password" v-model:value="user.password"
+                                                <material-input-field id="password" :value="user.password"
                                                     type="password" label="Password" name="password" variant="static"/>
                                             </div>
                                             <div class="mb-3">
                                                 <material-input-field id="confirmPassword"
-                                                    v-model:value="user.confirmPassword" type="password"
+                                                    :value="user.confirmPassword" type="password"
                                                     label="Confirm Password" name="confirmPassword" variant="static"/>
                                             </div>
                                             <material-checkbox-field id="flexCheckDefault"
-                                                v-model:checked="termsChecked" name="checkbox">
+                                                :checked="termsChecked" name="checkbox">
                                                 I agree the
                                                 <a href="../../../pages/privacy.html"
                                                     class="text-dark font-weight-bolder">Terms and
@@ -84,9 +84,9 @@
 
 <script>
 import Navbar from "@/examples/PageLayout/Navbar.vue";
-import MaterialInputField from "@/components/MaterialInputField.vue";
-import MaterialCheckboxField from "@/components/MaterialCheckboxField.vue";
-import MaterialButton from "@/components/MaterialButton.vue";
+import MaterialInputField from "@/components/dashboard/MaterialInputField.vue";
+import MaterialCheckboxField from "@/components/dashboard/MaterialCheckboxField.vue";
+import MaterialButton from "@/components/dashboard/MaterialButton.vue";
 import showSwal from "@/mixins/showSwal";
 const body = document.getElementsByTagName("body")[0];
 import { mapMutations } from "vuex";

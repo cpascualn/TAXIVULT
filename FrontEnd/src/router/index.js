@@ -1,31 +1,62 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import NotFound from '@/views/index/NotFound.vue'
-import Dash from '@/Dash.vue'
-import App from '@/App.vue'
+import HomeView from '@/views/index/HomeView.vue'
+import LoginView from '@/views/index/LoginView.vue'
+import RegisterView from '@/views/index/RegisterView.vue'
+import ViajarView from '@/views/index/ViajarView.vue'
+import ConduceView from '@/views/index/ConduceView.vue'
+import Dashboard from '@/views/dashboard/Dashboard.vue'
 
-import dashboardRoutes from './dashboardRoutes'
-import mainRoutes from './mainRoutes'
+
+
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
-      component: App,
-      children: mainRoutes
+      name: 'home',
+      component: HomeView,
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: Dash,
-      children: dashboardRoutes
+      path: '/login',
+      name: 'login',
+      component: LoginView
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
+      children: [
+        {
+          path: 'user',
+          name: 'user',
+          component: () => import('@/components/index/RegisterUserForm.vue')
+        },
+        {
+          path: 'driver',
+          name: 'driver',
+          component: () => import('@/components/index/RegisterDriverForm.vue')
+        },
+      ]
+    },
+    {
+      path: '/viaja',
+      name: 'viaja',
+      component: ViajarView
+    },
+    {
+      path: '/conduce',
+      name: 'conduce',
+      component: ConduceView
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFound
-    }
+    },
+
   ]
 })
 

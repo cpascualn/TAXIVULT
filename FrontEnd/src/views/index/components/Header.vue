@@ -30,7 +30,7 @@
 
         <div class="buttons" v-if="$route.path === '/viaja'">
           <!-- CUANDO ESTE IMPLEMENTADO LOS USUARIOS, HACER QUE SI NO ESTA SE MUESTRA LO DE ABAJO-->
-          <!-- <router-link :to="{ name: 'viajes ' }" class="viajes">
+          <router-link to="viajes" class="viajes">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/7d78f584f4528b1b3fa093f16102020cbac643872414eba8da81aab8620f1319?"
@@ -39,13 +39,13 @@
             <p class="viaje--txt">Mis viajes</p>
           </router-link>
 
-          <router-link :to="{ name: 'personal' }">
+          <router-link to="personal">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/18070c5c704d2146192df4332b603c7d0418703aec817cbd2c1fb32679b39bf4?"
               class="acc--img"
             />
-          </router-link> -->
+          </router-link>
         </div>
         <div class="buttons" v-else>
           <router-link :to="{ name: 'login' }" class="logIn"
