@@ -6,10 +6,7 @@ import LoginView from '@/views/index/LoginView.vue'
 import RegisterView from '@/views/index/RegisterView.vue'
 import ViajarView from '@/views/index/ViajarView.vue'
 import ConduceView from '@/views/index/ConduceView.vue'
-import Dashboard from '@/views/dashboard/Dashboard.vue'
-
-
-
+const APP_URL = 'http://localhost:5173';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -51,6 +48,10 @@ const router = createRouter({
       name: 'conduce',
       component: ConduceView
     },
+    // {
+    //   path: '/dashboard/',
+    //   redirect: `${window.location.origin}/dashboard`,
+    // },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',

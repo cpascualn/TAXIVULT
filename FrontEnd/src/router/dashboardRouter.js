@@ -18,6 +18,11 @@ const dashboardRouter = createRouter({
             component: Dashboard,
         },
         {
+            path: '/',
+            name: 'Dashboard',
+            component: Dashboard,
+        },
+        {
             path: "/tables",
             name: "Tables",
             component: Tables,
