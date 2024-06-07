@@ -17,10 +17,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        // index: resolve(__dirname, 'index.html'),
-        // dashboard: resolve(__dirname, 'dashboard.html'),
-        index: 'src/main.js',
-        dashboard: 'src/dashboard.js',
+        index: resolve(__dirname, 'index.html'),
+        dashboard: resolve(__dirname, 'dashboard.html'),
+        // index: 'src/main.js',
+        // dashboard: 'src/dashboard.js',
       },
       output: {
         manualChunks(id) {
