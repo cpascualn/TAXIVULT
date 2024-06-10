@@ -14,12 +14,17 @@ const dashboardRouter = createRouter({
     routes: [
         {
             path: '',
-            name: 'Dashboard',
+            name: 'Dashboard1',
             component: Dashboard,
         },
         {
             path: '/',
-            name: 'Dashboard',
+            name: 'Dashboard2',
+            component: Dashboard,
+        },
+        {
+            path: '/dashboard',
+            name: 'Dashboard3',
             component: Dashboard,
         },
         {
