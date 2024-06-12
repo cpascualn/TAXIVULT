@@ -62,7 +62,7 @@ export default {
         :minNav="navbarMinimize"
         v-if="showNavbar"
       />
-
+    
       <router-view />
       <app-footer v-show="showFooter" />
       <configurator

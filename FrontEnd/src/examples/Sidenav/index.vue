@@ -38,8 +38,8 @@
 </template>
 <script>
 import SidenavList from "./SidenavList.vue";
-import logo from "@/assets/img/logo-ct.png";
-import logoDark from "@/assets/img/logo-ct-dark.png";
+import logo from "@/assets/img/logo-ct.jpg";
+import logoDark from "@/assets/img/logo-ct-dark.jpg";
 import { mapState } from "vuex";
 
 export default {

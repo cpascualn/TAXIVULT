@@ -2,6 +2,11 @@
   <div class="container-fluid py-4">
     <div class="row">
       <div class="col-12">
+        <DataTable></DataTable>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
         <div class="card my-4">
           <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div
@@ -670,7 +675,9 @@
 </template>
 
 <script>
+import DataTable from "@/views/dashboard/components/DataTable.vue";
 export default {
   name: "tables",
+  components: { DataTable },
 };
 </script>

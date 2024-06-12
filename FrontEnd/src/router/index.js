@@ -5,7 +5,8 @@ import HomeView from '@/views/index/HomeView.vue'
 import LoginView from '@/views/index/LoginView.vue'
 import RegisterView from '@/views/index/RegisterView.vue'
 import ViajarView from '@/views/index/ViajarView.vue'
-import ConduceView from '@/views/index/ConduceView.vue'
+import ConduceMain from '@/views/index/components/ConduceMain.vue'
+import HomeMain from "@/views/index/components/HomeMain.vue";
 const APP_URL = 'http://localhost:5173';
 
 const router = createRouter({
@@ -15,6 +16,26 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      redirect: 'home', // Redirige / a /homeComp por defecto
+      children: [
+        {
+          path: 'home',
+          name: 'homeComp',
+          component: HomeMain,
+        },
+
+        {
+          path: 'conduce',
+          name: 'conduce',
+          component: ConduceMain
+        },
+
+      ]
+    },
+    {
+      path: '/viaja',
+      name: 'viaja',
+      component: ViajarView
     },
     {
       path: '/login',
@@ -38,16 +59,7 @@ const router = createRouter({
         },
       ]
     },
-    {
-      path: '/viaja',
-      name: 'viaja',
-      component: ViajarView
-    },
-    {
-      path: '/conduce',
-      name: 'conduce',
-      component: ConduceView
-    },
+
     // {
     //   path: '/dashboard/',
     //   redirect: `${window.location.origin}/dashboard`,

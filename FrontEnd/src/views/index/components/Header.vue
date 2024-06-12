@@ -1,8 +1,8 @@
 <template>
-  <header class="div">
-    <div class="background">
+  <nav class="div">
+    <div :class="$route.path === '/viaja' ? 'background--viaja' : 'background'">
       <div class="header">
-        <router-link :to="{ name: 'home' }" class="nav__link--active">
+        <router-link :to="{ name: 'homeComp' }" class="nav__link--active">
           <img loading="lazy" srcSet="/img/logo.jpg" class="img" />
         </router-link>
 
@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-  </header>
+  </nav>
 </template>
 
 <script setup></script>
@@ -82,6 +82,17 @@
 .background {
   position: relative;
   background-color: var(--oscuro-header, rgba(10, 21, 27, 0.95));
+  display: flex;
+  width: 100%;
+  align-items: center;
+  font-weight: 700;
+  justify-content: center;
+  padding: 14px 60px;
+}
+
+.background--viaja {
+  position: relative;
+  background-color: var(--oscuro-header, rgba(10, 21, 27, 1));
   display: flex;
   width: 100%;
   align-items: center;

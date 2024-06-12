@@ -14,7 +14,7 @@ const dashboardRouter = createRouter({
     routes: [
         {
             path: '',
-            name: 'Dashboard1',
+            name: 'Dashboard',
             component: Dashboard,
         },
         {
