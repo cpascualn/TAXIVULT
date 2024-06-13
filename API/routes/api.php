@@ -3,22 +3,20 @@
 use Illuminate\http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\UsuarioController;
 
-Route::get('/hola', function () {
-    return response()->json(['mensaje' => '¡Hola desde la API!']);
-});
 
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::get('/', function () {
-    return response()->json(['mensaje' => '¡Hola desde la API!']);
+    return response()->json([
+        'message' => 'This is a simple example of item returned by your APIs. Everyone can see it.'
+    ]);
 });
 
 
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 
 // Otras rutas API públicas

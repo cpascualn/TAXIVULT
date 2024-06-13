@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
     FOREIGN KEY (rol) REFERENCES Rol(id)
 );
 CREATE TABLE IF NOT EXISTS `Horario` (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(30) NOT NULL,
     hora_ini1 TIME NOT NULL,
     hora_fin1 TIME NOT NULL,
@@ -38,11 +38,12 @@ CREATE TABLE IF NOT EXISTS `Vehiculo` (
     fabricante VARCHAR(30) NOT NULL,
     modelo VARCHAR(30) NOT NULL,
     tipo ENUM('comun', 'van') NOT NULL,
+    imagen BLOB,
     conductor INT,
     FOREIGN KEY (conductor) REFERENCES Conductor(id)
 );
 CREATE TABLE IF NOT EXISTS `Conductor` (
-     id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     dni VARCHAR(15) NOT NULL UNIQUE,
     licencia_taxista VARCHAR(15),
     titular_tarjeta VARCHAR(30),
@@ -53,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `Conductor` (
     coche VARCHAR(12),
     horario INT,
     FOREIGN KEY (id) REFERENCES Usuario(id),
-    FOREIGN KEY (coche) REFERENCES Vehiculo(matricula),
+    -- FOREIGN KEY (coche) REFERENCES Vehiculo(matricula),
     FOREIGN KEY (horario) REFERENCES Horario(id)
 );
 CREATE TABLE IF NOT EXISTS `Pasajero` (

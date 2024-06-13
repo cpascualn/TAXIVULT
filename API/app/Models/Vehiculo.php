@@ -8,15 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Vehiculo extends Model
 {
     use HasFactory;
-
-    protected $table = 'vehiculos';
-
     protected $fillable = [
         'matricula',
         'capacidad',
         'fabricante',
         'modelo',
         'tipo',
+        'imagen',
         'conductor'
     ];
+
+    public function conductor()
+    {
+        return $this->belongsTo(Conductor::class);
+    }
 }

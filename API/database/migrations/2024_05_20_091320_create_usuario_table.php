@@ -10,21 +10,17 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('usuarios', function (Blueprint $table) {
+        Schema::create('usuario', function (Blueprint $table) {
             $table->id();
-            $table->string('email', 30);
-            $table->string('telefono', 15);
+            $table->string('email', 30)->unique();
+            $table->string('telefono', 15)->nullable();
             $table->string('nombre', 30);
             $table->string('apellidos', 50);
             $table->string('contrasena', 30);
-            $table->unsignedBigInteger('ciudad');
-            $table->unsignedBigInteger('fecha_creacion');
-            $table->unsignedBigInteger('rol');
+            $table->foreignId('ciudad')->constrained('ciudads');
+            $table->date('fecha_creacion');
+            $table->foreignId('rol')->constrained('rols');
             $table->timestamps();
-
-            // // Definir restricciones de clave foránea
-            // $table->foreign('ciudad')->references('id')->on('ciudades');
-            // $table->foreign('rol')->references('id')->on('roles');
         });
     }
 
@@ -33,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('usuarios');
+        Schema::dropIfExists('usuario');
     }
 };

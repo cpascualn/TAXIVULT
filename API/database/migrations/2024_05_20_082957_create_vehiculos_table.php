@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('modelo', 30);
             $table->enum('tipo', ['comun', 'van']);
             $table->binary('imagen')->nullable();
-            $table->integer('conductor');
+            $table->foreignId('conductor')->nullable()->constrained('conductors');
             $table->timestamps();
         });
     }
