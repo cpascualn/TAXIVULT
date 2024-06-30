@@ -1,0 +1,89 @@
+<?php
+
+require_once '../entities/Usuario.php';
+require_once '../database/libreriaPDO.php';
+
+class DaoUsuario extends DB
+{
+    public $usuarios = array();
+
+    public function listar()       //Lista el contenido de la tabla
+    {
+        $consulta = 'SELECT * FROM usuario';
+
+        $param = array();
+
+        $this->usuarios = array();  //Vaciamos el array de las situaciones entre consulta y consulta
+
+        $this->ConsultaDatos($consulta, $param);
+
+        foreach ($this->filas as $fila) {
+            $usu = new Usuario();
+            $usu->__set("id", $fila['id']);
+            $usu->__set("email", $fila['email']);
+            $usu->__set("telefono", $fila['telefono']);
+            $usu->__set("nombre", $fila['nombre']);
+            $usu->__set("apellidos", $fila['apellidos']);
+            $usu->__set("contrasena", $fila['contrasena']);
+            $usu->__set("ciudad", $fila['ciudad']);
+            $usu->__set("fecha_creacion", $fila['fecha_creacion']);
+            $usu->__set("rol", $fila['rol']);
+
+            $this->usuarios[] = $usu;   //Insertamos el objeto con los valores de esa fila en el array de objetos
+
+        }
+
+    }
+
+    public function insertar($usuario)      //Recibe como parámetro un objeto con los datos del usuario
+    {
+        $consulta = "INSERT INTO `usuario`(`email`, `telefono`, `nombre`, `apellidos`, `contrasena`, `ciudad`, `fecha_creacion`, `rol`) VALUES (:EMAIL,:TELEFONO,:NOMBRE,:APELLIDOS,:CONTRASENA,:CIUDAD,:FECHA_CREACION,:ROL)";
+        $param = array();
+
+        $param[":EMAIL"] = $usuario->__get("email");
+        $param[":TELEFONO"] = $usuario->__get("telefono");
+        $param[":NOMBRE"] = $usuario->__get("nombre");
+        $param[":APELLIDOS"] = $usuario->__get("apellidos");
+        $param[":CONTRASENA"] = $usuario->__get("contrasena");
+        $param[":CIUDAD"] = $usuario->__get("ciudad");
+        $param[":FECHA_CREACION"] = $usuario->__get("fecha_creacion");
+        $param[":ROL"] = $usuario->__get("rol");
+
+
+        $this->ConsultaSimple($consulta, $param);
+    }
+
+    public function obtener($id)          //Obtenemos el elemento a partir de su Id
+    {
+        $consulta = "select * from usuario where id=:ID";
+        $param = array(":ID" => $id);
+
+        $this->usuarios = array();  //Vaciamos el array de las situaciones entre consulta y consulta
+
+        $this->ConsultaDatos($consulta, $param);
+
+        $usu = null; //Inicializamos a nulo la variable que almacenarça el objeto de retorno
+
+        if (count($this->filas) == 1) {
+            $fila = $this->filas[0];  //Recuperamos la fila devuelta
+
+            $usu = new Usuario();
+
+            $usu = new Usuario();
+            $usu->__set("id", $fila['id']);
+            $usu->__set("email", $fila['email']);
+            $usu->__set("telefono", $fila['telefono']);
+            $usu->__set("nombre", $fila['nombre']);
+            $usu->__set("apellidos", $fila['apellidos']);
+            $usu->__set("contrasena", $fila['contrasena']);
+            $usu->__set("ciudad", $fila['ciudad']);
+            $usu->__set("fecha_creacion", $fila['fecha_creacion']);
+            $usu->__set("rol", $fila['rol']);
+
+        }
+
+        return $usu;  //Retornamos el objeto con los datos del usuario
+    }
+
+
+}
