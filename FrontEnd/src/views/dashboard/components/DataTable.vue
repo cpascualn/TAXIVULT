@@ -35,7 +35,7 @@ import { ProductService } from "@/services/ProductService";
 
 
 onMounted(() => {
-  ProductService.getProductsMini().then((data) => (products.value = data));
+  ProductService.getProducts().then((data) => (products.value = data));
 });
 
 const products = ref();

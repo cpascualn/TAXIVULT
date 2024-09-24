@@ -1,5 +1,6 @@
 <?php
 
+use FastRoute\Route;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
@@ -29,13 +30,14 @@ $app->add(new AddJsonResponseHeader);
 
 $app->group('/api', function(RouteCollectorProxy $group){
 
-    $group->get('/usuarios', [UsuarioController::class, 'listar']);
-
-    $group->get('/usuarios/{id:[0-9]+}', [UsuarioController::class, 'obtener']);
-    
-    $group->post('/usuarios', [UsuarioController::class, 'insertar']);
-    
-    $group->patch('/usuarios', [UsuarioController::class, 'update']);
+    $group->group('/usuarios', function(RouteCollectorProxy $group){
+        $group->get('', callable: [UsuarioController::class, 'listar']);
+        $group->post('', [UsuarioController::class, 'insertar']);
+        $group->patch('/{id:[0-9]+}', [UsuarioController::class, 'actualizar']);
+        $group->get('/{id:[0-9]+}', [UsuarioController::class, 'obtener']);
+        $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'eliminar']);
+    });
+ 
 });
 
 
