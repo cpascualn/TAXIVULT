@@ -37,6 +37,24 @@ $app->group('/api', function(RouteCollectorProxy $group){
         $group->get('/{id:[0-9]+}', [UsuarioController::class, 'obtener']);
         $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'eliminar']);
     });
+
+    $group->group('/usuarios', function(RouteCollectorProxy $group){
+        $group->get('', callable: [UsuarioController::class, 'listar']);
+        $group->post('', [UsuarioController::class, 'insertar']);
+        $group->patch('/{id:[0-9]+}', [UsuarioController::class, 'actualizar']);
+        $group->get('/{id:[0-9]+}', [UsuarioController::class, 'obtener']);
+        $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'eliminar']);
+    });
+
+    $group->group('/usuarios', function(RouteCollectorProxy $group){
+        $group->get('', callable: [UsuarioController::class, 'listar']);
+        $group->post('', [UsuarioController::class, 'insertar']);
+        $group->patch('/{id:[0-9]+}', [UsuarioController::class, 'actualizar']);
+        $group->get('/{id:[0-9]+}', [UsuarioController::class, 'obtener']);
+        $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'eliminar']);
+    });
+
+
  
 });
 

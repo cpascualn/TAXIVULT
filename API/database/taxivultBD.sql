@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `Conductor` (
     licencia_taxista VARCHAR(15),
     titular_tarjeta VARCHAR(30),
     iban_tarjeta VARCHAR(30),
-    tiemp_espera DECIMAL(6, 4),
+    long_espera DECIMAL(6, 4),
     lati_espera DECIMAL(9, 6),
     estado ENUM('libre', 'ocupado', 'fuera de servicio') NOT NULL,
     coche VARCHAR(12),
