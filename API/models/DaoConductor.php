@@ -11,6 +11,7 @@ class DaoConductor extends DB
         $consulta = "SELECT * FROM Conductor";
         $this->ConsultaDatos($consulta);
 
+        $this->conductores = [];
         foreach ($this->filas as $fila) {
             $con = new Conductor();
             $con->__set("id", $fila['id']);

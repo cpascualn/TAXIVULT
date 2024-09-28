@@ -10,15 +10,39 @@ class DaoPasajero extends DB
  // Listar todos los pasajeros
  public function listar() {
     $consulta = "SELECT * FROM Pasajero";
-    $pasajeros = $this->ConsultaDatos($consulta);
-    return $pasajeros;
+    $this->ConsultaDatos($consulta);
+    $this->pasajeros = [];
+    foreach ($this->filas as $fila) {
+    $pasajero = new Pasajero();
+    $pasajero->__set("id", $fila['id']);
+    $pasajero->__set("n_tarjeta", $fila['n_tarjeta']);
+    $pasajero->__set("titular_tarjeta", $fila['titular_tarjeta']);
+    $pasajero->__set("caducidad_tarjeta", $fila['caducidad_tarjeta']);
+    $pasajero->__set("cvv_tarjeta", $fila['cvv_tarjeta']);
+    $this->pasajeros[] = $pasajero;
+    }
+    return $this->pasajeros;
 }
 
 // Obtener un pasajero por su ID
 public function obtener($id) {
     $consulta = "SELECT * FROM Pasajero WHERE id = :ID";
     $param = array(":ID" => $id);
-    $pasajero = $this->ConsultaDatos($consulta, $param);
+    $this->ConsultaDatos($consulta, $param);
+
+    $pasajero = null;
+    if (count($this->filas) == 1) {
+        
+        $pasajero = new Pasajero();
+        $fila = $this->filas[0];  //Recuperamos la fila devuelta
+        $pasajero = new Pasajero();
+        $pasajero->__set("id", $fila['id']);
+        $pasajero->__set("n_tarjeta", $fila['n_tarjeta']);
+        $pasajero->__set("titular_tarjeta", $fila['titular_tarjeta']);
+        $pasajero->__set("caducidad_tarjeta", $fila['caducidad_tarjeta']);
+        $pasajero->__set("cvv_tarjeta", $fila['cvv_tarjeta']);
+
+    }
     return $pasajero;
 }
 
@@ -37,16 +61,16 @@ public function insertar(Pasajero $pasajero) {
 }
 
 // Actualizar un pasajero
-public function actualizar($id, Pasajero $pasajero) {
+public function actualizar($id,  $pasajero, $nuevo) {
     $consulta = "UPDATE Pasajero SET n_tarjeta = :N_TARJETA, titular_tarjeta = :TITULAR_TARJETA, 
                  caducidad_tarjeta = :CADUCIDAD_TARJETA, cvv_tarjeta = :CVV_TARJETA 
                  WHERE id = :ID";
     $param = array(
         ":ID" => $id,
-        ":N_TARJETA" => $pasajero->__get("n_tarjeta"),
-        ":TITULAR_TARJETA" => $pasajero->__get("titular_tarjeta"),
-        ":CADUCIDAD_TARJETA" => $pasajero->__get("caducidad_tarjeta"),
-        ":CVV_TARJETA" => $pasajero->__get("cvv_tarjeta")
+        ":N_TARJETA" => $nuevo->__get("n_tarjeta") ?? $pasajero->__get("n_tarjeta"),
+        ":TITULAR_TARJETA" => $nuevo->__get("titular_tarjeta") ?? $pasajero->__get("n_tarjeta"),
+        ":CADUCIDAD_TARJETA" => $nuevo->__get("caducidad_tarjeta") ?? $pasajero->__get("n_tarjeta"),
+        ":CVV_TARJETA" => $nuevo->__get("cvv_tarjeta") ?? $pasajero->__get("n_tarjeta")
     );
     $this->ConsultaSimple($consulta, $param);
 }

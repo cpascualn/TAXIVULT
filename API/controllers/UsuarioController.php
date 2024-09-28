@@ -53,8 +53,8 @@ class UsuarioController
         $daoUsu = new DaoUsuario("taxivult");
         $usu = $this->crearUsuario($body);
         $daoUsu->insertar($usu);
-
-
+        $usu = $daoUsu->obtenerPorEmail($usu->__get('email'));
+        $this->insertarUsuarioEnSuRol($request,$usu->__get('rol'));
         $body = json_encode([
             'message' => 'Usuario creado',
             'usuario' => $usu,
@@ -193,6 +193,27 @@ class UsuarioController
         $usu->__set('rol', $body['rol'] ?? null);
 
         return $usu;
+    }
+
+    private function insertarUsuarioEnSuRol($request,$usu){
+
+        $controlador = null;
+        switch ($usu->__get('rol')) {
+            case '1': //admin
+                break;
+            case '2': //conductor
+                $controlador = new ConductorController();
+                // recoger valores unicos de conductor e insertarlos
+                $controlador->insertar($request,$usu);
+                break;
+            case '3': //pasajero
+                $controlador = new PasajeroController();
+                $controlador->insertar($request,$usu);
+                break;
+            default:
+                break;
+        }
+
     }
 
 }
