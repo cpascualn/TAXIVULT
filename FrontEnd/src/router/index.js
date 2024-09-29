@@ -27,7 +27,8 @@ const router = createRouter({
         {
           path: 'conduce',
           name: 'conduce',
-          component: ConduceMain
+          component: ConduceMain,
+          meta: { requiresAuth: true }
         },
 
       ]
@@ -72,5 +73,25 @@ const router = createRouter({
 
   ]
 })
+
+
+router.beforeEach((to,from,next) => {
+
+  const token = localStorage.getItem('authToken');
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (token) {
+      // Si el token existe, permitir el acceso
+      next();
+    } else {
+      // Si no hay token, redirigir a login
+      next({ name: 'login' });
+    }
+  } else {
+    // Si la ruta no requiere autenticación, continuar normalmente
+    next();
+  }
+
+});
 
 export default router

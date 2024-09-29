@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="head__wrapper">
-      <router-link :to="{ name: 'home' }" class="button-2"> INICIO</router-link>
+      <router-link :to="{ name: 'homeComp' }" class="button-2"> INICIO</router-link>
       <div class="opciones" v-if="$route.path === '/register'">
         <router-link :to="{ name: 'user' }" class="button"
           >Registrarse Como pasajero</router-link

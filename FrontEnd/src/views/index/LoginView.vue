@@ -118,6 +118,7 @@
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import  authService   from "@/services/auth.service";
 
 const mail = ref("");
 const password = ref("");
@@ -146,38 +147,19 @@ const submitForm = async (event) => {
   if (!mailCorrect || !passCorrect) {
     event.preventDefault();
   } else {
-    const values = {
+    const user = {
       email: mail.value,
       password: password.value,
     };
 
     try {
-      // llamar al php de mi api , ese es de ejemplo
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/posts",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        }
-      )
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (data) {
-          // recoger los datos de logueo y hacer redirect a inicio
-          console.dir(data);
-
-          router.push("/");
-        })
-        .catch(function (err) {
-          console.log("No se ha recibido respuesta.");
-        });
-    } catch (error) {
-      console.log(error);
-    }
+        const response = await authService.login(user);
+        console.log('Login exitoso:', response.encontrados[0]);
+        // router.push("/");
+      } catch (error) {
+        console.error('Error en el login:', error);
+      }
+ 
   }
 };
 

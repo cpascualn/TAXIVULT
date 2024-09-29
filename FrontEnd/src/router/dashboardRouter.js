@@ -16,6 +16,7 @@ const dashboardRouter = createRouter({
             path: '',
             name: 'Dashboard',
             component: Dashboard,
+            meta: { requiresAuth: true }
         },
         {
             path: '/',
@@ -88,8 +89,25 @@ const dashboardRouter = createRouter({
             component: UsersList
         },
     ]
-})
+});
 
+dashboardRouter.beforeEach((to, from, next) => {
+
+    const token = localStorage.getItem('authToken');
+
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (token) {
+            // Si el token existe, permitir el acceso
+            next();
+        } else {
+            next({ name: 'Login', });
+        }
+    } else {
+        // Si la ruta no requiere autenticación, continuar normalmente
+        next();
+    }
+
+});
 
 
 

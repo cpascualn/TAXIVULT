@@ -8,7 +8,7 @@ require_once APP_ROOT . '/controllers/ConductorController.php';
 class UsuarioController
 {
 
-    public function listar(Request $request, Response $response)
+    public function HandleListar(Request $request, Response $response)
     {
         $daoUsu = new DaoUsuario("taxivult");
         $daoUsu->listar();
@@ -18,7 +18,26 @@ class UsuarioController
         return $response;
     }
 
-    public function obtener(Request $request, Response $response, array $args)
+    public function HandleBuscar(Request $request, Response $response)
+    {
+        $body = $request->getParsedBody();
+
+        $daoUsu = new DaoUsuario("taxivult");
+        $encontrados = $daoUsu->buscar($body);
+        if ($encontrados != null && count($encontrados) > 0) {
+            $body = json_encode(['encontrados' => $encontrados]);
+        }else{
+            $response->getBody()->write(json_encode([
+                'messages' => 'no se encontraron usuarios'
+            ]));
+            return $response->withStatus(404)
+                ->withHeader('Content-Type', 'application/json');
+        }
+        $response->getBody()->write($body);
+        return $response;
+    }
+
+    public function HandleObtener(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -36,7 +55,7 @@ class UsuarioController
     }
 
 
-    public function insertar(Request $request, Response $response)
+    public function HandleInsertar(Request $request, Response $response)
     {
         //recibir datos del body y validarlos
         $body = $request->getParsedBody();
@@ -55,12 +74,12 @@ class UsuarioController
         $usu = $this->crearUsuario($body);
         $daoUsu->insertar($usu);
         $usu = $daoUsu->obtenerPorEmail($usu->__get('email'));
-        $response = $this->insertarUsuarioEnSuRol($request,$response, $usu,$body);
-        if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500 ) {
+        $response = $this->insertarUsuarioEnSuRol($request, $response, $usu, $body);
+        if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
             $daoUsu = new DaoUsuario("taxivult");
             $daoUsu->eliminar($usu->__get('id'));
             return $response;
-          }
+        }
         $body = json_encode([
             'message' => 'Usuario creado',
             'usuario' => $usu,
@@ -71,7 +90,7 @@ class UsuarioController
         return $response;
     }
 
-    public function actualizar(Request $request, Response $response, array $args)
+    public function HandleActualizar(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -95,14 +114,14 @@ class UsuarioController
 
         //si son validos, crear usuario y actualizarlo
         $nuevo = $this->crearUsuario($body);
-        $daoUsu->actualizar($id,$usu,$nuevo);
+        $daoUsu->actualizar($id, $usu, $nuevo);
         $nuevo = $daoUsu->obtener($id);
         $valores = ': ';
         foreach ($body as $key => $value) {
-            $valores.= $key . ', ' ;
+            $valores .= $key . ', ';
         }
         $body = json_encode([
-            'message' => 'valores'. $valores . 'actualizados en el usuario ' . $id,
+            'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
             'usuario' => $nuevo,
         ]);
 
@@ -111,7 +130,7 @@ class UsuarioController
         return $response;
     }
 
-    public function eliminar(Request $request, Response $response, array $args)
+    public function HandleEliminar(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -201,7 +220,8 @@ class UsuarioController
         return $usu;
     }
 
-    private function insertarUsuarioEnSuRol($request,$response,$usu,$body){
+    private function insertarUsuarioEnSuRol($request, $response, $usu, $body)
+    {
 
         $controlador = null;
         switch ($usu->__get('rol')) {
@@ -210,22 +230,22 @@ class UsuarioController
             case '2': //conductor
                 $controlador = new ConductorController();
 
-              $response = $controlador->insertar($request,$response,$usu->__get('id'));
-              //si no se ha podido insertar en su rol se borra el usuario
-              if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500 ) {
-                $daoUsu = new DaoUsuario("taxivult");
-                $daoUsu->eliminar($usu->__get('id'));
-              }
+                $response = $controlador->HandleInsertar($request, $response, $usu->__get('id'));
+                //si no se ha podido insertar en su rol se borra el usuario
+                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+                    $daoUsu = new DaoUsuario("taxivult");
+                    $daoUsu->eliminar($usu->__get('id'));
+                }
 
                 break;
             case '3': //pasajero
                 $controlador = new PasajeroController();
-                $response = $controlador->insertar($request,$response,$usu->__get('id'));
-             //si no se ha podido insertar en su rol se borra el usuario
-             if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
-                $daoUsu = new DaoUsuario("taxivult");
-                $daoUsu->eliminar($usu->__get('id'));
-              }
+                $response = $controlador->HandleInsertar($request, $response, $usu->__get('id'));
+                //si no se ha podido insertar en su rol se borra el usuario
+                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+                    $daoUsu = new DaoUsuario("taxivult");
+                    $daoUsu->eliminar($usu->__get('id'));
+                }
 
                 break;
             default:

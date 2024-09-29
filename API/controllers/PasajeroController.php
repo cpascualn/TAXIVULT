@@ -9,7 +9,7 @@ class PasajeroController
 {
 
 
-    public function listar(Request $request, Response $response)
+    public function Handlelistar(Request $request, Response $response)
     {
         $daoPas = new DaoPasajero("taxivult");
         $daoPas->listar();
@@ -19,7 +19,7 @@ class PasajeroController
         return $response;
     }
 
-    public function obtener(Request $request, Response $response, array $args)
+    public function HandleObtener(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -37,7 +37,7 @@ class PasajeroController
     }
 
 
-    public function insertar(Request $request, Response $response, $id)
+    public function HandleInsertar(Request $request, Response $response, $id)
     {
         //recibir datos del body y validarlos
         $body = $request->getParsedBody();
@@ -67,7 +67,7 @@ class PasajeroController
         return $response;
     }
 
-    public function actualizar(Request $request, Response $response, array $args)
+    public function HandleActualizar(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -108,7 +108,7 @@ class PasajeroController
         return $response;
     }
 
-    public function eliminar(Request $request, Response $response, array $args)
+    public function HandleEliminar(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -127,7 +127,6 @@ class PasajeroController
         $response->getBody()->write($body);
         return $response;
     }
-
 
     private function validarDatos($id, $body)
     {

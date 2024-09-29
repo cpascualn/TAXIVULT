@@ -9,7 +9,7 @@ require_once APP_ROOT . '/entities/Conductor.php';
 class ConductorController
 {
 
-    public function listar(Request $request, Response $response)
+    public function HandleListar(Request $request, Response $response)
     {
         $daoCon = new DaoConductor("taxivult");
         $daoCon->listar();
@@ -19,7 +19,7 @@ class ConductorController
         return $response;
     }
 
-    public function obtener(Request $request, Response $response, array $args)
+    public function HandleObtener(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -37,7 +37,7 @@ class ConductorController
     }
 
 
-    public function insertar(Request $request, Response $response, $id)
+    public function HandleInsertar(Request $request, Response $response, $id)
     {
         //recibir datos del body y validarlos
         $body = $request->getParsedBody();
@@ -82,7 +82,7 @@ class ConductorController
         return $response;
     }
 
-    public function actualizar(Request $request, Response $response, array $args)
+    public function HandleActualizar(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
@@ -122,7 +122,7 @@ class ConductorController
         return $response;
     }
 
-    public function eliminar(Request $request, Response $response, array $args)
+    public function HandleEliminar(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
