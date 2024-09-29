@@ -3,7 +3,8 @@
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Valitron\Validator;
-
+require_once APP_ROOT . '/controllers/PasajeroController.php';
+require_once APP_ROOT . '/controllers/ConductorController.php';
 class UsuarioController
 {
 
@@ -42,7 +43,7 @@ class UsuarioController
         $validacion = $this->validarDatos($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation failed',
+                'error' => 'Vaalidation failed',
                 'messages' => $validacion['messages']
             ]));
             return $response->withStatus(400)
@@ -54,7 +55,12 @@ class UsuarioController
         $usu = $this->crearUsuario($body);
         $daoUsu->insertar($usu);
         $usu = $daoUsu->obtenerPorEmail($usu->__get('email'));
-        $this->insertarUsuarioEnSuRol($request,$usu->__get('rol'));
+        $response = $this->insertarUsuarioEnSuRol($request,$response, $usu,$body);
+        if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500 ) {
+            $daoUsu = new DaoUsuario("taxivult");
+            $daoUsu->eliminar($usu->__get('id'));
+            return $response;
+          }
         $body = json_encode([
             'message' => 'Usuario creado',
             'usuario' => $usu,
@@ -80,7 +86,7 @@ class UsuarioController
         $validacion = $this->validarDatosActualizacion($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation failed',
+                'error' => 'Validation failedd',
                 'messages' => $validacion['messages']
             ]));
             return $response->withStatus(400)
@@ -195,7 +201,7 @@ class UsuarioController
         return $usu;
     }
 
-    private function insertarUsuarioEnSuRol($request,$usu){
+    private function insertarUsuarioEnSuRol($request,$response,$usu,$body){
 
         $controlador = null;
         switch ($usu->__get('rol')) {
@@ -203,16 +209,30 @@ class UsuarioController
                 break;
             case '2': //conductor
                 $controlador = new ConductorController();
-                // recoger valores unicos de conductor e insertarlos
-                $controlador->insertar($request,$usu);
+
+              $response = $controlador->insertar($request,$response,$usu->__get('id'));
+              //si no se ha podido insertar en su rol se borra el usuario
+              if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500 ) {
+                $daoUsu = new DaoUsuario("taxivult");
+                $daoUsu->eliminar($usu->__get('id'));
+              }
+
                 break;
             case '3': //pasajero
                 $controlador = new PasajeroController();
-                $controlador->insertar($request,$usu);
+                $response = $controlador->insertar($request,$response,$usu->__get('id'));
+             //si no se ha podido insertar en su rol se borra el usuario
+             if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+                $daoUsu = new DaoUsuario("taxivult");
+                $daoUsu->eliminar($usu->__get('id'));
+              }
+
                 break;
             default:
                 break;
         }
+
+        return $response;
 
     }
 

@@ -3,7 +3,8 @@
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Valitron\Validator;
-
+require_once APP_ROOT . '/models/DaoPasajero.php';
+require_once APP_ROOT . '/entities/Pasajero.php';
 class PasajeroController
 {
 
@@ -36,14 +37,15 @@ class PasajeroController
     }
 
 
-    public function insertar(Request $request, Response $response)
+    public function insertar(Request $request, Response $response, $id)
     {
         //recibir datos del body y validarlos
         $body = $request->getParsedBody();
-        $validacion = $this->validarDatos($body);
+        $validacion = $this->validarDatos($id, $body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation failed',
+                'error' => 'Validation faileed',
+                'id' => $validacion['id'],
                 'messages' => $validacion['messages']
             ]));
             return $response->withStatus(400)
@@ -52,12 +54,12 @@ class PasajeroController
 
         //si son validos, crear usuario e insertarlo
         $daoPas = new DaoPasajero("taxivult");
-        $pasajero = $this->crearPasajero($body);
+        $pasajero = $this->crearPasajero($id, $body);
         $daoPas->insertar($pasajero);
-
+        $pasajero = $daoPas->obtener($id);
         $body = json_encode([
-            'message' => 'Usuario creado',
-            'usuario' => $pasajero,
+            'message' => 'Pasajero creado',
+            'pasajero' => $pasajero,
         ]);
 
         $response->getBody()->write($body);
@@ -80,7 +82,8 @@ class PasajeroController
         $validacion = $this->validarDatosActualizacion($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation failed',
+                'error' => 'Validatioon failed',
+                'el id es: ' => $id,
                 'messages' => $validacion['messages']
             ]));
             return $response->withStatus(400)
@@ -88,15 +91,15 @@ class PasajeroController
         }
 
         //si son validos, crear usuario y actualizarlo
-        $nuevo = $this->crearPasajero($body);
-        $daoPas->actualizar($id,$pasajero,$nuevo);
+        $nuevo = $this->crearPasajero($id,$body);
+        $daoPas->actualizar($id, $pasajero, $nuevo);
         $nuevo = $daoPas->obtener($id);
         $valores = ': ';
         foreach ($body as $key => $value) {
-            $valores.= $key . ', ' ;
+            $valores .= $key . ', ';
         }
         $body = json_encode([
-            'message' => 'valores'. $valores . 'actualizados en el usuario ' . $id,
+            'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
             'usuario' => $nuevo,
         ]);
 
@@ -126,11 +129,25 @@ class PasajeroController
     }
 
 
-    private function validarDatos($body)
+    private function validarDatos($id, $body)
     {
+
+        $v_id = new Validator(['id' => $id]);
+        $v_id->mapFieldsRules([
+            'id' => ['required'] 
+        ]);
+
+        // Ejecuta la validación del ID
+        if (!$v_id->validate()) {
+            return [
+                'success' => false,
+                'id' => $id,
+                'messages' => $v_id->errors()
+            ];
+        }
+
         $v = new Validator($body);
         $v->mapFieldsRules([
-            'id' => ['required', 'id', ['lengthMax', 11]],
             'n_tarjeta' => ['required', ['lengthMax', 30]],
             'titular_tarjeta' => ['required', ['lengthMax', 15]],
             'caducidad_tarjeta' => ['required', ['lengthMax', 30]],
@@ -172,10 +189,10 @@ class PasajeroController
         ];
     }
 
-    private function crearPasajero($body)
+    public function crearPasajero($id, $body)
     {
         $pasajero = new Pasajero();
-        $pasajero->__set("id", $body['id'] ?? null);
+        $pasajero->__set("id", $id);
         $pasajero->__set("n_tarjeta", $body['n_tarjeta'] ?? null);
         $pasajero->__set("titular_tarjeta", $body['titular_tarjeta'] ?? null);
         $pasajero->__set("caducidad_tarjeta", $body['caducidad_tarjeta'] ?? null);

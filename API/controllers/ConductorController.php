@@ -3,6 +3,8 @@
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Valitron\Validator;
+require_once APP_ROOT . '/models/DaoConductor.php';
+require_once APP_ROOT . '/entities/Conductor.php';
 
 class ConductorController
 {
@@ -35,15 +37,16 @@ class ConductorController
     }
 
 
-    public function insertar(Request $request, Response $response)
+    public function insertar(Request $request, Response $response, $id)
     {
         //recibir datos del body y validarlos
         $body = $request->getParsedBody();
-        $validacion = $this->validarDatos($body);
+        $validacion = $this->validarDatos($id, $body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
                 'error' => 'Validation failed',
-                'messages' => $validacion['messages']
+                'messages' => $validacion['messages'],
+                'id' => $validacion['id'],
             ]));
             return $response->withStatus(400)
                 ->withHeader('Content-Type', 'application/json');
@@ -51,8 +54,22 @@ class ConductorController
 
         //si son validos, crear usuario e insertarlo
         $daoCon = new DaoConductor("taxivult");
-        $conductor = $this->crearConductor($body);
-        $daoCon->insertar($conductor);
+        $conductor = $this->crearConductor($id, $body);
+        try {
+            $daoCon->insertar($conductor);
+        } catch (\Throwable $th) {
+            $response->withStatus(400)
+                ->withHeader('Content-Type', 'application/json');
+            $body = json_encode([
+                'message' => 'error',
+                'en' => $th->getMessage(),
+            ]);
+            $response->getBody()->write($body);
+
+            return $response->withStatus(400)
+                ->withHeader('Content-Type', 'application/json');
+        }
+
 
 
         $body = json_encode([
@@ -88,15 +105,15 @@ class ConductorController
         }
 
         //si son validos, crear usuario y actualizarlo
-        $nuevo = $this->crearConductor($body);
-        $daoCon->actualizar($id,$conductor,$nuevo);
+        $nuevo = $this->crearConductor($id, $body);
+        $daoCon->actualizar($id, $conductor, $nuevo);
         $nuevo = $daoCon->obtener($id);
         $valores = ': ';
         foreach ($body as $key => $value) {
-            $valores.= $key . ', ' ;
+            $valores .= $key . ', ';
         }
         $body = json_encode([
-            'message' => 'valores'. $valores . 'actualizados en el usuario ' . $id,
+            'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
             'usuario' => $nuevo,
         ]);
 
@@ -126,21 +143,37 @@ class ConductorController
     }
 
 
-    private function validarDatos($body)
+    private function validarDatos($id, $body)
     {
+
+        $v_id = new Validator(['id' => $id]);
+        $v_id->mapFieldsRules([
+            'id' => ['required']
+        ]);
+
+        // Ejecuta la validación del ID
+        if (!$v_id->validate()) {
+            return [
+                'success' => false,
+                'id' => $id,
+                'messages' => $v_id->errors()
+            ];
+        }
+
+
         $v = new Validator($body);
         $v->mapFieldsRules([
-            'dni' => ['required', ['lengthMax', 15]],  
-            'licencia_taxista' => [['lengthMax', 15]],  
-            'titular_tarjeta' => [['lengthMax', 30]],   
-            'iban_tarjeta' => [['lengthMax', 30]],      
-            'long_espera' => ['decimal', ['maxDigits', 6, 4]],  
-            'lati_espera' => ['decimal', ['maxDigits', 9, 6]],  
-            'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  
-            'coche' => [['lengthMax', 12]],  
-            'horario' => ['required', 'integer'] 
+            'dni' => ['required', ['lengthMax', 15]],  // Campo obligatorio, longitud máxima de 15
+            'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
+            'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
+            'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
+            'long_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,2}\.\d{1,4}$/']],  // Decimal con 1 o 2 dígitos enteros (positivo o negativo), y hasta 4 decimales
+            'lati_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,3}\.\d{1,6}$/']],  // Decimal con 1 a 3 dígitos enteros (positivo o negativo), y hasta 6 decimales
+            'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
+            'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
+            'horario' => ['required', 'integer']
         ]);
-        
+
 
         if (!$v->validate()) {
             return [
@@ -158,15 +191,15 @@ class ConductorController
     {
         $v = new Validator($body);
         $v->mapFieldsRules([
-            'dni' => ['required', ['lengthMax', 15]],  
-            'licencia_taxista' => [['lengthMax', 15]],  
-            'titular_tarjeta' => [['lengthMax', 30]],   
-            'iban_tarjeta' => [['lengthMax', 30]],      
-            'long_espera' => ['decimal', ['maxDigits', 6, 4]],  
-            'lati_espera' => ['decimal', ['maxDigits', 9, 6]],  
-            'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  
-            'coche' => [['lengthMax', 12]],  
-            'horario' => ['required', 'integer'] 
+            'dni' => ['required', ['lengthMax', 15]],  // Campo obligatorio, longitud máxima de 15
+            'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
+            'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
+            'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
+            'long_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,2}\.\d{1,4}$/']],  // Decimal con 1 o 2 dígitos enteros (positivo o negativo), y hasta 4 decimales
+            'lati_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,3}\.\d{1,6}$/']],  // Decimal con 1 a 3 dígitos enteros (positivo o negativo), y hasta 6 decimales
+            'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
+            'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
+            'horario' => ['required', 'integer']
         ]);
 
         if (!$v->validate()) {
@@ -182,18 +215,20 @@ class ConductorController
         ];
     }
 
-    private function crearConductor($body)
+    public function crearConductor($id, $body)
     {
-        $conductor = new Usuario();
-        $conductor->__set('id', null);
-        $conductor->__set('email', $body['email'] ?? null);
-        $conductor->__set('telefono', $body['telefono'] ?? null);
-        $conductor->__set('nombre', $body['nombre'] ?? null);
-        $conductor->__set('apellidos', $body['apellidos'] ?? null);
-        $conductor->__set('contrasena', isset($body['contrasena']) ? password_hash($body['contrasena'], PASSWORD_DEFAULT) : null);
-        $conductor->__set('ciudad', $body['ciudad'] ?? null);
-        $conductor->__set('fecha_creacion', $body['fecha_creacion'] ?? null);
-        $conductor->__set('rol', $body['rol'] ?? null);
+        $conductor = new Conductor();
+        $conductor->__set('id', $id);
+        $conductor->__set('dni', $body['dni'] ?? null);
+        $conductor->__set('licencia_taxista', $body['licencia_taxista'] ?? null);
+        $conductor->__set('titular_tarjeta', $body['titular_tarjeta'] ?? null);
+        $conductor->__set('iban_tarjeta', $body['iban_tarjeta'] ?? null);
+        $conductor->__set('long_espera', $body['long_espera'] ?? null);
+        $conductor->__set('lati_espera', $body['lati_espera'] ?? null);
+        $conductor->__set('estado', $body['estado'] ?? null);
+        $conductor->__set('coche', $body['coche'] ?? null);
+        $conductor->__set('horario', $body['horario'] ?? null);
+
 
         return $conductor;
     }
