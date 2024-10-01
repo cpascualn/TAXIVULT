@@ -1,7 +1,8 @@
 <?php
 
-require_once '../entities/Usuario.php';
-require_once '../database/libreriaPDO.php';
+require_once APP_ROOT . '/entities/Usuario.php';
+require_once APP_ROOT . '/database/libreriaPDO.php';
+
 
 class DaoUsuario extends DB
 {

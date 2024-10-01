@@ -54,3 +54,4 @@ $app->group('/api', function(RouteCollectorProxy $group){
 
 $app->run();
 
+echo("<h1> PRUEBAS </h1>");
