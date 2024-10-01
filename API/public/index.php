@@ -9,7 +9,7 @@ use Slim\Routing\RouteCollectorProxy;
 
 define('APP_ROOT', dirname(__DIR__));
 require_once APP_ROOT . '/middleware/AddJsonResponseHeader.php';
-require_once __DIR__ . '../models/DaoUsuario.php';
+require_once APP_ROOT . '/models/DaoUsuario.php';
 require APP_ROOT . '/vendor/autoload.php';
 require_once APP_ROOT . '/controllers/UsuarioController.php';
 
