@@ -10,16 +10,21 @@ class DB
 
     protected $dbname = "";
 
-    private $databaseProd = getenv('MYSQLDATABASE');
-    private $hostProd = getenv('MYSQLHOST');
-    private $passwordProd = getenv('MYSQLPASSWORD');
-    private $userProd = getenv('MYSQLUSER');
+    private $databaseProd;
+    private $hostProd;
+    private $passwordProd;
+    private $userProd;
 
     public $filas = array();   //Array de filas con el resultado de la consulta de datos
 
     public function __construct($base)  //El constructor recibe como parámetro la base de datos a conectar
     {
         $this->dbname = $base;
+
+        $this->databaseProd = getenv('MYSQLDATABASE');
+        $this->hostProd = getenv('MYSQLHOST');
+        $this->userProd = getenv('MYSQLUSER');
+        $this->passwordProd = getenv('MYSQLPASSWORD');
 
     }
 
