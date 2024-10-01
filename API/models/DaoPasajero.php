@@ -1,7 +1,7 @@
 <?php
 
-require_once '../entities/Pasajero.php';
-require_once '../database/libreriaPDO.php';
+require_once APP_ROOT . '/entities/Pasajero.php';
+require_once APP_ROOT . '/database/LibreriaPDO.php';
 
 
 class DaoPasajero extends DB

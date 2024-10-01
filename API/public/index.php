@@ -48,6 +48,7 @@ $app->group('/api', function(RouteCollectorProxy $group){
     //     $group->get('/{id:[0-9]+}', [UsuarioController::class, 'obtener']);
     //     $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'eliminar']);
     // });
+    
  
 });
 

@@ -1,7 +1,7 @@
 <?php
 
-require_once '../entities/Conductor.php';
-require_once '../database/libreriaPDO.php';
+require_once APP_ROOT . '/entities/Conductor.php';
+require_once APP_ROOT . '/database/LibreriaPDO.php';
 
 class DaoConductor extends DB
 {
