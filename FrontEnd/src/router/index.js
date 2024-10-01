@@ -28,7 +28,7 @@ const router = createRouter({
           path: 'conduce',
           name: 'conduce',
           component: ConduceMain,
-          meta: { requiresAuth: true }
+          // meta: { requiresAuth: true }
         },
 
       ]
