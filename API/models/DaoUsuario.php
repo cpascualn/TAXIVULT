@@ -10,7 +10,7 @@ class DaoUsuario extends DB
 
     public function listar()       //Lista el contenido de la tabla
     {
-        $consulta = 'SELECT * FROM usuario';
+        $consulta = 'SELECT * FROM Usuario';
 
         $this->usuarios = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
@@ -35,7 +35,7 @@ class DaoUsuario extends DB
 
     public function obtener($id)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "SELECT * FROM usuario WHERE id=:ID";
+        $consulta = "SELECT * FROM Usuario WHERE id=:ID";
         $param = array(":ID" => $id);
 
         $this->usuarios = array();  //Vaciamos el array de las situaciones entre consulta y consulta
@@ -65,7 +65,7 @@ class DaoUsuario extends DB
 
     public function obtenerPorEmail($email)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "SELECT * FROM usuario WHERE email=:EMAIL";
+        $consulta = "SELECT * FROM Usuario WHERE email=:EMAIL";
         $param = array(":EMAIL" => $email);
 
         $this->usuarios = array();  //Vaciamos el array de las situaciones entre consulta y consulta
@@ -94,7 +94,7 @@ class DaoUsuario extends DB
     }
 
     public function buscar($valores){
-        $consulta = "SELECT * FROM usuario WHERE 1=1";
+        $consulta = "SELECT * FROM Usuario WHERE 1=1";
 
         $param = [];
         $valores = array_change_key_case($valores, CASE_UPPER);
@@ -158,7 +158,7 @@ class DaoUsuario extends DB
 
     public function insertar($usuario)      //Recibe como parámetro un objeto con los datos del usuario
     {
-        $consulta = "INSERT INTO `usuario`(`email`, `telefono`, `nombre`, `apellidos`, `contrasena`, `ciudad`, `fecha_creacion`, `rol`) VALUES (:EMAIL,:TELEFONO,:NOMBRE,:APELLIDOS,:CONTRASENA,:CIUDAD,:FECHA_CREACION,:ROL)";
+        $consulta = "INSERT INTO `Usuario`(`email`, `telefono`, `nombre`, `apellidos`, `contrasena`, `ciudad`, `fecha_creacion`, `rol`) VALUES (:EMAIL,:TELEFONO,:NOMBRE,:APELLIDOS,:CONTRASENA,:CIUDAD,:FECHA_CREACION,:ROL)";
         $param = array();
 
         $param[":EMAIL"] = $usuario->__get("email");
@@ -177,7 +177,7 @@ class DaoUsuario extends DB
 
     public function actualizar($id, $usuario, $nuevo)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "UPDATE `usuario` SET `email`=:EMAIL,`telefono`=:TELEFONO,`nombre`=:NOMBRE,`apellidos`=:APELLIDOS,`contrasena`=:CONTRASENA,`ciudad`=:CIUDAD,
+        $consulta = "UPDATE `Usuario` SET `email`=:EMAIL,`telefono`=:TELEFONO,`nombre`=:NOMBRE,`apellidos`=:APELLIDOS,`contrasena`=:CONTRASENA,`ciudad`=:CIUDAD,
         `rol`=:ROL WHERE id = :ID";
 
         $param = array();
@@ -197,7 +197,7 @@ class DaoUsuario extends DB
     }
     public function eliminar($id)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "DELETE FROM usuario WHERE id=:ID";
+        $consulta = "DELETE FROM Usuario WHERE id=:ID";
         $param = array(":ID" => $id);
         $this->ConsultaSimple($consulta, $param);
     }
