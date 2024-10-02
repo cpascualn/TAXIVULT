@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 
+use Exception;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Valitron\Validator;
@@ -13,16 +14,17 @@ use App\Controllers\PasajeroController;
 class UsuarioController
 {
     private DaoUsuario $daoUsu;
-    // private ConductorController $controladorCon;
-    // private PasajeroController $controladorPas;
+    private ConductorController $controladorCon;
+    private PasajeroController $controladorPas;
 
     public function __construct(
         DaoUsuario $daoUsu,
-        //  ConductorController $controladorCon, PasajeroController $controladorPas
+        ConductorController $controladorCon,
+        PasajeroController $controladorPas
     ) {
         $this->daoUsu = $daoUsu;
-        // $this->controladorCon = $controladorCon;
-        // $this->controladorPas = $controladorPas;
+        $this->controladorCon = $controladorCon;
+        $this->controladorPas = $controladorPas;
     }
 
     public function HandleLogin(Request $request, Response $response)
@@ -30,36 +32,56 @@ class UsuarioController
         $input = $request->getParsedBody();
         $email = $input['email'] ?? '';
         $password = $input['password'] ?? '';
-
-
         $usu = $this->daoUsu->obtenerPorEmail($email);
 
-        if ($usu == null || !password_verify($password, $usu->getContrasena)) {
+        // si encuentra usuario y la contrasena coincide devolver token
+        if ($usu == null || !password_verify(trim($password), trim($usu->getContrasena()))) {
             $response->getBody()->write(json_encode(['error' => 'Invalid credentials']));
             return $response->withStatus(401);
         }
 
-        $issuedAt = time();
-        $expirationTime = $issuedAt + 3600; // Token válido por 1 hora
-        $payload = [
-            'iat' => $issuedAt,
-            'exp' => $expirationTime,
-            'email' => $email,
-        ];
-
-        $token = JWT::encode($payload, 'your_secret_key', 'HS256');
+        $token = $this->generarJwtToken($usu);
 
         $response->getBody()->write(json_encode(['access_token' => $token]));
         return $response->withStatus(200);
 
     }
 
+    public function HandleRegister(Request $request, Response $response)
+    {
+        $usuario = null;
+        try {
+            $response = $this->HandleInsertar($request, $response);
+
+            if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500)
+                throw new Exception("Error en el registro");
+
+            $body = $request->getParsedBody();
+            $usuario = $this->daoUsu->obtenerPorEmail($body['email']);
+            if ($usuario == null)
+                throw new Exception("Error en el registro");
+
+        } catch (\Throwable $th) {
+            $errorMessage = $th->getMessage() ?: 'Error al registrar al usuario';
+            $response->getBody()->write(json_encode(['errorRegister' => $errorMessage]));
+            return $response->withStatus(500);
+        }
+
+        if ($usuario != null) {
+            $token = $this->generarJwtToken($usuario);
+            $response->getBody()->write(json_encode(['access_token' => $token]));
+            return $response->withStatus(200);
+        }
+
+        $response->getBody()->write(json_encode(['error' => 'Error al registrar al usuario']));
+        return $response->withStatus(500);
+    }
+
     public function HandleListar(Request $request, Response $response)
     {
-
         $usuarios = $this->daoUsu->listar();
 
-        $body = json_encode( $usuarios);
+        $body = json_encode($usuarios);
         $response->getBody()->write($body);
         return $response;
     }
@@ -82,10 +104,8 @@ class UsuarioController
         return $response;
     }
 
-    public function HandleObtener(Request $request, Response $response, array $args)
+    public function HandleObtener(Request $request, Response $response, string $id)
     {
-
-        $id = $args['id'];
 
         $usu = $this->daoUsu->obtener($id);
 
@@ -113,16 +133,31 @@ class UsuarioController
         }
 
         //si son validos, crear usuario e insertarlo
-
         $usu = $this->crearUsuario($body);
-        $this->daoUsu->insertar($usu);
-        $usu = $this->daoUsu->obtenerPorEmail($usu->__get('email'));
-        // $response = $this->insertarUsuarioEnSuRol($request, $response, $usu, $body);
-        if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
-
-            $this->daoUsu->eliminar($usu->__get('id'));
-            return $response;
+        if ($this->daoUsu->obtenerPorEmail($usu->getEmail()) != null) {
+            $response->getBody()->write(json_encode([
+                'error' => 'El usuario ya existe',
+            ]));
+            return $response->withStatus(400);
         }
+
+        $this->daoUsu->insertar($usu);
+        $usu = $this->daoUsu->obtenerPorEmail($usu->getEmail());
+        try {
+            $response = $this->insertarUsuarioEnSuRol($request, $response, $usu, $body);
+
+            if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+                $this->daoUsu->eliminar($usu->getId());
+                return $response;
+            }
+        } catch (\Throwable $th) {
+            $this->daoUsu->eliminar($usu->getId());
+            $response->getBody()->write(json_encode([
+                'error' => $th->getMessage(),
+            ]));
+            return $response->withStatus(400);
+        }
+
         $body = json_encode([
             'message' => 'Usuario creado',
             'usuario' => $usu,
@@ -133,11 +168,8 @@ class UsuarioController
         return $response;
     }
 
-    public function HandleActualizar(Request $request, Response $response, array $args)
+    public function HandleActualizar(Request $request, Response $response, string $id)
     {
-
-        $id = $args['id'];
-
         //comprobar que existe
         $usu = $this->daoUsu->obtener($id);
         if ($usu === null) {
@@ -172,11 +204,8 @@ class UsuarioController
         return $response;
     }
 
-    public function HandleEliminar(Request $request, Response $response, array $args)
+    public function HandleEliminar(Request $request, Response $response, string $id)
     {
-
-        $id = $args['id'];
-
 
         $usu = $this->daoUsu->obtener($id);
 
@@ -203,7 +232,7 @@ class UsuarioController
             'apellidos' => ['required', ['lengthMax', 30]],
             'contrasena' => ['required', ['lengthMax', 30]],
             'ciudad' => ['required', 'integer'],
-            'fecha_creacion' => ['required', 'date'],
+            'fecha_creacion' => ['date'],
             'rol' => ['required', 'integer']
         ]);
 
@@ -249,51 +278,68 @@ class UsuarioController
     private function crearUsuario($body)
     {
         $usu = new Usuario();
-        $usu->__set('id', null);
-        $usu->__set('email', $body['email'] ?? null);
-        $usu->__set('telefono', $body['telefono'] ?? null);
-        $usu->__set('nombre', $body['nombre'] ?? null);
-        $usu->__set('apellidos', $body['apellidos'] ?? null);
-        $usu->__set('contrasena', isset($body['contrasena']) ? password_hash($body['contrasena'], PASSWORD_DEFAULT) : null);
-        $usu->__set('ciudad', $body['ciudad'] ?? null);
-        $usu->__set('fecha_creacion', $body['fecha_creacion'] ?? null);
-        $usu->__set('rol', $body['rol'] ?? null);
+        $usu->setId(null);
+        $usu->setEmail($body['email'] ?? null);
+        $usu->setTelefono($body['telefono'] ?? null);
+        $usu->setNombre($body['nombre'] ?? null);
+        $usu->setApellidos($body['apellidos'] ?? null);
+        $usu->setContrasena(isset($body['contrasena']) ? password_hash($body['contrasena'], PASSWORD_DEFAULT) : null);
+        $usu->setCiudad($body['ciudad'] ?? null);
+        $usu->setFechaCreacion(date("Y-m-d"));
+        $usu->setRol($body['rol'] ?? null);
 
         return $usu;
     }
 
-    // private function insertarUsuarioEnSuRol($request, $response, $usu, $body)
-    // {
+    private function insertarUsuarioEnSuRol($request, $response, $usu, $body)
+    {
 
-    //     $controlador = null;
-    //     switch ($usu->__get('rol')) {
-    //         case '1': //admin
-    //             break;
-    //         case '2': //conductor
+        $controlador = null;
+        switch ($usu->getRol()) {
+            case '1': //admin
+                break;
+            case '2': //conductor
 
-    //             $response = $this->controladorCon->HandleInsertar($request, $response, $usu->__get('id'));
-    //             //si no se ha podido insertar en su rol se borra el usuario
-    //             if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+                $response = $this->controladorCon->HandleInsertar($request, $response, $usu->getId());
+                //si no se ha podido insertar en su rol se borra el usuario
+                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
 
-    //                 $this->daoUsu->eliminar($usu->__get('id'));
-    //             }
+                    $this->daoUsu->eliminar($usu->getId());
+                }
 
-    //             break;
-    //         case '3': //pasajero
-    //             $response = $this->controladorPas->HandleInsertar($request, $response, $usu->__get('id'));
-    //             //si no se ha podido insertar en su rol se borra el usuario
-    //             if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+                break;
+            case '3': //pasajero
+                $response = $this->controladorPas->HandleInsertar($request, $response, $usu->getId());
+                //si no se ha podido insertar en su rol se borra el usuario
+                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
 
-    //                 $this->daoUsu->eliminar($usu->__get('id'));
-    //             }
+                    $this->daoUsu->eliminar($usu->getId());
+                }
 
-    //             break;
-    //         default:
-    //             break;
-    //     }
+                break;
+            default:
+                break;
+        }
 
-    //     return $response;
+        return $response;
 
-    // }
+    }
+
+    private function generarJwtToken($usu)
+    {
+        $issuedAt = time();
+        $expirationTime = $issuedAt + 86400; // Token válido por 1 dia
+        $payload = [
+            'iat' => $issuedAt,
+            'exp' => $expirationTime,
+            'userId' => $usu->getId(),
+            'email' => $usu->getEmail(),
+            'rol' => $usu->getRol()
+        ];
+        $jwtKey = $_ENV['JWT_SECRET_KEY'];
+
+        $token = JWT::encode($payload, $jwtKey, 'HS256');
+        return $token;
+    }
 
 }

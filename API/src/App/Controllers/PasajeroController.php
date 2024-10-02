@@ -11,7 +11,7 @@ use App\Entities\Pasajero;
 
 class PasajeroController
 {
-    
+
     public function __construct(private DaoPasajero $daoPas)
     {
     }
@@ -19,7 +19,7 @@ class PasajeroController
 
     public function Handlelistar(Request $request, Response $response)
     {
-        
+
         $this->daoPas->listar();
 
         $body = json_encode($this->daoPas->pasajeros);
@@ -32,7 +32,7 @@ class PasajeroController
 
         $id = $args['id'];
 
-        
+
         $pasajero = $this->daoPas->obtener($id);
 
         if ($pasajero === null) {
@@ -60,7 +60,7 @@ class PasajeroController
         }
 
         //si son validos, crear usuario e insertarlo
-        
+
         $pasajero = $this->crearPasajero($id, $body);
         $this->daoPas->insertar($pasajero);
         $pasajero = $this->daoPas->obtener($id);
@@ -78,7 +78,7 @@ class PasajeroController
     {
 
         $id = $args['id'];
-        
+
         //comprobar que existe
         $pasajero = $this->daoPas->obtener($id);
         if ($pasajero === null) {
@@ -97,7 +97,7 @@ class PasajeroController
         }
 
         //si son validos, crear usuario y actualizarlo
-        $nuevo = $this->crearPasajero($id,$body);
+        $nuevo = $this->crearPasajero($id, $body);
         $this->daoPas->actualizar($id, $pasajero, $nuevo);
         $nuevo = $this->daoPas->obtener($id);
         $valores = ': ';
@@ -119,7 +119,7 @@ class PasajeroController
 
         $id = $args['id'];
 
-        
+
         $pasajero = $this->daoPas->obtener($id);
 
         if ($pasajero === null) {
@@ -139,7 +139,7 @@ class PasajeroController
 
         $v_id = new Validator(['id' => $id]);
         $v_id->mapFieldsRules([
-            'id' => ['required'] 
+            'id' => ['required']
         ]);
 
         // Ejecuta la validación del ID
@@ -197,11 +197,11 @@ class PasajeroController
     public function crearPasajero($id, $body)
     {
         $pasajero = new Pasajero();
-        $pasajero->__set("id", $id);
-        $pasajero->__set("n_tarjeta", $body['n_tarjeta'] ?? null);
-        $pasajero->__set("titular_tarjeta", $body['titular_tarjeta'] ?? null);
-        $pasajero->__set("caducidad_tarjeta", $body['caducidad_tarjeta'] ?? null);
-        $pasajero->__set("cvv_tarjeta", $body['cvv_tarjeta'] ?? null);
+        $pasajero->setId($id);
+        $pasajero->setNTarjeta($body['n_tarjeta'] ?? null);
+        $pasajero->setTitularTarjeta($body['titular_tarjeta'] ?? null);
+        $pasajero->setCaducidadTarjeta($body['caducidad_tarjeta'] ?? null);
+        $pasajero->setCvvTarjeta($body['cvv_tarjeta'] ?? null);
         return $pasajero;
     }
 

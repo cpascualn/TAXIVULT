@@ -1,17 +1,15 @@
 <?php
 
 use App\Database\Database;
-use App\Models\DaoUsuario;
 
 return [
 
     Database::class => function () {
         return new Database(
-            host: 'localhost',
-            dbname: 'taxivult',
-            user: 'root',
-            password: ''
+            host: $_ENV['MYSQLHOST'],
+            dbname: $_ENV['MYSQLDATABASE'],
+            user: $_ENV['MYSQLUSER'],
+            password: $_ENV['MYSQLPASSWORD']
         );
     },
 ];
-

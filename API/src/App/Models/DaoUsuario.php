@@ -9,8 +9,9 @@ use App\Entities\Usuario;
 
 class DaoUsuario
 {
-    private $db;
+   
     public $usuarios = array();
+    private $db;
 
     public function __construct(Database $db)
     {

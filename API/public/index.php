@@ -7,10 +7,15 @@ use Slim\Handlers\Strategies\RequestResponseArgs;
 define('APP_ROOT', dirname(__DIR__));
 require APP_ROOT . '/vendor/autoload.php';
 
- header("Access-Control-Allow-Origin: http://localhost:5173"); // Cambia por tu dominio
- header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
- header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Origin: http://localhost:5173"); // Cambia por tu dominio
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+
+if(file_exists(APP_ROOT. '/.env')){
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+    $dotenv->load();
+}
 
 $builder = new ContainerBuilder;
 $container = $builder->addDefinitions(APP_ROOT . '/config/definitions.php')->build();

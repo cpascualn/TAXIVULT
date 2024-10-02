@@ -10,14 +10,14 @@ use App\Entities\Conductor;
 
 class ConductorController
 {
-    
+
     public function __construct(private DaoConductor $daoCon)
     {
     }
 
     public function HandleListar(Request $request, Response $response)
     {
-        
+
         $this->daoCon->listar();
 
         $body = json_encode($this->daoCon->conductores);
@@ -25,12 +25,13 @@ class ConductorController
         return $response;
     }
 
+
     public function HandleObtener(Request $request, Response $response, array $args)
     {
 
         $id = $args['id'];
 
-        
+
         $conductor = $this->daoCon->obtener($id);
 
         if ($conductor === null) {
@@ -58,7 +59,7 @@ class ConductorController
         }
 
         //si son validos, crear usuario e insertarlo
-        
+
         $conductor = $this->crearConductor($id, $body);
         try {
             $this->daoCon->insertar($conductor);
@@ -89,7 +90,7 @@ class ConductorController
     {
 
         $id = $args['id'];
-        
+
         //comprobar que existe
         $conductor = $this->daoCon->obtener($id);
         if ($conductor === null) {
@@ -129,7 +130,7 @@ class ConductorController
 
         $id = $args['id'];
 
-        
+
         $conductor = $this->daoCon->obtener($id);
 
         if ($conductor === null) {
@@ -220,16 +221,16 @@ class ConductorController
     public function crearConductor($id, $body)
     {
         $conductor = new Conductor();
-        $conductor->__set('id', $id);
-        $conductor->__set('dni', $body['dni'] ?? null);
-        $conductor->__set('licencia_taxista', $body['licencia_taxista'] ?? null);
-        $conductor->__set('titular_tarjeta', $body['titular_tarjeta'] ?? null);
-        $conductor->__set('iban_tarjeta', $body['iban_tarjeta'] ?? null);
-        $conductor->__set('long_espera', $body['long_espera'] ?? null);
-        $conductor->__set('lati_espera', $body['lati_espera'] ?? null);
-        $conductor->__set('estado', $body['estado'] ?? null);
-        $conductor->__set('coche', $body['coche'] ?? null);
-        $conductor->__set('horario', $body['horario'] ?? null);
+        $conductor->setId($id);
+        $conductor->setDni($body['dni'] ?? null);
+        $conductor->setLicenciaTaxista($body['licencia_taxista'] ?? null);
+        $conductor->setTitularTarjeta($body['titular_tarjeta'] ?? null);
+        $conductor->setIbanTarjeta($body['iban_tarjeta'] ?? null);
+        $conductor->setLongEspera($body['long_espera'] ?? null);
+        $conductor->setLatiEspera($body['lati_espera'] ?? null);
+        $conductor->setEstado($body['estado'] ?? null);
+        $conductor->setCoche($body['coche'] ?? null);
+        $conductor->setHorario($body['horario'] ?? null);
 
 
         return $conductor;
