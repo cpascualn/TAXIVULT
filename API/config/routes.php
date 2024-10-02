@@ -1,7 +1,7 @@
 <?php
 
-use App\middleware\AddJsonResponseHeader;
-use App\middleware\JwtMiddleware;
+use App\Middleware\AddJsonResponseHeader;
+use App\Middleware\JwtMiddleware;
 use App\Middleware\FilterByRolMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 use App\Controllers\UsuarioController;
