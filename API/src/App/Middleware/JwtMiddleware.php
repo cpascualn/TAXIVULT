@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Psr7\Response as SlimResponse;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use App\models\DaoUsuario;
+use App\Models\DaoUsuario;
 use App\Entities\Usuario;
 class JwtMiddleware
 {
