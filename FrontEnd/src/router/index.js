@@ -78,31 +78,32 @@ const router = createRouter({
 const token = localStorage.getItem('authToken');
 
 
-// router.beforeEach((to, from, next) => {
-//   // redirect to login page if not logged in and trying to access a restricted page
-//   const { authorize } = to.meta;
-//   let decoded;
-//   let userRol = 0;
-//   if (token) {
-//     decoded = jwtDecode(token);
-//     userRol = decoded.data.rol;
-//   }
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const { authorize } = to.meta;
+  let decoded;
+  let userRol = 0;
+  if (token) {
+    decoded = jwtDecode(token);
+    userRol = decoded.data.rol;
+  }
+  console.log(userRol);
 
+  // check if route is restricted by role
+  if (authorize) {
+    if (authorize.length && !authorize.includes(userRol)) {
+      // si el rol no tiene acceso y es un visitante redirigir al login,si no al home
+      if (userRol == Roles.Visitante) {
+        return next({ name: 'login' });
+      }
 
-//   if (authorize) {
-//     if (userRol == Roles.Visitante) {
-//       // not logged in so redirect to login page with the return url
-//       return next({ name: 'login' });
-//     }
-//     // check if route is restricted by role
-//     if (authorize.length && !authorize.includes(userRol)) {
-//       // role not authorised so redirect to home page
-//       return next({ name: 'home' });
-//     }
-//   }
+      // role not authorised so redirect to home page
+      return next({ name: 'home' });
+    }
+  }
 
-//   next();
-// })
+  next();
+})
 
 
 
