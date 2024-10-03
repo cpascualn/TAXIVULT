@@ -111,29 +111,29 @@ const dashboardRouter = createRouter({
 const token = localStorage.getItem('authToken');
 
 
-dashboardRouter.beforeEach((to, from, next) => {
-    const { authorize } = to.meta;
-    let decoded;
-    let userRol = 0;
-    if (token) {
-        decoded = jwtDecode(token);
-        userRol = decoded.data.rol;
-    }
+// dashboardRouter.beforeEach((to, from, next) => {
+//     const { authorize } = to.meta;
+//     let decoded;
+//     let userRol = 0;
+//     if (token) {
+//         decoded = jwtDecode(token);
+//         userRol = decoded.data.rol;
+//     }
 
 
-    if (authorize) {
-        if (userRol == Roles.Visitante) {
-            return window.location.replace('/login');
-        }
-        // check if route is restricted by role
-        if (authorize.length && !authorize.includes(userRol)) {
-            // role not authorised so redirect to home page
-            return window.location.replace('/home');
-        }
-    }
+//     if (authorize) {
+//         if (userRol == Roles.Visitante) {
+//             return window.location.replace('/login');
+//         }
+//         // check if route is restricted by role
+//         if (authorize.length && !authorize.includes(userRol)) {
+//             // role not authorised so redirect to home page
+//             return window.location.replace('/home');
+//         }
+//     }
 
-    next();
-})
+//     next();
+// })
 
 
 

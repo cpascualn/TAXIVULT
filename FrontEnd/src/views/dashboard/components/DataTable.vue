@@ -33,10 +33,13 @@ import { ProductService } from "@/services/ProductService";
 
 //  los filtros a medias
 
-
+const products = ref();
 onMounted(() => {
   ProductService.getProducts().then((data) => (products.value = data));
 });
 
-const products = ref();
+// MIRAR EN W3S HOWTO FILTER TABLES Y HACERLO CON JS PURO EN VEZ DEL FRAMEWORK PRIMEVUE
+
+
+
 </script>
