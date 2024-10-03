@@ -2,7 +2,7 @@ import axios from 'axios';
 import authHeader from './auth-header';
 
 // const API_URL = import.meta.env.VITE_API_BASE_URL;
-const API_URL = "http://localhost:8080/api/";
+const API_URL = "http://localhost:8080/";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -11,7 +11,7 @@ export default {
   async login(user) {
     try {
       const response = await fetch(
-        API_URL + "usuarios/buscar",
+        API_URL + "login",
         {
           method: "POST",
           headers: {
@@ -21,19 +21,16 @@ export default {
         }
       )
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json(); // Espera el resultado de la conversión a JSON
+        return data;
+        // throw new Error(`HTTP error! error:${data.error} status: ${response.status} `);
       }
       const data = await response.json(); // Espera el resultado de la conversión a JSON
-      console.dir(data);
-      console.log(data.encontrados[0]);
-
       if (data.access_token) {
         localStorage.setItem('authToken', JSON.stringify(data.access_token));
-        console.log("token anadido" , data.access_token);
       }
       return data;
     } catch (err) {
-      console.log("No se ha recibido respuesta.");
       console.log(err);
     }
   },

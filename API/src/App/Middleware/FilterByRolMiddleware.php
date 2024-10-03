@@ -20,7 +20,7 @@ class FilterByRolMiddleware
     public function __invoke(Request $request, $handler): Response
     {
         try {
-            
+
             $user = $request->getAttribute('userData');
             if (!isset($user) && $user == null)
                 throw new \Exception('Invalid token');
@@ -29,14 +29,14 @@ class FilterByRolMiddleware
 
             if (!in_array($rol, $this->allowedRoles)) {
                 $response = new SlimResponse();
-                $response->getBody()->write(json_encode(['error' => 'Acceso restringido']));
+                $response->getBody()->write(json_encode(['error' => 'Acceso restringido', 'success' => false]));
                 return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
             }
 
 
         } catch (\Exception $e) {
             $response = new SlimResponse();
-            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+            $response->getBody()->write(json_encode(['error' => $e->getMessage(), 'success' => false]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
         }
 

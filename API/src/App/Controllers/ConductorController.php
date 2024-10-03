@@ -20,9 +20,9 @@ class ConductorController
 
         $this->daoCon->listar();
 
-        $body = json_encode($this->daoCon->conductores);
+        $body = json_encode(['conductores' => $this->daoCon->conductores, 'success' => true]);
         $response->getBody()->write($body);
-        return $response;
+        return $response->withStatus(200);
     }
 
 
@@ -35,12 +35,14 @@ class ConductorController
         $conductor = $this->daoCon->obtener($id);
 
         if ($conductor === null) {
-            throw new \Slim\Exception\HttpNotFoundException($request, message: 'El usuario no existe');
+            $body = json_encode(['message' => 'El conductor no existe', 'success' => false]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
         }
 
-        $body = json_encode($conductor);
+        $body = json_encode(['conductor' => $conductor, 'success' => true]);
         $response->getBody()->write($body);
-        return $response;
+        return $response->withStatus(200);
     }
 
 
@@ -54,6 +56,7 @@ class ConductorController
                 'error' => 'Validation failed',
                 'messages' => $validacion['messages'],
                 'id' => $validacion['id'],
+                'success' => false
             ]));
             return $response->withStatus(400);
         }
@@ -68,6 +71,7 @@ class ConductorController
             $body = json_encode([
                 'message' => 'error',
                 'en' => $th->getMessage(),
+                'success' => false
             ]);
             $response->getBody()->write($body);
 
@@ -79,11 +83,12 @@ class ConductorController
         $body = json_encode([
             'message' => 'Usuario creado',
             'usuario' => $conductor,
+            'success' => true
         ]);
 
         $response->getBody()->write($body);
 
-        return $response;
+        return $response->withStatus(200);
     }
 
     public function HandleActualizar(Request $request, Response $response, array $args)
@@ -94,7 +99,11 @@ class ConductorController
         //comprobar que existe
         $conductor = $this->daoCon->obtener($id);
         if ($conductor === null) {
-            throw new \Slim\Exception\HttpNotFoundException($request, message: 'El usuario no existe');
+            $response->getBody()->write(json_encode([
+                'messages' => "El conductor no existe",
+                'success' => false
+            ]));
+            return $response->withStatus(400);
         }
 
         $body = $request->getParsedBody();
@@ -102,7 +111,8 @@ class ConductorController
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
                 'error' => 'Validation failed',
-                'messages' => $validacion['messages']
+                'messages' => $validacion['messages'],
+                'success' => false
             ]));
             return $response->withStatus(400);
         }
@@ -118,11 +128,12 @@ class ConductorController
         $body = json_encode([
             'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
             'usuario' => $nuevo,
+            'success' => true
         ]);
 
         $response->getBody()->write($body);
 
-        return $response;
+        return $response->withStatus(200);
     }
 
     public function HandleEliminar(Request $request, Response $response, array $args)
@@ -134,15 +145,21 @@ class ConductorController
         $conductor = $this->daoCon->obtener($id);
 
         if ($conductor === null) {
-            throw new \Slim\Exception\HttpNotFoundException($request, message: 'El usuario no existe');
+            $body = json_encode([
+                'message' => 'El conductor no existe',
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
         }
 
         $this->daoCon->eliminar($id);
         $body = json_encode([
-            'message' => 'Usuario ' . $id . ' Borrado'
+            'message' => 'Usuario ' . $id . ' Borrado',
+            'success' => true
         ]);
         $response->getBody()->write($body);
-        return $response;
+        return $response->withStatus(200);
     }
 
 

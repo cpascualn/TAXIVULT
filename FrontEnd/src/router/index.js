@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+import { jwtDecode } from 'jwt-decode'
+import { Roles } from './Roles'
 import NotFound from '@/views/index/NotFound.vue'
 import HomeView from '@/views/index/HomeView.vue'
 import LoginView from '@/views/index/LoginView.vue'
@@ -8,6 +9,9 @@ import ViajarView from '@/views/index/ViajarView.vue'
 import ConduceMain from '@/views/index/components/ConduceMain.vue'
 import HomeMain from "@/views/index/components/HomeMain.vue";
 const APP_URL = 'http://localhost:5173';
+
+
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,7 +32,6 @@ const router = createRouter({
           path: 'conduce',
           name: 'conduce',
           component: ConduceMain,
-          // meta: { requiresAuth: true }
         },
 
       ]
@@ -36,62 +39,74 @@ const router = createRouter({
     {
       path: '/viaja',
       name: 'viaja',
-      component: ViajarView
+      component: ViajarView,
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
+      meta: { authorize: [Roles.Visitante] },
+
     },
     {
       path: '/register',
       name: 'register',
       component: RegisterView,
+      meta: { authorize: [Roles.Visitante] },
       children: [
         {
           path: 'user',
           name: 'user',
-          component: () => import('@/components/index/RegisterUserForm.vue')
+          component: () => import('@/components/index/RegisterUserForm.vue'),
         },
         {
           path: 'driver',
           name: 'driver',
-          component: () => import('@/components/index/RegisterDriverForm.vue')
+          component: () => import('@/components/index/RegisterDriverForm.vue'),
         },
       ]
     },
-
-    // {
-    //   path: '/dashboard/',
-    //   redirect: `${window.location.origin}/dashboard`,
-    // },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFound
     },
+  ],
 
-  ]
+})
+
+const token = localStorage.getItem('authToken');
+
+
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const { authorize } = to.meta;
+  let decoded;
+  let userRol = 0;
+  if (token) {
+    decoded = jwtDecode(token);
+    userRol = decoded.data.rol;
+  }
+
+
+  if (authorize) {
+    if (userRol == Roles.Visitante) {
+      // not logged in so redirect to login page with the return url
+      return next({ name: 'login' });
+    }
+    // check if route is restricted by role
+    if (authorize.length && !authorize.includes(userRol)) {
+      // role not authorised so redirect to home page
+      return next({ name: 'home' });
+    }
+  }
+
+  next();
 })
 
 
-router.beforeEach((to,from,next) => {
 
-  const token = localStorage.getItem('authToken');
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (token) {
-      // Si el token existe, permitir el acceso
-      next();
-    } else {
-      // Si no hay token, redirigir a login
-      next({ name: 'login' });
-    }
-  } else {
-    // Si la ruta no requiere autenticación, continuar normalmente
-    next();
-  }
 
-});
 
 export default router

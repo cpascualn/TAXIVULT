@@ -22,9 +22,9 @@ class PasajeroController
 
         $this->daoPas->listar();
 
-        $body = json_encode($this->daoPas->pasajeros);
+        $body = json_encode(['pasajero' => $this->daoPas->pasajeros, 'success' => true]);
         $response->getBody()->write($body);
-        return $response;
+        return $response->withStatus(200);
     }
 
     public function HandleObtener(Request $request, Response $response, array $args)
@@ -36,12 +36,14 @@ class PasajeroController
         $pasajero = $this->daoPas->obtener($id);
 
         if ($pasajero === null) {
-            throw new \Slim\Exception\HttpNotFoundException($request, message: 'El usuario no existe');
+            $body = json_encode(['message' => 'el pasajero no existe', 'success' => false]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
         }
 
-        $body = json_encode($pasajero);
+        $body = json_encode(['pasajero' => $pasajero, 'success' => true]);
         $response->getBody()->write($body);
-        return $response;
+        return $response->withStatus(200);
     }
 
 
@@ -54,7 +56,8 @@ class PasajeroController
             $response->getBody()->write(json_encode([
                 'error' => 'Validation faileed',
                 'id' => $validacion['id'],
-                'messages' => $validacion['messages']
+                'messages' => $validacion['messages'],
+                'success' => false
             ]));
             return $response->withStatus(400);
         }
@@ -67,11 +70,12 @@ class PasajeroController
         $body = json_encode([
             'message' => 'Pasajero creado',
             'pasajero' => $pasajero,
+            'success' => true
         ]);
 
         $response->getBody()->write($body);
 
-        return $response;
+        return $response->withStatus(200);
     }
 
     public function HandleActualizar(Request $request, Response $response, array $args)
@@ -82,7 +86,11 @@ class PasajeroController
         //comprobar que existe
         $pasajero = $this->daoPas->obtener($id);
         if ($pasajero === null) {
-            throw new \Slim\Exception\HttpNotFoundException($request, message: 'El usuario no existe');
+            $response->getBody()->write(json_encode([
+                'messages' => 'El pasajero no existe',
+                'success' => false
+            ]));
+            return $response->withStatus(400);
         }
 
         $body = $request->getParsedBody();
@@ -91,7 +99,8 @@ class PasajeroController
             $response->getBody()->write(json_encode([
                 'error' => 'Validatioon failed',
                 'el id es: ' => $id,
-                'messages' => $validacion['messages']
+                'messages' => $validacion['messages'],
+                'success' => false
             ]));
             return $response->withStatus(400);
         }
@@ -107,11 +116,12 @@ class PasajeroController
         $body = json_encode([
             'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
             'usuario' => $nuevo,
+            'success' => true
         ]);
 
         $response->getBody()->write($body);
 
-        return $response;
+        return $response->withStatus(200);
     }
 
     public function HandleEliminar(Request $request, Response $response, array $args)
@@ -123,15 +133,21 @@ class PasajeroController
         $pasajero = $this->daoPas->obtener($id);
 
         if ($pasajero === null) {
-            throw new \Slim\Exception\HttpNotFoundException($request, message: 'El usuario no existe');
+            $body = json_encode([
+                'message' => 'el pasajero no existe',
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
         }
 
         $this->daoPas->eliminar($id);
         $body = json_encode([
-            'message' => 'Usuario ' . $id . ' Borrado'
+            'message' => 'Usuario ' . $id . ' Borrado',
+            'success' => true
         ]);
         $response->getBody()->write($body);
-        return $response;
+        return $response->withStatus(200);
     }
 
     private function validarDatos($id, $body)

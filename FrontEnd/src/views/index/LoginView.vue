@@ -118,7 +118,7 @@
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import  authService   from "@/services/auth.service";
+import authService from "@/services/auth.service";
 
 const mail = ref("");
 const password = ref("");
@@ -153,13 +153,12 @@ const submitForm = async (event) => {
     };
 
     try {
-        const response = await authService.login(user);
-        console.log('Login exitoso:', response.encontrados[0]);
-        // router.push("/");
-      } catch (error) {
-        console.error('Error en el login:', error);
-      }
- 
+      const data = await authService.login(user);
+      if (!data.success) throw new Error(data.error);
+      router.push("/");
+    } catch (error) {
+      console.error("Error en el login:", error);
+    }
   }
 };
 

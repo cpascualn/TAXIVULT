@@ -23,7 +23,7 @@ class JwtMiddleware
 
         if (!$authHeader) {
             $response = new SlimResponse();
-            $response->getBody()->write(json_encode(['error' => 'No token provided']));
+            $response->getBody()->write(json_encode(['error' => 'No token provided', 'success' => false]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
         }
 
@@ -32,7 +32,8 @@ class JwtMiddleware
         try {
             $jwtKey = $_ENV['JWT_SECRET_KEY'];
             $decoded = JWT::decode($token, new Key($jwtKey, 'HS256'));
-            $usu = $this->daoUsu->obtenerPorEmail($decoded->email);
+            $data = $decoded->data;
+            $usu = $this->daoUsu->obtenerPorEmail($data->email);
             if ($usu == null)
                 throw new \Exception("El usuario ya no existe");
             $userData = array(
@@ -43,10 +44,10 @@ class JwtMiddleware
             $request = $request->withAttribute('userData', $userData);
         } catch (\Exception $e) {
             $response = new SlimResponse();
-            $response->getBody()->write(json_encode(['error' => 'Invalid token']));
+            $response->getBody()->write(json_encode(['error' => 'Invalid token', 'success' => false]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
         }
-        
+
         return $handler->handle($request);
     }
 }

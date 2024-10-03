@@ -12,7 +12,7 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 
-if(file_exists(APP_ROOT. '/.env')){
+if (file_exists(APP_ROOT . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
     $dotenv->load();
 }
@@ -28,7 +28,7 @@ $collector->setDefaultInvocationStrategy(new RequestResponseArgs);
 
 $app->addBodyParsingMiddleware();
 
-$error_middleware = $app->addErrorMiddleware(true, true, true);
+$error_middleware = $app->addErrorMiddleware(false, true, true);
 
 $error_handler = $error_middleware->getDefaultErrorHandler();
 
