@@ -87,7 +87,6 @@ router.beforeEach((to, from, next) => {
     decoded = jwtDecode(token);
     userRol = decoded.data.rol;
   }
-  console.log(userRol);
 
   // check if route is restricted by role
   if (authorize) {
