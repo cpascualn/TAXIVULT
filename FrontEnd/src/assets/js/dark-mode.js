@@ -2,7 +2,6 @@
 
 export function activateDarkMode() {
 
-  console.log('asdasdasd');
   const body = document.getElementsByTagName("body")[0];
   const hr = document.querySelectorAll("div:not(.sidenav) > hr");
   const hr_card = document.querySelectorAll("div:not(.bg-gradient-dark) hr");

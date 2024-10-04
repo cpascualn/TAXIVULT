@@ -79,7 +79,7 @@
                       {{ invalidPassMessage }}
                     </div>
                   </div>
-                  <div class="form-options">
+                  <!-- <div class="form-options">
                     <div class="remember-me">
                       <div class="checkbox-wrapper">
                         <input
@@ -91,7 +91,7 @@
                       </div>
                       <span class="remember-text">Remember me</span>
                     </div>
-                  </div>
+                  </div> -->
                   <button type="submit" class="login-button">Sign in</button>
                 </form>
                 <div class="form-divider"></div>

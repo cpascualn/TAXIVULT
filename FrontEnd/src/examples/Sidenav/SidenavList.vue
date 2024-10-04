@@ -147,7 +147,8 @@
         <a
           class="btn mt-4 w-100"
           :class="`bg-gradient-${this.$store.state.color}`"
-          href="/login"
+          @click="logout"
+          href="/home"
           style="text-shadow: 3px 3px 6px rgba(1, 1, 2, 1)"
         >
           <i class="material-icons ms-2" :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-1'">

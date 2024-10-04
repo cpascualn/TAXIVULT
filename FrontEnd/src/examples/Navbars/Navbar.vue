@@ -74,12 +74,11 @@
 
           <li class="nav-item d-xl-none px-3 d-flex align-items-center">
             <a
-              href="#"
               @click="toggleSidebar"
               class="p-0 nav-link text-body lh-1"
               id="iconNavbarSidenav"
             >
-              <div class="sidenav-toggler-inner">
+              <div class="sidenav-toggler-inner">              
                 <i class="sidenav-toggler-line"></i>
                 <i class="sidenav-toggler-line"></i>
                 <i class="sidenav-toggler-line"></i>
@@ -87,17 +86,6 @@
             </a>
           </li>
 
-          <!-- <li class="px-3 nav-item d-flex align-items-center">
-            <a
-              class="p-0 nav-link lh-1"
-              @click="toggleConfigurator"
-              :class="color ? color : 'text-body'"
-            >
-              <i class="material-icons fixed-plugin-button-nav cursor-pointer">
-                settings
-              </i>
-            </a>
-          </li> -->
           <li
             class="nav-item dropdown d-flex align-items-center"
             :class="isRTL ? 'ps-2' : 'pe-2'"
@@ -118,52 +106,6 @@
               :class="showMenu ? 'show' : ''"
               aria-labelledby="dropdownMenuButton"
             >
-              <li class="mb-2">
-                <a class="dropdown-item border-radius-md" href="javascript:;">
-                  <div class="py-1 d-flex">
-                    <div class="my-auto">
-                      <img
-                        src="../../assets/img/team-2.jpg"
-                        class="avatar avatar-sm me-3"
-                        alt="user image"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-1 text-sm font-weight-normal">
-                        <span class="font-weight-bold">New message</span> from
-                        Laur
-                      </h6>
-                      <p class="mb-0 text-xs text-secondary">
-                        <i class="fa fa-clock me-1"></i>
-                        13 minutes ago
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="mb-2">
-                <a class="dropdown-item border-radius-md" href="javascript:;">
-                  <div class="py-1 d-flex">
-                    <div class="my-auto">
-                      <img
-                        src="../../assets/img/small-logos/logo-spotify.svg"
-                        class="avatar avatar-sm bg-gradient-dark me-3"
-                        alt="logo spotify"
-                      />
-                    </div>
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-1 text-sm font-weight-normal">
-                        <span class="font-weight-bold">New album</span> by
-                        Travis Scott
-                      </h6>
-                      <p class="mb-0 text-xs text-secondary">
-                        <i class="fa fa-clock me-1"></i>
-                        1 day
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </li>
               <li>
                 <a class="dropdown-item border-radius-md" href="javascript:;">
                   <div class="py-1 d-flex">
@@ -243,7 +185,7 @@ export default {
     this.minNav;
   },
   methods: {
-    ...mapMutations(["navbarMinimize", "toggleConfigurator"]),
+    ...mapMutations(["navbarMinimize"]),
 
     toggleSidebar() {
       this.navbarMinimize();
