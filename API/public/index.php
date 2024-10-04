@@ -1,4 +1,6 @@
 <?php
+
+use App\Middleware\AllowCorsMiddleware;
 use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
 use Slim\Handlers\Strategies\RequestResponseArgs;
@@ -28,11 +30,13 @@ $collector->setDefaultInvocationStrategy(new RequestResponseArgs);
 
 $app->addBodyParsingMiddleware();
 
-$error_middleware = $app->addErrorMiddleware(false, true, true);
+$error_middleware = $app->addErrorMiddleware(true, true, true);
 
 $error_handler = $error_middleware->getDefaultErrorHandler();
 
 $error_handler->forceContentType('application/json');
+
+$app->add(new AllowCorsMiddleware);
 
 
 require_once APP_ROOT . '/config/routes.php';
