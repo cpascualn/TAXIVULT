@@ -2,7 +2,7 @@ import axios from 'axios';
 import authHeader from './auth-header';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-// const API_URL = "http://localhost:8080/";
+// const API_URL = "http://localhost:8080";
 const API_URLPROD = "taxivult-production.up.railway.app";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -13,7 +13,7 @@ export default {
     
     try {
       const response = await fetch(
-        API_URL + "login",
+        API_URL + "/login",
         {
           method: "POST",
           headers: {

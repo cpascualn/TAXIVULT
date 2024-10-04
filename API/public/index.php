@@ -25,6 +25,7 @@ AppFactory::setContainer($container);
 
 $app = AppFactory::create();
 
+
 $collector = $app->getRouteCollector();
 $collector->setDefaultInvocationStrategy(new RequestResponseArgs);
 
@@ -36,9 +37,10 @@ $error_handler = $error_middleware->getDefaultErrorHandler();
 
 $error_handler->forceContentType('application/json');
 
-$app->add(new AllowCorsMiddleware);
-
 
 require_once APP_ROOT . '/config/routes.php';
+
+
+$app->add(new AllowCorsMiddleware);
 
 $app->run();

@@ -5,10 +5,17 @@ use App\Middleware\JwtMiddleware;
 use App\Middleware\FilterByRolMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 use App\Controllers\UsuarioController;
-
+use App\Middleware\AllowCorsMiddleware;
+use Slim\Psr7\Request;
+use Slim\Psr7\Response;
 $adminRol = 1;
 $conductorRol = 2;
 $pasajeroRol = 3;
+
+// Manejar todas las solicitudes OPTIONS para todas las rutas
+$app->options('/{routes:.+}', function (Request $request, Response $response) {
+    return $response;
+});
 
 $app->post('/register', [UsuarioController::class, 'HandleRegister'])->add(AddJsonResponseHeader::class);
 $app->post('/login', [UsuarioController::class, 'HandleLogin'])->add(AddJsonResponseHeader::class);
