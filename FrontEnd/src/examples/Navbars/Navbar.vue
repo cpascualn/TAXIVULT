@@ -55,8 +55,7 @@
 
               <!--Logout-->
               <li class="nav-item d-flex align-items-center">
-                <router-link
-                  :to="{ name: 'Login' }"
+                <div
                   @click="logout"
                   class="px-0 nav-link font-weight-bold lh-1 d-flex align-items-center"
                 >
@@ -67,7 +66,7 @@
                     logout
                   </i>
                   Logout
-                </router-link>
+                </div>
               </li>
             </ul>
           </li>
@@ -78,7 +77,7 @@
               class="p-0 nav-link text-body lh-1"
               id="iconNavbarSidenav"
             >
-              <div class="sidenav-toggler-inner">              
+              <div class="sidenav-toggler-inner">
                 <i class="sidenav-toggler-line"></i>
                 <i class="sidenav-toggler-line"></i>
                 <i class="sidenav-toggler-line"></i>

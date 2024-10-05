@@ -4,6 +4,8 @@
       <div class="row">
         <div class="col-6 d-flex align-items-center">
           <h6 class="mb-0">Payment Method</h6>
+          <!-- <material-input id="password" :value="user.password" type="password" label="Password"
+                name="password" /> -->
         </div>
         <div class="col-6 text-end">
           <material-button color="dark" variant="gradient">

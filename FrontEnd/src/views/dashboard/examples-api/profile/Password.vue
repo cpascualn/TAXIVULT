@@ -5,11 +5,17 @@
         <div class="row">
           <div class="col-12">
             <div class="mt-2">
+              <material-input id="actualPassword" :value="user.password" type="password" label="actualPassword"
+                name="actualPassword" />
+            </div>
+            <div class="mt-2">
               <material-input id="password" :value="user.password" type="password" label="Password"
                 name="password" />
   
               <validation-error :errors="apiValidationErrors.password" />
             </div>
+            
+            
             <div class="mt-5">
               <material-input id="confirmPassword" :value="user.password_confirmation" type="password"
                 label="Confirm Password" name="confirmPassword" />

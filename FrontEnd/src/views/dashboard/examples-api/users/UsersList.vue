@@ -53,8 +53,6 @@ import MaterialButton from "@/components/dashboard/MaterialButton.vue";
 import UserItemList from "./UserItemList.vue";
 import showSwal from "@/mixins/showSwal";
 
-
-
 export default {
   name: "UsersList",
   components: {
@@ -63,7 +61,11 @@ export default {
   },
   data() {
     return {
-      me: {},
+      me: {
+        name: "pirri",
+        email: "pirri@mail",
+        created_at: "hoy",
+      },
     };
   },
   async mounted() {
@@ -80,6 +82,8 @@ export default {
     },
   },
 };
+
+// para filtrar y ordenar modificar el array q se pone dentro de data return
 </script>
 
 <style scoped>

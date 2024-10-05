@@ -33,16 +33,20 @@ export default {
     router: null,
     startLocation: "",
     endLocation: "",
-    zoom: 5,
+    zoom: 14,
     center: [40.422476, -3.696139],
     distance: "", // en metros
     time: "", // en segundos
   }),
-  mounted() {
+  async mounted() {
+
+    let pos = await this.centerLocation();
+    this.center = [pos.latitud, pos.longitud];
     // DO
     this.$nextTick(() => {
       this.$refs.map.leafletObject; // work as expected
     });
+   
   },
   methods: {
     onMapReady() {
@@ -50,6 +54,7 @@ export default {
       this.map.setMaxZoom(16);
       this.map.setMinZoom(6);
       this.initializeRouter();
+
       const entradas = this.setupInputs();
       this.$emit("send-entrys", entradas);
     },
@@ -189,6 +194,41 @@ export default {
           //   this.map.zoomControl.remove();
         } else {
           alert("Location not found: " + query);
+        }
+      });
+    },
+    async centerLocation() {
+      let lati = 40.422476;
+      let longi = -3.696139;
+      try {
+        const { latitud, longitud } = await this.getCurrentPositionPromise();
+        return {
+          latitud,
+          longitud,
+        };
+      } catch (error) {
+        return {
+          latitud: lati,
+          longitud: longi,
+        };
+      }
+    },
+    getCurrentPositionPromise() {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              resolve({
+                latitud: pos.coords.latitude,
+                longitud: pos.coords.longitude,
+              });
+            },
+            (error) => reject(error)
+          );
+        } else {
+          reject(
+            new Error("La geolocalización no es soportada por este navegador.")
+          );
         }
       });
     },

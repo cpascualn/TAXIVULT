@@ -69,6 +69,8 @@
 
 <script setup>
 import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
+import { useRouter } from 'vue-router';
+
 
 // Definir los eventos que puede emitir este componente
 const emits = defineEmits(["send-datos"]);
@@ -78,6 +80,8 @@ let start, end;
 
 const date = ref("");
 const time = ref("");
+const token = localStorage.getItem("authToken");
+const router = useRouter();
 
 const openDatetimeSelection = () => {
   document.querySelector(".datetimeSel").style.display = "flex";
@@ -86,6 +90,10 @@ const openDatetimeSelection = () => {
 const handleSubmit = (e) => {
   e.preventDefault();
   let datos = { date: date.value, time: time.value };
+
+  if (!token) {
+    router.push({ name: 'login' });
+  }
   emits("send-datos", datos);
 };
 
