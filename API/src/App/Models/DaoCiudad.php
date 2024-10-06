@@ -18,7 +18,7 @@ class DaoCiudad
 
     public function listar()
     {
-        $consulta = 'SELECT * FROM CIUDAD';
+        $consulta = 'SELECT * FROM ciudad';
 
         $this->ciudades = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
