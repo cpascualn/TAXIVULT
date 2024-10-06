@@ -21,73 +21,150 @@
 
       <transition name="slide-fade">
         <section v-show="step === 1">
-          <form class="form" method="post" @submit.prevent="next">
+          <form class="form" @submit.prevent="next">
             <div class="form-group">
-              <input
-                type="text"
-                v-model="usuario.email"
-                autocomplete="usuario.email"
-                placeholder="Email"
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                required
-              />
-              <input
-                type="text"
-                v-model="usuario.nombre"
-                autocomplete="usuario.nombre"
-                placeholder="Nombre"
-                required
-              />
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="usuario.email"
+                  autocomplete="usuario.email"
+                  placeholder="Email"
+                />
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidMail[1] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidMail[0] }"
+                >
+                  El mail debe tener formato usuario@dominio.**
+                </div>
+              </div>
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="usuario.nombre"
+                  autocomplete="usuario.nombre"
+                  placeholder="Nombre"
+                />
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidNombre[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidNombre[1] }"
+                >
+                  Nombre incorrecto
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
-              <input
-                type="tel"
-                v-model="usuario.telefono"
-                autocomplete="usuario.telefono"
-                placeholder="telefono"
-                minlength="9"
-                maxlength="10"
-                pattern="^\+?[0-9\s\-().]{7,15}$"
-                required
-              />
-              <input
-                type="text"
-                v-model="usuario.apellidos"
-                autocomplete="usuario.apellidos"
-                placeholder="Apellidos"
-                required
-              />
+              <div class="input-group">
+                <input
+                  type="tel"
+                  v-model="usuario.telefono"
+                  autocomplete="usuario.telefono"
+                  placeholder="telefono"
+                  minlength="9"
+                  maxlength="10"
+                />
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidTelefono[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidTelefono[1] }"
+                >
+                  El telefono no es valido
+                </div>
+              </div>
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="usuario.apellidos"
+                  autocomplete="usuario.apellidos"
+                  placeholder="Apellidos"
+                />
+
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidApellido[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidApellido[1] }"
+                >
+                  El apellido no es valido
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
-              <input
-                type="text"
-                v-model="usuario.ciudad"
-                autocomplete="usuario.ciudad"
-                placeholder="Ciudad"
-                required
-              />
+              <div class="input-group">
+                <select
+                  v-model="usuario.ciudad"
+                  id="selectCiu"
+                  autocomplete="usuario.ciudad"
+                  placeholder="Ciudad"
+                  required
+                >
+                  <option value="" disabled selected>Ciudad</option>
+                  <option
+                    v-for="ciudad in ciudades"
+                    :key="ciudad.id"
+                    :value="ciudad.id"
+                  >
+                    {{ ciudad.nombre }}
+                  </option>
+                </select>
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidCiudad[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidCiudad[1] }"
+                >
+                  Debes seleccionar una ciudad
+                </div>
+              </div>
+              <div class="input-group">
+                <input
+                  type="password"
+                  v-model="usuario.contrasena"
+                  autocomplete="usuario.contrasena"
+                  placeholder="Contrasena"
+                />
 
-              <input
-                type="password"
-                v-model="usuario.password"
-                autocomplete="usuario.password"
-                placeholder="Contrasena"
-                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$"
-                required
-              />
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidContra[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidContra[1] }"
+                >
+                  la contraseña debe tener al menos una letra, al menos un
+                  número y una longitud mínima de 8 caracteres.
+                </div>
+              </div>
             </div>
-
-            <div class="form-group">
-              <input
-                type="date"
-                v-model="usuario.fechaNac"
-                placeholder="Birthday ('day'/'month'/'year')"
-                required
-              />
-            </div>
-
             <div
               class="cta"
               data-style="see-through"
@@ -113,40 +190,94 @@
             @submit.prevent="register"
           >
             <div class="form-group">
-              <input
-                type="text"
-                v-model="usuario.cardNumber"
-                autocomplete="usuario.cardNumber"
-                placeholder="numero tarjeta"
-                pattern="^\d{4}(?:\s?\d{4}){3}$"
-                required
-              />
-              <input
-                type="text"
-                v-model="usuario.cardName"
-                autocomplete="usuario.cardName"
-                placeholder="nombre"
-                required
-              />
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="usuario.n_tarjeta"
+                  autocomplete="usuario.n_tarjeta"
+                  placeholder="numero tarjeta"
+                />
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidTarjeta[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidTarjeta[1] }"
+                >
+                  la tarjeta no coincide (debe tener 16 numeros)
+                </div>
+              </div>
+
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="usuario.titular_tarjeta"
+                  autocomplete="usuario.titular_tarjeta"
+                  placeholder="nombre"
+                />
+
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidNombreTarjeta[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidNombreTarjeta[1] }"
+                >
+                  El nombre no es correcto
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
-              <input
-                type="text"
-                v-model="usuario.cardExpiration"
-                autocomplete="usuario.cardExpiration"
-                placeholder="fecha expiracion (mm/yy)"
-                pattern="\d{2}/\d{2}"
-                required
-              />
-              <input
-                type="text"
-                v-model="usuario.cardCVC"
-                autocomplete="usuario.cardCVC"
-                placeholder="CVC"
-                pattern="^\d{3,4}$"
-                required
-              />
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="usuario.caducidad_tarjeta"
+                  autocomplete="usuario.caducidad_tarjeta"
+                  placeholder="fecha expiracion (mm/yy)"
+                />
+
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidExpTarjeta[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidExpTarjeta[1] }"
+                >
+                  la caducidad debe tener formato mm/yy
+                </div>
+              </div>
+
+              <div class="input-group">
+                <input
+                  type="text"
+                  v-model="usuario.cvv_tarjeta"
+                  autocomplete="usuario.cvv_tarjeta"
+                  placeholder="CVC"
+                />
+
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidCVC[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidCVC[1] }"
+                >
+                  el cvc debe tener formato de tres numeros
+                </div>
+              </div>
             </div>
 
             <div class="form-group cta-step">
@@ -176,23 +307,37 @@
       </transition>
     </section>
     <section class="congrats register" v-if="hasSeenCongrats">
-      <h2 class="congrats-title">Thank you !</h2>
+      <h2 class="congrats-title">Registro finalizado!</h2>
       <p class="congrats-subtitle">
-        You have successfully created your account and joined the<br />
-        <strong>VueJS<br />multiple steps form</strong>
+        {{ finalMessage }}
       </p>
     </section>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import ciudadService from "@/services/ciudad.service";
+import regFormCheck from "@/mixins/regFormCheck";
+import authService from "@/services/auth.service";
 
 const step = ref(1);
-const titulos = ["PERSONAL", "TARJETA(opcional)"];
+const titulos = ["PERSONAL", "TARJETA"];
+const ciudades = ref(["Madrid"]);
 
-// se reemplazaran por la llamada a la api
-const horarios = ["diurno", "nocturno"];
+// propiedades del css para mostrar los validadores, [0] para el correcto y [1] para el incorrecto
+const displayValidMail = ref(["none", "none"]);
+const displayValidNombre = ref(["none", "none"]);
+const displayValidApellido = ref(["none", "none"]);
+const displayValidContra = ref(["none", "none"]);
+const displayValidTelefono = ref(["none", "none"]);
+const displayValidCiudad = ref(["none", "none"]);
+
+const displayValidTarjeta = ref(["none", "none"]);
+const displayValidNombreTarjeta = ref(["none", "none"]);
+const displayValidExpTarjeta = ref(["none", "none"]);
+const displayValidCVC = ref(["none", "none"]);
+
 const usuario = ref({
   //step 1
   email: "",
@@ -200,30 +345,137 @@ const usuario = ref({
   apellidos: "",
   telefono: "",
   ciudad: "",
-  password: "",
-  fechaNac: "",
+  contrasena: "",
+  rol: 3,
   //step 2
-  cardNumber: "",
-  cardName: "",
-  cardExpiration: "",
-  cardCVC: "",
+  n_tarjeta: "",
+  titular_tarjeta: "",
+  caducidad_tarjeta: "",
+  cvv_tarjeta: "",
 });
 
 const hasSeenCongrats = ref(false);
+const finalMessage = ref(
+  "TU CUENTA SE HA CREADO CON EXITO, YA PUEDES INICIAR SESION. "
+);
+
+onMounted(async () => {
+  ciudades.value = await fetchCiudades();
+});
 
 const prev = () => {
   step.value--;
 };
 
 const next = () => {
-  console.log(usuario.value);
-  step.value++;
+  if (validarStep1()) step.value++;
 };
 
-const register = () => {
-  console.log(usuario.value);
-  hasSeenCongrats.value = true;
+const validarStep1 = () => {
+  if (regFormCheck.checkMail(usuario.value.email)) {
+    displayValidMail.value[0] = "none";
+    displayValidMail.value[1] = "block";
+  } else {
+    displayValidMail.value[0] = "block";
+    displayValidMail.value[1] = "none";
+    return false;
+  }
+
+  if (regFormCheck.checkNombre(usuario.value.nombre)) {
+    displayValidNombre.value[0] = "block";
+    displayValidNombre.value[1] = "none";
+  } else {
+    displayValidMail.value[0] = "none";
+    displayValidMail.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkTelefono(usuario.value.telefono)) {
+    displayValidTelefono.value[0] = "block";
+    displayValidTelefono.value[1] = "none";
+  } else {
+    displayValidTelefono.value[0] = "none";
+    displayValidTelefono.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkApellido(usuario.value.apellidos)) {
+    displayValidApellido.value[0] = "block";
+    displayValidApellido.value[1] = "none";
+  } else {
+    displayValidApellido.value[0] = "none";
+    displayValidApellido.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkContrasena(usuario.value.contrasena)) {
+    displayValidContra.value[0] = "block";
+    displayValidContra.value[1] = "none";
+  } else {
+    displayValidContra.value[0] = "none";
+    displayValidContra.value[1] = "block";
+    return false;
+  }
+
+  return true;
 };
+const validarStep2 = () => {
+  if (regFormCheck.checkTarjeta(usuario.value.n_tarjeta)) {
+    displayValidTarjeta.value[0] = "block";
+    displayValidTarjeta.value[1] = "none";
+  } else {
+    displayValidTarjeta.value[0] = "none";
+    displayValidTarjeta.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkNombre(usuario.value.titular_tarjeta)) {
+    displayValidNombreTarjeta.value[0] = "block";
+    displayValidNombreTarjeta.value[1] = "none";
+  } else {
+    displayValidNombreTarjeta.value[0] = "none";
+    displayValidNombreTarjeta.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkExpTarjeta(usuario.value.caducidad_tarjeta)) {
+    displayValidExpTarjeta.value[0] = "block";
+    displayValidExpTarjeta.value[1] = "none";
+  } else {
+    displayValidExpTarjeta.value[0] = "none";
+    displayValidExpTarjeta.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkCvcTarjeta(usuario.value.cvv_tarjeta)) {
+    displayValidCVC.value[0] = "block";
+    displayValidCVC.value[1] = "none";
+  } else {
+    displayValidCVC.value[0] = "none";
+    displayValidCVC.value[1] = "block";
+    return false;
+  }
+  return true;
+};
+
+const register = async () => {
+  if (validarStep2()) {
+    hasSeenCongrats.value = true;
+    const data = await authService.register(usuario.value);
+    if (!data.success) finalMessage.value = data.errorRegister;
+  }
+};
+
+async function fetchCiudades() {
+  const response = await ciudadService.getCiudades();
+  let cius = [];
+  if (response.success) {
+    response.ciudades.forEach((ciudad) => {
+      cius.push({ id: ciudad.id, nombre: ciudad.nombre });
+    });
+  }
+  return cius;
+}
 </script>
 
 <style>
@@ -235,6 +487,24 @@ body {
   width: 100%;
   height: 100vh;
   margin: 0;
+}
+
+.validFeedback {
+  color: green;
+  display: block;
+  text-align: center;
+}
+
+.invalidFeedback {
+  color: red;
+  display: block;
+  text-align: center;
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .pen-description {

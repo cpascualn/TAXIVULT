@@ -110,6 +110,7 @@
           </div>
         </div>
       </div>
+      <ErrorModal ref="errMod"></ErrorModal>
     </div>
   </div>
 </template>
@@ -119,6 +120,7 @@ import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import authService from "@/services/auth.service";
+import ErrorModal from "@/components/index/ErrorModal.vue";
 
 const mail = ref("");
 const password = ref("");
@@ -132,6 +134,8 @@ const displayValidMail = ref("none");
 const displayInvalidMail = ref("none");
 const displayValidPass = ref("none");
 const displayInvalidPass = ref("none");
+
+const errMod = ref(null); // Crear una referencia para el componente hijo
 
 const router = useRouter();
 
@@ -157,7 +161,9 @@ const submitForm = async (event) => {
       if (!data.success) throw new Error(data.error);
       router.push("/");
     } catch (error) {
-      console.error("Error en el login:", error);
+      if (errMod.value) {
+        errMod.value.openModal("ERROR DE INICIO DE SESION", error);
+      }
     }
   }
 };

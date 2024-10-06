@@ -9,7 +9,7 @@ use App\Entities\Usuario;
 
 class DaoUsuario
 {
-   
+
     public $usuarios = array();
     private $db;
 
@@ -27,21 +27,21 @@ class DaoUsuario
         $this->db->ConsultaDatos($consulta);
 
         foreach ($this->db->filas as $fila) {
- 
+
             $usu = new Usuario();
-            $usu->__set("id", $fila['id']);
-            $usu->__set("email", $fila['email']);
-            $usu->__set("telefono", $fila['telefono']);
-            $usu->__set("nombre", $fila['nombre']);
-            $usu->__set("apellidos", $fila['apellidos']);
-            $usu->__set("contrasena", $fila['contrasena']);
-            $usu->__set("ciudad", $fila['ciudad']);
-            $usu->__set("fecha_creacion", $fila['fecha_creacion']);
-            $usu->__set("rol", $fila['rol']);
-    
+            $usu->setId($fila['id']);
+            $usu->setEmail($fila['email']);
+            $usu->setTelefono($fila['telefono']);
+            $usu->setNombre($fila['nombre']);
+            $usu->setApellidos($fila['apellidos']);
+            $usu->setContrasena($fila['contrasena']);
+            $usu->setCiudad($fila['ciudad']);
+            $usu->setFechaCreacion($fila['fecha_creacion']);
+            $usu->setRol($fila['rol']);
+
             $this->usuarios[] = $usu;   //Insertamos el objeto con los valores de esa fila en el array de objetos
         }
-       
+
         return $this->usuarios;
     }
 
@@ -60,15 +60,15 @@ class DaoUsuario
             $fila = $this->db->filas[0];  //Recuperamos la fila devuelta
 
             $usu = new Usuario();
-            $usu->__set("id", $fila['id']);
-            $usu->__set("email", $fila['email']);
-            $usu->__set("telefono", $fila['telefono']);
-            $usu->__set("nombre", $fila['nombre']);
-            $usu->__set("apellidos", $fila['apellidos']);
-            $usu->__set("contrasena", $fila['contrasena']);
-            $usu->__set("ciudad", $fila['ciudad']);
-            $usu->__set("fecha_creacion", $fila['fecha_creacion']);
-            $usu->__set("rol", $fila['rol']);
+            $usu->setId($fila['id']);
+            $usu->setEmail($fila['email']);
+            $usu->setTelefono($fila['telefono']);
+            $usu->setNombre($fila['nombre']);
+            $usu->setApellidos($fila['apellidos']);
+            $usu->setContrasena($fila['contrasena']);
+            $usu->setCiudad($fila['ciudad']);
+            $usu->setFechaCreacion($fila['fecha_creacion']);
+            $usu->setRol($fila['rol']);
 
         }
 
@@ -90,15 +90,15 @@ class DaoUsuario
             $fila = $this->db->filas[0];  //Recuperamos la fila devuelta
 
             $usu = new Usuario();
-            $usu->__set("id", $fila['id']);
-            $usu->__set("email", $fila['email']);
-            $usu->__set("telefono", $fila['telefono']);
-            $usu->__set("nombre", $fila['nombre']);
-            $usu->__set("apellidos", $fila['apellidos']);
-            $usu->__set("contrasena", $fila['contrasena']);
-            $usu->__set("ciudad", $fila['ciudad']);
-            $usu->__set("fecha_creacion", $fila['fecha_creacion']);
-            $usu->__set("rol", $fila['rol']);
+            $usu->setId($fila['id']);
+            $usu->setEmail($fila['email']);
+            $usu->setTelefono($fila['telefono']);
+            $usu->setNombre($fila['nombre']);
+            $usu->setApellidos($fila['apellidos']);
+            $usu->setContrasena($fila['contrasena']);
+            $usu->setCiudad($fila['ciudad']);
+            $usu->setFechaCreacion($fila['fecha_creacion']);
+            $usu->setRol($fila['rol']);
 
         }
 
@@ -154,15 +154,15 @@ class DaoUsuario
 
         foreach ($this->db->filas as $fila) {
             $usu = new Usuario();
-            $usu->__set("id", $fila['id']);
-            $usu->__set("email", $fila['email']);
-            $usu->__set("telefono", $fila['telefono']);
-            $usu->__set("nombre", $fila['nombre']);
-            $usu->__set("apellidos", $fila['apellidos']);
-            $usu->__set("contrasena", $fila['contrasena']);
-            $usu->__set("ciudad", $fila['ciudad']);
-            $usu->__set("fecha_creacion", $fila['fecha_creacion']);
-            $usu->__set("rol", $fila['rol']);
+            $usu->setId($fila['id']);
+            $usu->setEmail($fila['email']);
+            $usu->setTelefono($fila['telefono']);
+            $usu->setNombre($fila['nombre']);
+            $usu->setApellidos($fila['apellidos']);
+            $usu->setContrasena($fila['contrasena']);
+            $usu->setCiudad($fila['ciudad']);
+            $usu->setFechaCreacion($fila['fecha_creacion']);
+            $usu->setRol($fila['rol']);
 
             $this->usuarios[] = $usu;   //Insertamos el objeto con los valores de esa fila en el array de objetos
         }
@@ -174,14 +174,14 @@ class DaoUsuario
         $consulta = "INSERT INTO `Usuario`(`email`, `telefono`, `nombre`, `apellidos`, `contrasena`, `ciudad`, `fecha_creacion`, `rol`) VALUES (:EMAIL,:TELEFONO,:NOMBRE,:APELLIDOS,:CONTRASENA,:CIUDAD,:FECHA_CREACION,:ROL)";
         $param = array();
 
-        $param[":EMAIL"] = $usuario->__get("email");
-        $param[":TELEFONO"] = $usuario->__get("telefono");
-        $param[":NOMBRE"] = $usuario->__get("nombre");
-        $param[":APELLIDOS"] = $usuario->__get("apellidos");
-        $param[":CONTRASENA"] = $usuario->__get("contrasena");
-        $param[":CIUDAD"] = $usuario->__get("ciudad");
-        $param[":FECHA_CREACION"] = $usuario->__get("fecha_creacion");
-        $param[":ROL"] = $usuario->__get("rol");
+        $param[":EMAIL"] = $usuario->getEmail();
+        $param[":TELEFONO"] = $usuario->getTelefono();
+        $param[":NOMBRE"] = $usuario->getNombre();
+        $param[":APELLIDOS"] = $usuario->getApellidos();
+        $param[":CONTRASENA"] = $usuario->getContrasena();
+        $param[":CIUDAD"] = $usuario->getCiudad();
+        $param[":FECHA_CREACION"] = $usuario->getFechaCreacion();
+        $param[":ROL"] = $usuario->getRol();
 
 
         $this->db->ConsultaSimple($consulta, $param);
@@ -196,13 +196,13 @@ class DaoUsuario
         $param = array();
 
         $param[":ID"] = $id;
-        $param[":EMAIL"] = $nuevo->__get("email") ?? $usuario->__get("email");
-        $param[":TELEFONO"] = $nuevo->__get("telefono") ?? $usuario->__get("telefono");
-        $param[":NOMBRE"] = $nuevo->__get("nombre") ?? $usuario->__get("nombre");
-        $param[":APELLIDOS"] = $nuevo->__get("apellidos") ?? $usuario->__get("apellidos");
-        $param[":CONTRASENA"] = $nuevo->__get("contrasena") ?? $usuario->__get("contrasena");
-        $param[":CIUDAD"] = $nuevo->__get("ciudad") ?? $usuario->__get("ciudad");
-        $param[":ROL"] = $nuevo->__get("rol") ?? $usuario->__get("rol");
+        $param[":EMAIL"] = $nuevo->getEmail() ?? $usuario->getEmail();
+        $param[":TELEFONO"] = $nuevo->getTelefono() ?? $usuario->getTelefono();
+        $param[":NOMBRE"] = $nuevo->getNombre() ?? $usuario->getNombre();
+        $param[":APELLIDOS"] = $nuevo->getApellidos() ?? $usuario->getApellidos();
+        $param[":CONTRASENA"] = $nuevo->getContrasena() ?? $usuario->getContrasena();
+        $param[":CIUDAD"] = $nuevo->getCiudad() ?? $usuario->getCiudad();
+        $param[":ROL"] = $nuevo->getRol() ?? $usuario->getRol();
 
 
         $this->db->ConsultaSimple($consulta, $param);

@@ -35,7 +35,6 @@ export default {
     const sidenav = document.getElementsByClassName("g-sidenav-show")[0];
     if (sidenav) {
       if (window.innerWidth > 1200) {
-        console.log(sidenav);
         sidenav.classList.add("g-sidenav-pinned");
       }
     }

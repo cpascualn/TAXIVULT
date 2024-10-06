@@ -32,8 +32,8 @@
             </div>
             <div class="features-text">
               <p class="feature-detail">La mayor red de usuarios del país.</p>
-              <p class="feature-detail">La mayor red de usuarios del país.</p>
-              <p class="feature-detail">La mayor red de usuarios del país.</p>
+              <p class="feature-detail">Aplicacion mejor valorada.</p>
+              <p class="feature-detail">Sencillez en tu bolsillo.</p>
             </div>
           </div>
         </section>

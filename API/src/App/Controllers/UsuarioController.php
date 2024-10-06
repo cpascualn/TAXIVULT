@@ -36,7 +36,7 @@ class UsuarioController
 
         // si encuentra usuario y la contrasena coincide devolver token
         if ($usu == null || !password_verify(trim($password), trim($usu->getContrasena()))) {
-            $response->getBody()->write(json_encode(['error' => 'Invalid credentials', 'success' => false]));
+            $response->getBody()->write(json_encode(['error' => 'Credenciales no validas', 'success' => false]));
             return $response->withStatus(401);
         }
 
@@ -52,7 +52,7 @@ class UsuarioController
         $usuario = null;
         try {
             $response = $this->HandleInsertar($request, $response);
-
+            $response->getStatusCode();
             if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500)
                 throw new Exception("Error en el registro");
 
@@ -131,7 +131,7 @@ class UsuarioController
         $validacion = $this->validarDatos($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'messages' => $validacion['messages'],
+                'messages' => 'error validacion',
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -331,8 +331,7 @@ class UsuarioController
                 $response = $this->controladorPas->HandleInsertar($request, $response, $usu->getId());
                 //si no se ha podido insertar en su rol se borra el usuario
                 $body = $request->getParsedBody();
-                if ($body['success'] == false && $response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
-
+                if (isset($body['success']) && $body['success'] == false && $response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
                     $this->daoUsu->eliminar($usu->getId());
                 }
 

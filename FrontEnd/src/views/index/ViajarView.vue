@@ -52,7 +52,6 @@ const handleFromSearch = (data) => {
 
   console.log(searchParams.value);
 
-  //procesar el envio al servidor
 };
 </script>
 

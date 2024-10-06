@@ -19,7 +19,7 @@ const props = defineProps({
   <div class="div">
     <img loading="lazy" :srcSet="imagen" class="img" />
     <Header></Header>
-    <router-link :to="botones ? 'login' : 'driver'" class="button">{{
+    <router-link :to="botones ? 'login' : 'register/driver'" class="button">{{
       botones ? "RESERVA YA" : "REGISTRATE"
     }}</router-link>
   </div>

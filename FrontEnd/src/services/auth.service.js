@@ -24,7 +24,6 @@ export default {
       }
       return data;
     } catch (err) {
-      console.log("fallo del fetch");
       console.log(err);
     }
   },
@@ -34,22 +33,30 @@ export default {
   },
 
   async register(user) {
-    var response = await fetch(
-      API_URL + "/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      }
-    )
+    try {
 
-    const data = await response.json();
-    if (data.access_token) {
-      localStorage.setItem('authToken', JSON.stringify(data.access_token));
+
+      const response = await fetch(
+        API_URL + "/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      )
+      console.log(response);
+      if (!response.ok) {
+        const errorText = await response.text(); // Obtén la respuesta como texto
+        console.log("Error en la respuesta:", errorText);
+        throw new Error(errorText);
+      }
+
+      return {response,"success": true};
+    } catch (error) {
+      return { "error": error, "success": false };
     }
-    return data;
   },
 
   async passwordForgot(userEmail) {

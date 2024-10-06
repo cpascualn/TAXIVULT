@@ -24,11 +24,11 @@ class DaoPasajero extends Database
         $this->pasajeros = [];
         foreach ($this->filas as $fila) {
             $pasajero = new Pasajero();
-            $pasajero->__set("id", $fila['id']);
-            $pasajero->__set("n_tarjeta", $fila['n_tarjeta']);
-            $pasajero->__set("titular_tarjeta", $fila['titular_tarjeta']);
-            $pasajero->__set("caducidad_tarjeta", $fila['caducidad_tarjeta']);
-            $pasajero->__set("cvv_tarjeta", $fila['cvv_tarjeta']);
+            $pasajero->setId($fila['id']);
+            $pasajero->setNTarjeta($fila['n_tarjeta']);
+            $pasajero->setTitularTarjeta($fila['titular_tarjeta']);
+            $pasajero->setCaducidadTarjeta($fila['caducidad_tarjeta']);
+            $pasajero->setCvvTarjeta($fila['cvv_tarjeta']);
             $this->pasajeros[] = $pasajero;
         }
         return $this->pasajeros;
@@ -47,11 +47,11 @@ class DaoPasajero extends Database
             $pasajero = new Pasajero();
             $fila = $this->filas[0];  //Recuperamos la fila devuelta
             $pasajero = new Pasajero();
-            $pasajero->__set("id", $fila['id']);
-            $pasajero->__set("n_tarjeta", $fila['n_tarjeta']);
-            $pasajero->__set("titular_tarjeta", $fila['titular_tarjeta']);
-            $pasajero->__set("caducidad_tarjeta", $fila['caducidad_tarjeta']);
-            $pasajero->__set("cvv_tarjeta", $fila['cvv_tarjeta']);
+            $pasajero->setId($fila['id']);
+            $pasajero->setNTarjeta($fila['n_tarjeta']);
+            $pasajero->setTitularTarjeta($fila['titular_tarjeta']);
+            $pasajero->setCaducidadTarjeta($fila['caducidad_tarjeta']);
+            $pasajero->setCvvTarjeta($fila['cvv_tarjeta']);
 
         }
         return $pasajero;
@@ -63,11 +63,11 @@ class DaoPasajero extends Database
         $consulta = "INSERT INTO Pasajero (id, n_tarjeta, titular_tarjeta, caducidad_tarjeta, cvv_tarjeta) 
                  VALUES (:ID, :N_TARJETA, :TITULAR_TARJETA, :CADUCIDAD_TARJETA, :CVV_TARJETA)";
         $param = array(
-            ":ID" => $pasajero->__get("id"),
-            ":N_TARJETA" => $pasajero->__get("n_tarjeta"),
-            ":TITULAR_TARJETA" => $pasajero->__get("titular_tarjeta"),
-            ":CADUCIDAD_TARJETA" => $pasajero->__get("caducidad_tarjeta"),
-            ":CVV_TARJETA" => $pasajero->__get("cvv_tarjeta")
+            ":ID" => $pasajero->getId(),
+            ":N_TARJETA" => $pasajero->getNTarjeta(),
+            ":TITULAR_TARJETA" => $pasajero->getTitularTarjeta(),
+            ":CADUCIDAD_TARJETA" => $pasajero->getCaducidadTarjeta(),
+            ":CVV_TARJETA" => $pasajero->getCvvTarjeta()
         );
         $this->db->ConsultaSimple($consulta, $param);
     }
@@ -80,10 +80,10 @@ class DaoPasajero extends Database
                  WHERE id = :ID";
         $param = array(
             ":ID" => $id,
-            ":N_TARJETA" => $nuevo->__get("n_tarjeta") ?? $pasajero->__get("n_tarjeta"),
-            ":TITULAR_TARJETA" => $nuevo->__get("titular_tarjeta") ?? $pasajero->__get("n_tarjeta"),
-            ":CADUCIDAD_TARJETA" => $nuevo->__get("caducidad_tarjeta") ?? $pasajero->__get("n_tarjeta"),
-            ":CVV_TARJETA" => $nuevo->__get("cvv_tarjeta") ?? $pasajero->__get("n_tarjeta")
+            ":N_TARJETA" => $nuevo->getNTarjeta() ?? $pasajero->getNTarjeta(),
+            ":TITULAR_TARJETA" => $nuevo->getTitularTarjeta() ?? $pasajero->getTitularTarjeta(),
+            ":CADUCIDAD_TARJETA" => $nuevo->getCaducidadTarjeta() ?? $pasajero->getCaducidadTarjeta(),
+            ":CVV_TARJETA" => $nuevo->getCvvTarjeta() ?? $pasajero->getCvvTarjeta()
         );
         $this->db->ConsultaSimple($consulta, $param);
     }
