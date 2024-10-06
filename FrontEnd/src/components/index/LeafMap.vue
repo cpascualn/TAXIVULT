@@ -9,6 +9,7 @@
             layer-type="base"
             name="OpenStreetMap"
           ></l-tile-layer>
+          <l-marker :lat-lng="marker" />
         </l-map>
       </div>
     </div>
@@ -21,6 +22,7 @@ import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
+import { latLng } from "leaflet";
 
 export default {
   components: {
@@ -37,16 +39,15 @@ export default {
     center: [40.422476, -3.696139],
     distance: "", // en metros
     time: "", // en segundos
+    marker: latLng(47.41322, -1.219482),
   }),
   async mounted() {
-
     let pos = await this.centerLocation();
     this.center = [pos.latitud, pos.longitud];
     // DO
     this.$nextTick(() => {
       this.$refs.map.leafletObject; // work as expected
     });
-   
   },
   methods: {
     onMapReady() {
@@ -112,17 +113,11 @@ export default {
       this.router = L.Routing.control({
         waypoints: [],
         routeWhileDragging: true,
-        // addWaypoints: false,
+        addWaypoints: true,
 
         createMarker: function (i, waypoint, n) {
           return L.marker(waypoint.latLng, {
             draggable: false,
-            // icon: L.icon({
-            //   iconUrl: "ruta/a/tu/icono.png",
-            //   iconSize: [0, 0], // Tamaño del icono
-            //   iconAnchor: [16, 32], // Punto de anclaje del icono
-            //   popupAnchor: [0, -32], // Punto donde se abrirá el popup
-            // }),
           });
         },
         lineOptions: {
@@ -135,12 +130,19 @@ export default {
           // recibira la ciudad de cada usuario por la api
           geocodingQueryParams: {
             countrycodes: "ES", // Limitar la búsqueda a España
+            // viewbox: "-3.888, 40.64, -3.486, 40.312", // Coordenadas aproximadas de la ciudad (Madrid)
+            // bounded: 1, // Limita los resultados a los límites del viewbox
           },
         }),
       }).addTo(this.map);
 
       this.router.on("routesfound", (event) => {
         const route = event.routes[0];
+
+        if (route.waypoints.length > 2) {
+          alert("SOLO PUEDES SELECCIONAR 2 RUTAS");
+          location.reload();
+        }
 
         this.distance = route.summary.totalDistance;
         this.time = route.summary.totalTime;
@@ -185,13 +187,13 @@ export default {
 
           this.router.setWaypoints(waypoints);
 
-          this.map.setView(latlng, this.zoom);
-          //   this.map.touchZoom.disable();
-          //   this.map.doubleClickZoom.disable();
-          //   this.map.scrollWheelZoom.disable();
-          //   this.map.boxZoom.disable();
-          //   this.map.keyboard.disable();
-          //   this.map.zoomControl.remove();
+          // this.map.setView(latlng, this.zoom);
+          // this.map.touchZoom.disable();
+          // this.map.doubleClickZoom.disable();
+          // this.map.scrollWheelZoom.disable();
+          // this.map.boxZoom.disable();
+          // this.map.keyboard.disable();
+          // this.map.zoomControl.remove();
         } else {
           alert("Location not found: " + query);
         }
