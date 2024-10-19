@@ -16,7 +16,7 @@ $pasajeroRol = 3;
 // Manejar todas las solicitudes OPTIONS para todas las rutas
 $app->options('/{routes:.+}', function (Request $request, Response $response) {
     return $response;
-});
+})->add(AddJsonResponseHeader::class);
 
 $app->post('/register', [UsuarioController::class, 'HandleRegister'])->add(AddJsonResponseHeader::class);
 $app->post('/login', [UsuarioController::class, 'HandleLogin'])->add(AddJsonResponseHeader::class);

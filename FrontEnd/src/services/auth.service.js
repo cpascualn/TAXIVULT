@@ -1,24 +1,11 @@
-import authHeader from './auth-header';
-
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+import { simpleQuery } from "@/assets/utils/fetchHelper";
+import { Query } from "@/assets/utils/fetchHelper";
 
 export default {
 
   async login(user) {
-
     try {
-      const response = await fetch(
-        API_URL + "/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        }
-      )
-
-      const data = await response.json();
+      const data = await Query('/login', user);
       if (data.access_token) {
         localStorage.setItem('authToken', JSON.stringify(data.access_token));
       }
@@ -34,38 +21,10 @@ export default {
 
   async register(user) {
     try {
-
-
-      const response = await fetch(
-        API_URL + "/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        }
-      )
-      console.log(response);
-      if (!response.ok) {
-        const errorText = await response.text(); // Obtén la respuesta como texto
-        console.log("Error en la respuesta:", errorText);
-        throw new Error(errorText);
-      }
-
-      return {response,"success": true};
+      return await Query('/register', user);
     } catch (error) {
+      console.log(error);
       return { "error": error, "success": false };
     }
   },
-
-  async passwordForgot(userEmail) {
-
-
-  },
-
-  async passwordReset(passwordDTO) {
-
-
-  }
 }

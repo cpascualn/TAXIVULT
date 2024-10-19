@@ -62,9 +62,9 @@ class UsuarioController
                 throw new Exception("Error en el registro");
 
         } catch (\Throwable $th) {
-            $errorMessage = $th->getMessage() ?: 'Error al registrar al usuario';
-            $response->getBody()->write(json_encode(['errorRegister' => $errorMessage, 'success' => false]));
-            return $response->withStatus(500);
+            $errorMessage = 'Error en el registro';
+
+            return $response->withStatus(400);
         }
 
         if ($usuario != null) {
@@ -73,8 +73,7 @@ class UsuarioController
             return $response->withStatus(200);
         }
 
-        $response->getBody()->write(json_encode(['error' => 'Error al registrar al usuario', 'success' => false]));
-        return $response->withStatus(500);
+        return $response->withStatus(400);
     }
 
     public function HandleListar(Request $request, Response $response)
