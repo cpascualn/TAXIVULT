@@ -1,4 +1,3 @@
-import { simpleQuery } from "@/assets/utils/fetchHelper";
 import { Query } from "@/assets/utils/fetchHelper";
 
 export default {

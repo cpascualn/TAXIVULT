@@ -21,9 +21,7 @@ export const profile = {
            const picURL = (await ProfileService.uploadPic(file, this.state.profile.userProfile.id)).url;
            commit('successUpload', picURL);
         },
-
         
-
     },
     mutations: {
         success(state, userProfile) {

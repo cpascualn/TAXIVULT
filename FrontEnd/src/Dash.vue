@@ -61,7 +61,6 @@ export default {
       />
     
       <router-view />
-      <app-footer v-show="showFooter" />
     </main>
   </div>
 </template>

@@ -330,7 +330,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import ciudadService from "@/services/ciudad.service";
+import regFormCheck from "@/mixins/regFormCheck";
+import authService from "@/services/auth.service";
 
 const step = ref(1);
 const titulos = ["PERSONAL", "TARJETA", "CONDUCTOR", "INFO VEHICULO"];
@@ -372,6 +375,11 @@ const usuario = ref({
   tipo: "", // desplegable con los valores que llegen del servidor
 });
 
+
+onMounted(async () => {
+  ciudades.value = await fetchCiudades();
+});
+
 async function searchLocations() {
   try {
     const response = await fetch(
@@ -396,7 +404,115 @@ function selectLocation(location) {
   usuario.value.lonEspera = location.lon;
 }
 
+
 const hasSeenCongrats = ref(false);
+
+const validarStep1 = () => {
+  if (regFormCheck.checkMail(usuario.value.email)) {
+    displayValidMail.value[0] = "none";
+    displayValidMail.value[1] = "block";
+  } else {
+    displayValidMail.value[0] = "block";
+    displayValidMail.value[1] = "none";
+    return false;
+  }
+
+  if (regFormCheck.checkNombre(usuario.value.nombre)) {
+    displayValidNombre.value[0] = "block";
+    displayValidNombre.value[1] = "none";
+  } else {
+    displayValidMail.value[0] = "none";
+    displayValidMail.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkTelefono(usuario.value.telefono)) {
+    displayValidTelefono.value[0] = "block";
+    displayValidTelefono.value[1] = "none";
+  } else {
+    displayValidTelefono.value[0] = "none";
+    displayValidTelefono.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkApellido(usuario.value.apellidos)) {
+    displayValidApellido.value[0] = "block";
+    displayValidApellido.value[1] = "none";
+  } else {
+    displayValidApellido.value[0] = "none";
+    displayValidApellido.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkContrasena(usuario.value.contrasena)) {
+    displayValidContra.value[0] = "block";
+    displayValidContra.value[1] = "none";
+  } else {
+    displayValidContra.value[0] = "none";
+    displayValidContra.value[1] = "block";
+    return false;
+  }
+
+  return true;
+};
+const validarStep2 = () => {
+  if (regFormCheck.checkTarjeta(usuario.value.n_tarjeta)) {
+    displayValidTarjeta.value[0] = "block";
+    displayValidTarjeta.value[1] = "none";
+  } else {
+    displayValidTarjeta.value[0] = "none";
+    displayValidTarjeta.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkNombre(usuario.value.titular_tarjeta)) {
+    displayValidNombreTarjeta.value[0] = "block";
+    displayValidNombreTarjeta.value[1] = "none";
+  } else {
+    displayValidNombreTarjeta.value[0] = "none";
+    displayValidNombreTarjeta.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkExpTarjeta(usuario.value.caducidad_tarjeta)) {
+    displayValidExpTarjeta.value[0] = "block";
+    displayValidExpTarjeta.value[1] = "none";
+  } else {
+    displayValidExpTarjeta.value[0] = "none";
+    displayValidExpTarjeta.value[1] = "block";
+    return false;
+  }
+
+  if (regFormCheck.checkCvcTarjeta(usuario.value.cvv_tarjeta)) {
+    displayValidCVC.value[0] = "block";
+    displayValidCVC.value[1] = "none";
+  } else {
+    displayValidCVC.value[0] = "none";
+    displayValidCVC.value[1] = "block";
+    return false;
+  }
+  return true;
+};
+
+const register = async () => {
+  if (validarStep2()) {
+    hasSeenCongrats.value = true;
+    const data = await authService.register(usuario.value);
+    if (!data.success) finalMessage.value = data.errorRegister;
+  }
+};
+
+async function fetchCiudades() {
+  const response = await ciudadService.getCiudades();
+  let cius = [];
+  if (response.success) {
+    response.ciudades.forEach((ciudad) => {
+      cius.push({ id: ciudad.id, nombre: ciudad.nombre });
+    });
+  }
+  return cius;
+}
+
 
 const prev = () => {
   step.value--;
@@ -404,12 +520,7 @@ const prev = () => {
 
 const next = () => {
   console.log(usuario.value);
-  step.value++;
-};
-
-const register = () => {
-  console.log(usuario.value);
-  hasSeenCongrats.value = true;
+  if (validarStep1()) step.value++;
 };
 </script>
 

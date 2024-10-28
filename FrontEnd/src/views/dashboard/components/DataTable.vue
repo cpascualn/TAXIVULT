@@ -1,5 +1,6 @@
 <template>
   <div class="card">
+    <!--
     <DataTable
       :value="products"
       paginator
@@ -20,26 +21,20 @@
       <Column field="name" header="Name" sortable></Column>
       <Column field="category" header="Category" sortable></Column>
       <Column field="quantity" header="Quantity" sortable></Column>
-    </DataTable>
+    </DataTable> -->
   </div>
 </template>
 
 <script setup>
-import DataTable from "primevue/datatable";
-import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import Column from "primevue/column";
-import { ref, onMounted } from "vue";
-import { ProductService } from "@/services/ProductService";
+// import { ref, onMounted } from "vue";
+// import { ProductService } from "@/services/ProductService";
 
-//  los filtros a medias
+// //  los filtros a medias
 
-const products = ref();
-onMounted(() => {
-  ProductService.getProducts().then((data) => (products.value = data));
-});
+// const products = ref();
+// onMounted(() => {
+//   ProductService.getProducts().then((data) => (products.value = data));
+// });
 
-// MIRAR EN W3S HOWTO FILTER TABLES Y HACERLO CON JS PURO EN VEZ DEL FRAMEWORK PRIMEVUE
-
-
-
+// USAR VUE MATERIAL
 </script>

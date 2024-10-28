@@ -62,7 +62,7 @@
           class="text-xs ps-4 text-uppercase font-weight-bolder text-white"
           :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
         >
-          EXAMPLES (API)
+          MI CUENTA
         </h6>
       </li>
 
@@ -92,14 +92,18 @@
           </template>
         </sidenav-collapse>
       </li>
-
-      <li class="mt-3 nav-item">
-        <h6
-          class="text-xs ps-4 text-uppercase font-weight-bolder text-white"
-          :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
+      <li class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="profile"
+          navText="Profile"
         >
-          ACCOUNT PAGES
-        </h6>
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">person</i>
+          </template>
+        </sidenav-collapse>
       </li>
 
       <li class="nav-item">
@@ -115,32 +119,7 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="sign-in"
-          navText="SignIn"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">login</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="sign-up"
-          navText="SignUp"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">assignment</i>
-          </template>
-        </sidenav-collapse>
-      </li>
+
     </ul>
     <div class="sidenav-footer position-absolute w-100 bottom-0">
       <div class="mx-3">

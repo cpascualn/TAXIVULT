@@ -67,13 +67,6 @@ class PasajeroController
         $pasajero = $this->crearPasajero($id, $body);
         $this->daoPas->insertar($pasajero);
         $pasajero = $this->daoPas->obtener($id);
-        $body = json_encode([
-            'message' => 'Pasajero creado',
-            'pasajero' => $pasajero,
-            'success' => true
-        ]);
-
-        $response->getBody()->write($body);
 
         return $response->withStatus(200);
     }

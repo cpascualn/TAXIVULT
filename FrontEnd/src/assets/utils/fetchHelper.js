@@ -20,10 +20,8 @@ export const Query = async (path, data = null, method = 'POST') => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(res => {
-    console.log(res);
-   return res.json()
-  })
+  }).then(res => res.json()
+  )
 }
 
 // query de metodos sin body con necesidad de token

@@ -172,9 +172,15 @@
               data-text-color="custom"
             >
               <p class="cta-color">
+                <br />
                 <span class="link_wrap">
-                  <input type="submit" value="" class="link_text" />
-                  <span class="arrow-next"></span>
+                  <button class="submit-next-button" type="submit">
+                    <img
+                      src="/src/assets/img/flecha-correcta.png"
+                      alt=""
+                      class="icono-flecha"
+                    />
+                  </button>
                 </span>
               </p>
             </div>
@@ -279,25 +285,19 @@
                 </div>
               </div>
             </div>
-
             <div class="form-group cta-step">
               <div class="cta prev">
-                <p class="cta-color">
-                  <span class="link_wrap">
-                    <a class="link_text" href="#" @click.prevent="prev()"
-                      ><span class="arrow-prev"></span>
-                    </a>
-                  </span>
-                </p>
+                <span class="link_wrap">
+                  <button class="submit-next-button" @click.prevent="prev()">
+                    <img
+                      src="/src/assets/img/flecha-correcta.png"
+                      alt=""
+                      class="icono-flecha-atras"
+                    />
+                  </button>
+                </span>
               </div>
-              <div class="cta">
-                <p class="cta-color">
-                  <span class="text"></span>
-                  <span class="link_wrap">
-                    <input type="submit" value="" class="link_text" />
-                  </span>
-                </p>
-              </div>
+              <div class="cta"></div>
               <div class="register-btn">
                 <input type="submit" value="REGISTRATE" />
               </div>
@@ -462,7 +462,8 @@ const register = async () => {
   if (validarStep2()) {
     hasSeenCongrats.value = true;
     const data = await authService.register(usuario.value);
-    if (!data.success) finalMessage.value = data.errorRegister;
+    if (!data.success)
+      finalMessage.value = data.error ? `ERROR: ${data.error}` : "ERROR";
   }
 };
 
@@ -674,7 +675,7 @@ body {
 .register .cta-color,
 .register .cta-color input,
 .register .cta-color .link_text {
-  color: #fff;
+  color: #ffc000;
   font-family: "K2D", sans-serif;
   font-size: 1.1rem;
   text-decoration: none;
@@ -695,13 +696,28 @@ body {
   transition: transform 0.3s ease-in-out;
 }
 
-.register .cta-color .link_wrap .arrow-prev::before {
-  color: #ffc000;
-  content: "<-";
-  position: absolute;
+.submit-next-button {
+  background-color: #ffc000; /* Color de fondo */
+  color: white; /* Color del texto */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre texto e imagen */
+}
 
-  top: -17px;
-  left: -25px;
+.icono-flecha {
+  width: 32px;
+  height: 32px;
+}
+
+.icono-flecha-atras {
+  width: 32px;
+  height: 32px;
+  transform: rotate(180deg);
 }
 
 .register .cta-color .link_wrap .arrow-next {

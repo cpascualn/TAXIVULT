@@ -12,7 +12,7 @@
               <div class="col-6 text-end">
                 <material-button
                   class="float-right btn btm-sm"
-                  @click="showProMessage()"
+                  @click="addUser()"
                 >
                   <i class="fas fa-user-plus me-2"></i>
                   Add User
@@ -70,16 +70,19 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch("profile/getProfile");
-    this.me = this.$store.getters["profile/getUserProfile"];
   },
   methods: {
-    showProMessage() {
+    showErrorMessage() {
       showSwal.methods.showSwal({
         type: "error",
-        message: "This is a PRO feature.",
+        message: "Error.",
         width: 500,
       });
     },
+    addUser(){
+      console.log('add user');
+      
+    }
   },
 };
 

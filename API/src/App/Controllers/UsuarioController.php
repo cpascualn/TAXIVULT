@@ -51,9 +51,9 @@ class UsuarioController
     {
         $usuario = null;
         try {
-            $response = $this->HandleInsertar($request, $response);
-            $response->getStatusCode();
-            if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500)
+            $InsertResponse = $this->HandleInsertar($request, $response);
+
+            if ($InsertResponse->getStatusCode() == 400 || $InsertResponse->getStatusCode() == 500)
                 throw new Exception("Error en el registro");
 
             $body = $request->getParsedBody();
@@ -68,8 +68,8 @@ class UsuarioController
         }
 
         if ($usuario != null) {
-            $token = $this->generarJwtToken($usuario);
-            $response->getBody()->write(json_encode(['access_token' => $token, 'success' => true]));
+            // $token = $this->generarJwtToken($usuario);
+            // $response->getBody()->write(json_encode(['access_token' => $token, 'success' => true]));
             return $response->withStatus(200);
         }
 
@@ -166,7 +166,6 @@ class UsuarioController
 
         $body = json_encode([
             'message' => 'Usuario creado',
-            'usuario' => $usu,
             'success' => true
         ]);
 
