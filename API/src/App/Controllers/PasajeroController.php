@@ -54,9 +54,7 @@ class PasajeroController
         $validacion = $this->validarDatos($id, $body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation faileed',
-                'id' => $validacion['id'],
-                'messages' => $validacion['messages'],
+                'message' => $validacion['message'],
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -80,7 +78,7 @@ class PasajeroController
         $pasajero = $this->daoPas->obtener($id);
         if ($pasajero === null) {
             $response->getBody()->write(json_encode([
-                'messages' => 'El pasajero no existe',
+                'message' => 'El pasajero no existe',
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -90,9 +88,7 @@ class PasajeroController
         $validacion = $this->validarDatosActualizacion($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validatioon failed',
-                'el id es: ' => $id,
-                'messages' => $validacion['messages'],
+                'message' => $validacion['message'],
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -108,7 +104,6 @@ class PasajeroController
         }
         $body = json_encode([
             'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
-            'usuario' => $nuevo,
             'success' => true
         ]);
 
@@ -155,8 +150,7 @@ class PasajeroController
         if (!$v_id->validate()) {
             return [
                 'success' => false,
-                'id' => $id,
-                'messages' => $v_id->errors()
+                'message' => $v_id->errors()
             ];
         }
 
@@ -171,13 +165,13 @@ class PasajeroController
         if (!$v->validate()) {
             return [
                 'success' => false,
-                'messages' => $v->errors()
+                'message' => $v->errors()
             ];
         }
 
         return [
             'success' => true,
-            'messages' => []
+            'message' => []
         ];
     }
     private function validarDatosActualizacion($body)
@@ -193,13 +187,13 @@ class PasajeroController
         if (!$v->validate()) {
             return [
                 'success' => false,
-                'messages' => $v->errors()
+                'message' => $v->errors()
             ];
         }
 
         return [
             'success' => true,
-            'messages' => []
+            'message' => []
         ];
     }
 

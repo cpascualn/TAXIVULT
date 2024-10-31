@@ -199,9 +199,7 @@
 }
 
 @media (max-width: 991px) {
-  .col-2 {
-    width: 100%;
-  }
+ 
 }
 
 .img {

@@ -10,6 +10,8 @@ use App\Models\DaoUsuario;
 use App\Entities\Usuario;
 use App\Controllers\ConductorController;
 use App\Controllers\PasajeroController;
+use Slim\App;
+use Slim\Factory\AppFactory;
 
 class UsuarioController
 {
@@ -50,8 +52,11 @@ class UsuarioController
     public function HandleRegister(Request $request, Response $response)
     {
         $usuario = null;
+        //crear una response para almacenar el mensaje de la insercion y tener la otra para devolver a cliente
+        $app = AppFactory::create();
+        $auxResponse = $app->getResponseFactory()->createResponse();
         try {
-            $InsertResponse = $this->HandleInsertar($request, $response);
+            $InsertResponse = $this->HandleInsertar($request, $auxResponse);
 
             if ($InsertResponse->getStatusCode() == 400 || $InsertResponse->getStatusCode() == 500)
                 throw new Exception("Error en el registro");
@@ -62,14 +67,12 @@ class UsuarioController
                 throw new Exception("Error en el registro");
 
         } catch (\Throwable $th) {
-            $errorMessage = 'Error en el registro';
-
+            $response->getBody()->write(json_encode(value: ['error' => $th->getMessage(), 'success' => false]));
             return $response->withStatus(400);
         }
 
         if ($usuario != null) {
-            // $token = $this->generarJwtToken($usuario);
-            // $response->getBody()->write(json_encode(['access_token' => $token, 'success' => true]));
+            $response->getBody()->write(json_encode(value: ['message' => 'usuario registrado', 'success' => true]));
             return $response->withStatus(200);
         }
 
@@ -92,10 +95,10 @@ class UsuarioController
 
         $encontrados = $this->daoUsu->buscar($body);
         if ($encontrados != null && count($encontrados) > 0) {
-            $body = json_encode(['encontrados' => $encontrados, 'success' => true]);
+            $body = json_encode(['usuarios' => $encontrados, 'success' => true]);
         } else {
             $response->getBody()->write(json_encode([
-                'messages' => 'no se encontraron usuarios',
+                'message' => 'no se encontraron usuarios',
                 'success' => false
             ]));
             return $response->withStatus(404);
@@ -111,7 +114,7 @@ class UsuarioController
 
         if ($usu === null) {
             $response->getBody()->write(json_encode([
-                'messages' => 'El usuario no existe',
+                'message' => 'El usuario no existe',
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -130,7 +133,7 @@ class UsuarioController
         $validacion = $this->validarDatos($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'messages' => 'error validacion',
+                'message' => 'error validacion',
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -146,9 +149,11 @@ class UsuarioController
             return $response->withStatus(400);
         }
 
-        $this->daoUsu->insertar($usu);
-        $usu = $this->daoUsu->obtenerPorEmail($usu->getEmail());
+
         try {
+            $this->daoUsu->insertar($usu);
+            $usu = $this->daoUsu->obtenerPorEmail($usu->getEmail());
+
             $response = $this->insertarUsuarioEnSuRol($request, $response, $usu, $body);
 
             if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
@@ -186,8 +191,7 @@ class UsuarioController
         $validacion = $this->validarDatosActualizacion($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation failedd',
-                'messages' => $validacion['messages'],
+                'message' => $validacion['message'],
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -203,7 +207,6 @@ class UsuarioController
         }
         $body = json_encode([
             'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
-            'usuario' => $nuevo,
             'success' => true
         ]);
 
@@ -258,13 +261,13 @@ class UsuarioController
         if (!$v->validate()) {
             return [
                 'success' => false,
-                'messages' => $v->errors()
+                'message' => $v->errors()
             ];
         }
 
         return [
             'success' => true,
-            'messages' => []
+            'message' => []
         ];
     }
     private function validarDatosActualizacion($body)
@@ -284,13 +287,13 @@ class UsuarioController
         if (!$v->validate()) {
             return [
                 'success' => false,
-                'messages' => $v->errors()
+                'message' => $v->errors()
             ];
         }
 
         return [
             'success' => true,
-            'messages' => []
+            'message' => []
         ];
     }
 
@@ -319,18 +322,20 @@ class UsuarioController
 
                 $response = $this->controladorCon->HandleInsertar($request, $response, $usu->getId());
                 //si no se ha podido insertar en su rol se borra el usuario
-                $body = $request->getParsedBody();
-                if ($body['success'] == false && $response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+
+                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
                     $this->daoUsu->eliminar($usu->getId());
+                    return $response->withStatus(400);
                 }
 
                 break;
             case '3': //pasajero
                 $response = $this->controladorPas->HandleInsertar($request, $response, $usu->getId());
                 //si no se ha podido insertar en su rol se borra el usuario
-                $body = $request->getParsedBody();
-                if (isset($body['success']) && $body['success'] == false && $response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+
+                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
                     $this->daoUsu->eliminar($usu->getId());
+                    return $response->withStatus(400);
                 }
 
                 break;

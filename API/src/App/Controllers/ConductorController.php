@@ -6,12 +6,13 @@ use Slim\Psr7\Response;
 use Valitron\Validator;
 use App\Models\DaoConductor;
 use App\Entities\Conductor;
-
+use App\Controllers\VehiculoController;
+use Exception;
 
 class ConductorController
 {
 
-    public function __construct(private DaoConductor $daoCon)
+    public function __construct(private DaoConductor $daoCon, private VehiculoController $vehiContr)
     {
     }
 
@@ -53,24 +54,31 @@ class ConductorController
         $validacion = $this->validarDatos($id, $body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation failed',
-                'messages' => $validacion['messages'],
-                'id' => $validacion['id'],
+                'message' => $validacion['message'],
                 'success' => false
             ]));
             return $response->withStatus(400);
         }
-
-        //si son validos, crear usuario e insertarlo
-
-        $conductor = $this->crearConductor($id, $body);
         try {
+            //primero  insertar el vehiculo  
+          $response = $this->vehiContr->handleInsertar($request, $response);
+
+          if($response->getStatusCode() == 400 || $response->getStatusCode() == 500)
+            throw new Exception("error al insertar vehiculo");
+            //despues crear el conductor
+            $conductor = $this->crearConductor($id, $body);
             $this->daoCon->insertar($conductor);
+            // actualizar el conductor en el vehiculo
+            $this->vehiContr->handleActualizarConductor($request, $response, null, $id);
+
+
         } catch (\Throwable $th) {
+            // si hay error borrar vehiculo 
+            $this->vehiContr->handleBorrarVehiculo($request, $response);
+
             $response->withStatus(400);
             $body = json_encode([
-                'message' => 'error',
-                'en' => $th->getMessage(),
+                'message' => $th->getMessage(),
                 'success' => false
             ]);
             $response->getBody()->write($body);
@@ -82,7 +90,6 @@ class ConductorController
 
         $body = json_encode([
             'message' => 'Usuario creado',
-            'usuario' => $conductor,
             'success' => true
         ]);
 
@@ -100,7 +107,7 @@ class ConductorController
         $conductor = $this->daoCon->obtener($id);
         if ($conductor === null) {
             $response->getBody()->write(json_encode([
-                'messages' => "El conductor no existe",
+                'message' => "El conductor no existe",
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -110,8 +117,7 @@ class ConductorController
         $validacion = $this->validarDatosActualizacion($body);
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
-                'error' => 'Validation failed',
-                'messages' => $validacion['messages'],
+                'message' => $validacion['message'],
                 'success' => false
             ]));
             return $response->withStatus(400);
@@ -126,8 +132,7 @@ class ConductorController
             $valores .= $key . ', ';
         }
         $body = json_encode([
-            'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
-            'usuario' => $nuevo,
+            'message' => 'valores actualizados en el usuario ' . $id,
             'success' => true
         ]);
 
@@ -175,8 +180,7 @@ class ConductorController
         if (!$v_id->validate()) {
             return [
                 'success' => false,
-                'id' => $id,
-                'messages' => $v_id->errors()
+                'message' => $v_id->errors()
             ];
         }
 
@@ -187,8 +191,8 @@ class ConductorController
             'licenciaVTC' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'n_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
-            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],  
-            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],  
+            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
+            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
             'horario' => ['required', 'integer']
         ]);
@@ -197,13 +201,13 @@ class ConductorController
         if (!$v->validate()) {
             return [
                 'success' => false,
-                'messages' => $v->errors()
+                'message' => $v->errors()
             ];
         }
 
         return [
             'success' => true,
-            'messages' => []
+            'message' => []
         ];
     }
     private function validarDatosActualizacion($body)
@@ -214,8 +218,8 @@ class ConductorController
             'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
-            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],  
-            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],  
+            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
+            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
             'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
             'horario' => ['required', 'integer']
@@ -224,13 +228,13 @@ class ConductorController
         if (!$v->validate()) {
             return [
                 'success' => false,
-                'messages' => $v->errors()
+                'message' => $v->errors()
             ];
         }
 
         return [
             'success' => true,
-            'messages' => []
+            'message' => []
         ];
     }
 

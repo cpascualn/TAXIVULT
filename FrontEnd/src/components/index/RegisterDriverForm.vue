@@ -610,7 +610,6 @@ async function searchLocations() {
 
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
 
     locations.value = data;
     errorMessage.value = "";
@@ -626,11 +625,15 @@ function selectLocation(location) {
   longitude.value = location.lon;
   locations.value = [];
 
-  usuario.value.latEspera = location.lat;
-  usuario.value.lonEspera = location.lon;
+  // limitar la cadena a 12 digitos
+  usuario.value.latEspera = location.lat.length > 12 ? location.lat.slice(0, 12) : location.lat;
+  usuario.value.lonEspera = location.lon.length > 12 ? location.lon.slice(0, 12) : location.lon;
 }
 
 const hasSeenCongrats = ref(false);
+const finalMessage = ref(
+  "TU CUENTA SE HA CREADO CON EXITO, YA PUEDES INICIAR SESION. "
+);
 
 onMounted(async () => {
   ciudades.value = await fetchCiudades();
@@ -779,7 +782,8 @@ const register = async () => {
   if (validarStep4()) {
     hasSeenCongrats.value = true;
     const data = await authService.register(usuario.value);
-    if (!data.success) finalMessage.value = data.errorRegister;
+    if (!data.success)
+      finalMessage.value = data.error ? `ERROR: ${data.error}` : "ERROR";
   }
 };
 
