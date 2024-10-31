@@ -12,10 +12,9 @@ export default {
         return regexNombre.test(nombre);
     },
 
-    // Validación de apellido (similar al nombre)
-    checkApellido(apellido) {
-        const regexApellido = /^[a-zA-ZÀ-ÿ\s]{2,}$/;
-        return regexApellido.test(apellido);
+    checkNomCoche(nombre) {
+        const regexNombre = /^[a-zA-ZÀ-ÿ0-9\s\-.]{2,}$/;
+        return regexNombre.test(nombre);
     },
 
     checkTelefono(telefono) {
@@ -46,6 +45,10 @@ export default {
         const regexCVC = /^[0-9]{3,4}$/;
         return regexCVC.test(cvc);
     },
+    checkIban(iban) {
+        const regexIban = /^[A-Z]{2}\d{2}(?:\s?\d{4}){5}$/;
+        return regexIban.test(iban);
+    },
 
     // Validación de DNI (España, formato 8 dígitos + letra)
     checkDNI(dni) {
@@ -55,7 +58,7 @@ export default {
 
     // Validación de VTC (8 caracteres alfanuméricos)
     checkVTC(vtc) {
-        const regexVTC = /^[A-Za-z0-9]{8}$/;
+        const regexVTC = /^[A-Za-z]{3}-?\d{6}$/;
         return regexVTC.test(vtc);
     },
 

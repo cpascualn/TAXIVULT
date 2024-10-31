@@ -171,18 +171,13 @@
               data-alignment="right"
               data-text-color="custom"
             >
-              <p class="cta-color">
-                <br />
-                <span class="link_wrap">
                   <button class="submit-next-button" type="submit">
                     <img
                       src="/src/assets/img/flecha-correcta.png"
                       alt=""
                       class="icono-flecha"
                     />
-                  </button>
-                </span>
-              </p>
+                  </button>   
             </div>
           </form>
         </section>
@@ -192,7 +187,6 @@
           <form
             class="form"
             method="post"
-            action="#"
             @submit.prevent="register"
           >
             <div class="form-group">
@@ -385,8 +379,8 @@ const validarStep1 = () => {
     displayValidNombre.value[0] = "block";
     displayValidNombre.value[1] = "none";
   } else {
-    displayValidMail.value[0] = "none";
-    displayValidMail.value[1] = "block";
+    displayValidNombre.value[0] = "none";
+    displayValidNombre.value[1] = "block";
     return false;
   }
 
@@ -494,12 +488,20 @@ body {
   color: green;
   display: block;
   text-align: center;
+  width: 100%;
+  max-width: 12rem;
+  margin: 0.5rem;
+  overflow-wrap: break-word;
 }
 
 .invalidFeedback {
   color: red;
   display: block;
   text-align: center;
+  width: 100%;
+  max-width: 12rem;
+  margin: 0.5rem;
+  overflow-wrap: break-word;
 }
 
 .input-group {
@@ -644,11 +646,18 @@ body {
   vertical-align: middle;
 }
 
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .register .form-group {
   display: flex;
   flex-flow: row;
   justify-content: flex-start;
   align-items: baseline;
+  gap: 1.5rem;
 }
 
 .register .form-group label {
@@ -663,9 +672,9 @@ body {
   justify-content: center;
   align-items: center;
 }
-
-.register .form-group.cta-step .cta.prev {
-  padding: 10px 30px;
+.cta{
+  display: flex;
+  justify-content: center;
 }
 
 .register .form-group.new-password {
@@ -707,6 +716,11 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px; /* Espacio entre texto e imagen */
+}
+.submit-next-button:hover {
+  background-color: #ffcb2d; 
+    transform: scale(1.1); 
+    box-shadow: 0 18px 25px #162430; 
 }
 
 .icono-flecha {
@@ -790,7 +804,6 @@ input[type="date"] {
   border-radius: 5px;
   padding: 1.3rem 1rem;
   width: 100%;
-  margin: 0.5rem;
   max-width: 12rem;
 }
 

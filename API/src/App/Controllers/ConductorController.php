@@ -184,12 +184,11 @@ class ConductorController
         $v = new Validator($body);
         $v->mapFieldsRules([
             'dni' => ['required', ['lengthMax', 15]],  // Campo obligatorio, longitud máxima de 15
-            'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
+            'licenciaVTC' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
-            'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
-            'long_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,2}\.\d{1,4}$/']],  // Decimal con 1 o 2 dígitos enteros (positivo o negativo), y hasta 4 decimales
-            'lati_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,3}\.\d{1,6}$/']],  // Decimal con 1 a 3 dígitos enteros (positivo o negativo), y hasta 6 decimales
-            'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
+            'n_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
+            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],  
+            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],  
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
             'horario' => ['required', 'integer']
         ]);
@@ -215,8 +214,8 @@ class ConductorController
             'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
-            'long_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,2}\.\d{1,4}$/']],  // Decimal con 1 o 2 dígitos enteros (positivo o negativo), y hasta 4 decimales
-            'lati_espera' => ['required', 'numeric', ['regex', '/^-?\d{1,3}\.\d{1,6}$/']],  // Decimal con 1 a 3 dígitos enteros (positivo o negativo), y hasta 6 decimales
+            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],  
+            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],  
             'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
             'horario' => ['required', 'integer']
@@ -240,13 +239,13 @@ class ConductorController
         $conductor = new Conductor();
         $conductor->setId($id);
         $conductor->setDni($body['dni'] ?? null);
-        $conductor->setLicenciaTaxista($body['licencia_taxista'] ?? null);
+        $conductor->setLicenciaTaxista($body['licenciaVTC'] ?? null);
         $conductor->setTitularTarjeta($body['titular_tarjeta'] ?? null);
-        $conductor->setIbanTarjeta($body['iban_tarjeta'] ?? null);
-        $conductor->setLongEspera($body['long_espera'] ?? null);
-        $conductor->setLatiEspera($body['lati_espera'] ?? null);
-        $conductor->setEstado($body['estado'] ?? null);
-        $conductor->setCoche($body['coche'] ?? null);
+        $conductor->setIbanTarjeta($body['n_tarjeta'] ?? null);
+        $conductor->setLongEspera($body['lonEspera'] ?? null);
+        $conductor->setLatiEspera($body['latEspera'] ?? null);
+        $conductor->setEstado($body['estado'] ?? 'libre');
+        $conductor->setCoche($body['matricula'] ?? null);
         $conductor->setHorario($body['horario'] ?? null);
 
 
