@@ -1,6 +1,7 @@
 <template>
   <div>
     <Header></Header>
+    <LoadingPage ref="loading"></LoadingPage>
     <section class="trip-booking">
       <div class="trip-booking__container">
         <div class="trip-booking__content">
@@ -21,6 +22,7 @@
 
 <script setup>
 import Header from "./components/Header.vue";
+import LoadingPage from "@/components/index/LoadingPage.vue";
 import SearchTrip from "@/components/index/SearchTrip.vue";
 import LeafMap from "@/components/index/LeafMap.vue";
 import { ref } from "vue";
@@ -34,6 +36,8 @@ let searchParams = ref({
   distance: "",
   duration: "",
 });
+
+const loading = ref(null);
 
 const handleFromMap = (data) => {
   entradas.value = data;
@@ -51,7 +55,12 @@ const handleFromSearch = (data) => {
   searchParams.value.time = data.time;
 
   console.log(searchParams.value);
+};
 
+const loadFinished = () => {
+  if (loading.value) {
+    loading.value.closeModal();
+  }
 };
 </script>
 

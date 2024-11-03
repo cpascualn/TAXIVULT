@@ -18,15 +18,17 @@ $app->options('/{routes:.+}', function (Request $request, Response $response) {
     return $response;
 })->add(AddJsonResponseHeader::class);
 
-$app->post('/register', [UsuarioController::class, 'HandleRegister'])->add(AddJsonResponseHeader::class);
-$app->post('/login', [UsuarioController::class, 'HandleLogin'])->add(AddJsonResponseHeader::class);
-$app->get('/api/ciudades', callable: [CiudadController::class, 'HandleListar'])->add(AddJsonResponseHeader::class);
-
+$app->group('', function (RouteCollectorProxy $group) {
+    $group->post('/register', [UsuarioController::class, 'HandleRegister']);
+    $group->post('/login', [UsuarioController::class, 'HandleLogin']);
+    $group->get('/api/ciudades', [CiudadController::class, 'HandleListar']);
+    $group->get('/api/ciudades/{nombre:[a-zA-ZÀ-ÿ\s-]+}', [CiudadController::class, 'handleObtenerPorNombre']);
+    $group->get('/api/ciudades/{id:[0-9]+}', [CiudadController::class, 'handleObtener']);
+})->add(AddJsonResponseHeader::class);
 
 $app->group('/api', function (RouteCollectorProxy $group) {
-
     $group->group('/usuarios', function (RouteCollectorProxy $group) {
-        $group->get('', callable: [UsuarioController::class, 'HandleListar']);
+        $group->get('', [UsuarioController::class, 'HandleListar']);
         $group->post('', [UsuarioController::class, 'HandleInsertar']);
         $group->patch('/{id:[0-9]+}', [UsuarioController::class, 'HandleActualizar']);
         $group->get('/{id:[0-9]+}', [UsuarioController::class, 'HandleObtener']);

@@ -30,4 +30,35 @@ class CiudadController
         return $response->withStatus(200);
     }
 
+    public function handleObtener(Request $request, Response $response, $id)
+    {
+        $ciudad = $this->daoCiu->obtener($id);
+        if ($ciudad === null) {
+            $response->getBody()->write(json_encode([
+                'message' => 'La ciudad no existe',
+                'success' => false
+            ]));
+            return $response->withStatus(400);
+        }
+
+        $response->getBody()->write(json_encode(['ciudad' => $ciudad, 'success' => true]));
+        return $response->withStatus(200);
+    }
+
+    public function handleObtenerPorNombre(Request $request, Response $response, $nombreCiudad)
+    {
+        $ciudad = $this->daoCiu->obtenerPorNombre($nombreCiudad);
+        if ($ciudad === null) {
+            $response->getBody()->write(json_encode([
+                'message' => 'La ciudad no existe',
+                'success' => false
+            ]));
+            return $response->withStatus(400);
+        }
+
+        $response->getBody()->write(json_encode(['ciudad' => $ciudad, 'success' => true]));
+        return $response->withStatus(200);
+    }
+
+
 }

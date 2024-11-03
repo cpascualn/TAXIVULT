@@ -3,13 +3,18 @@
     <div class="trip-booking__map-container">
       <div></div>
       <div class="leafMap">
-        <l-map ref="map" :zoom="zoom" :center="center" @ready="onMapReady()">
+        <l-map
+          ref="map"
+          :zoom="zoom"
+          :center="center"
+          @ready="onMapReady()"
+          @update:center="centerLocation()"
+        >
           <l-tile-layer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             layer-type="base"
             name="OpenStreetMap"
           ></l-tile-layer>
-          <l-marker :lat-lng="marker" />
         </l-map>
       </div>
     </div>
@@ -18,17 +23,18 @@
 
 <script>
 import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
 import { latLng } from "leaflet";
+import ciudadService from "@/services/ciudad.service";
+import profileService from "@/services/profile.service";
 
 export default {
   components: {
     LMap,
     LTileLayer,
-    LMarker,
   },
   data: () => ({
     map: null,
@@ -36,24 +42,28 @@ export default {
     startLocation: "",
     endLocation: "",
     zoom: 14,
-    center: [40.422476, -3.696139],
+    center: [0, 0], //[lat,long]
     distance: "", // en metros
     time: "", // en segundos
-    marker: latLng(47.41322, -1.219482),
+    viewbox: "", // <long_min>,<lat_min>,<long_max>,<lat_max>,
   }),
-  async mounted() {
-    let pos = await this.centerLocation();
-    this.center = [pos.latitud, pos.longitud];
+  mounted() {
     // DO
     this.$nextTick(() => {
-      this.$refs.map.leafletObject; // work as expected
+      this.$refs.map.leafletObject;
     });
   },
   methods: {
-    onMapReady() {
+    async onMapReady() {
+      const pos = await this.centerLocation();
+      this.center = [pos.latitud, pos.longitud];
+      const vBox = await this.getViewBox();
+      this.viewbox = vBox;
+
       this.map = this.$refs.map.leafletObject;
       this.map.setMaxZoom(16);
       this.map.setMinZoom(6);
+
       this.initializeRouter();
 
       const entradas = this.setupInputs();
@@ -130,8 +140,8 @@ export default {
           // recibira la ciudad de cada usuario por la api
           geocodingQueryParams: {
             countrycodes: "ES", // Limitar la búsqueda a España
-            // viewbox: "-3.888, 40.64, -3.486, 40.312", // Coordenadas aproximadas de la ciudad (Madrid)
-            // bounded: 1, // Limita los resultados a los límites del viewbox
+            viewbox: this.viewbox, //  rango de Coordenadas a la ciudad en la que buscar
+            bounded: 1, // Limita los resultados a los límites del viewbox
           },
         }),
       }).addTo(this.map);
@@ -170,7 +180,6 @@ export default {
         this.hideOptions(); // Oculta la div solo si el segundo punto de ruta no ha sido cambiado antes
       });
     },
-
     addWaypoint(query, index) {
       L.Control.Geocoder.nominatim().geocode(query, (results) => {
         if (results && results.length > 0) {
@@ -183,25 +192,25 @@ export default {
           } else {
             waypoints[index] = L.Routing.waypoint(latlng);
           }
-          //   L.marker(latlng).addTo(this.map);
 
           this.router.setWaypoints(waypoints);
-
-          // this.map.setView(latlng, this.zoom);
-          // this.map.touchZoom.disable();
-          // this.map.doubleClickZoom.disable();
-          // this.map.scrollWheelZoom.disable();
-          // this.map.boxZoom.disable();
-          // this.map.keyboard.disable();
-          // this.map.zoomControl.remove();
         } else {
           alert("Location not found: " + query);
         }
       });
     },
     async centerLocation() {
-      let lati = 40.422476;
-      let longi = -3.696139;
+      const ciudad = await ciudadService.getCiudadUsuario();
+      let lati, longi;
+      if (!ciudad) {
+        lati = 40.422476;
+        longi = -3.696139;
+      }
+
+      lati = ciudad.lat;
+      longi = ciudad.long;
+
+      // si el usuario bloquea la ubicacion del navegador y se asgina la ubicacion de su ciudad , si la llamada falla se muestra madrid
       try {
         const { latitud, longitud } = await this.getCurrentPositionPromise();
         return {
@@ -233,6 +242,13 @@ export default {
           );
         }
       });
+    },
+    async getViewBox() {
+      const ciudad = await ciudadService.getCiudadUsuario();
+      //si no estas logueado y por tanto no tienes ciudad, no hay viewbox
+      if (!ciudad) return "";
+      const vBox = `${ciudad.long_min}, ${ciudad.lat_min}, ${ciudad.long_max}, ${ciudad.lat_max}`;
+      return vBox;
     },
   },
 };
