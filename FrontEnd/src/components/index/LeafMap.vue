@@ -3,12 +3,7 @@
     <div class="trip-booking__map-container">
       <div></div>
       <div class="leafMap">
-        <l-map
-          ref="map"
-          :zoom="zoom"
-          :center="center"
-          @ready="onMapReady()"
-        >
+        <l-map ref="map" :zoom="zoom" :center="center" @ready="onMapReady()">
           <l-tile-layer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             layer-type="base"
@@ -28,7 +23,6 @@ import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
 import { latLng } from "leaflet";
 import ciudadService from "@/services/ciudad.service";
-import profileService from "@/services/profile.service";
 
 export default {
   components: {
@@ -201,13 +195,13 @@ export default {
     async centerLocation() {
       const ciudad = await ciudadService.getCiudadUsuario();
       let lati, longi;
-      if (!ciudad) {
-        lati = 40.422476;
-        longi = -3.696139;
+      if (ciudad) {
+        lati = ciudad.lat;
+        longi = ciudad.long;
       }
 
-      lati = ciudad.lat;
-      longi = ciudad.long;
+      lati = 40.422476;
+      longi = -3.696139;
 
       // si el usuario bloquea la ubicacion del navegador y se asgina la ubicacion de su ciudad , si la llamada falla se muestra madrid
       try {
