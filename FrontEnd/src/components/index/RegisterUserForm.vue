@@ -393,7 +393,7 @@ const validarStep1 = () => {
     return false;
   }
 
-  if (regFormCheck.checkApellido(usuario.value.apellidos)) {
+  if (regFormCheck.checkNombre(usuario.value.apellidos)) {
     displayValidApellido.value[0] = "block";
     displayValidApellido.value[1] = "none";
   } else {
