@@ -8,7 +8,6 @@
           :zoom="zoom"
           :center="center"
           @ready="onMapReady()"
-          @update:center="centerLocation()"
         >
           <l-tile-layer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
