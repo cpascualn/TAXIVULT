@@ -25,7 +25,7 @@ import Header from "./components/Header.vue";
 import LoadingPage from "@/components/index/LoadingPage.vue";
 import SearchTrip from "@/components/index/SearchTrip.vue";
 import LeafMap from "@/components/index/LeafMap.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 let entradas = ref();
 let searchParams = ref({
@@ -38,9 +38,11 @@ let searchParams = ref({
 });
 
 const loading = ref(null);
+const isReady = ref(false);
 
 const handleFromMap = (data) => {
   entradas.value = data;
+  isReady.value = true;
 };
 
 const handleMapData = (data) => {
@@ -62,6 +64,13 @@ const loadFinished = () => {
     loading.value.closeModal();
   }
 };
+
+// Configuramos un `watch` para observar `isReady`
+watch(isReady, (newVal) => {
+  if (newVal) {
+    loadFinished();
+  }
+});
 </script>
 
 <style scoped>

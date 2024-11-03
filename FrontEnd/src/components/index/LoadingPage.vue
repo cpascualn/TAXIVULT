@@ -6,8 +6,6 @@
           <div class="modal-body">
             <div class="loading-spinner mb-2"></div>
             <div>Loading</div>
-
-            <button class="btn btn-danger" @click="closeModal">ACEPTAR</button>
           </div>
         </div>
       </div>
