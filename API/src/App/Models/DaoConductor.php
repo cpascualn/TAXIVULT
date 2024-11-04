@@ -15,6 +15,8 @@ class DaoConductor extends Database
         $this->db = $db;
     }
 
+
+    //lista de conductores
     public function listar()
     {
         $consulta = "SELECT * FROM Conductor";
@@ -120,4 +122,92 @@ class DaoConductor extends Database
         $this->db->ConsultaSimple($consulta, $param);
     }
 
+    // actualiza todos los estados en la hora actual dependiendo del horario del conductor, excepto los ocupados
+    public function actualizarEstados()
+    {
+        $hora = date('H:i:s');
+        $consulta = "
+        UPDATE Conductor c
+    JOIN Horario h ON c.horario = h.id
+    SET c.estado = CASE
+         WHEN ((:HORA_ACTUAL >= TIME(h.hora_ini1) AND :HORA_ACTUAL <= TIME(h.hora_fin1)) OR
+              (:HORA_ACTUAL >= TIME(h.hora_ini2) AND :HORA_ACTUAL <= TIME(h.hora_fin2)) OR
+              (TIME(h.hora_ini1) > TIME(h.hora_fin1) AND (:HORA_ACTUAL >= TIME(h.hora_ini1) OR :HORA_ACTUAL <= TIME(h.hora_fin1))) OR
+              (TIME(h.hora_ini2) > TIME(h.hora_fin2) AND (:HORA_ACTUAL >= TIME(h.hora_ini2) OR :HORA_ACTUAL <= TIME(h.hora_fin2))))
+        THEN 'libre'
+        ELSE 'fuera de servicio'
+    END
+    WHERE h.nombre IN ('diurno', 'nocturno') 
+      AND c.estado != 'ocupado'
+        ";
+        $param = array(
+            "HORA_ACTUAL" => $hora,
+        );
+
+        $this->db->ConsultaSimple($consulta, $param);
+    }
+    // actualiza los estados de conductores ocupados que ya hayan acabado el viaje
+    public function actualizarEstadosOcupados()
+    {
+        $hora = date('H:i:s');
+        $horaEpoch = time();
+        $consulta = "
+         UPDATE Conductor c
+    JOIN viaje v ON v.id_conductor = c.id
+    JOIN Horario h ON c.horario = h.id
+    SET c.estado = CASE
+        WHEN ((:HORA_ACTUAL >= TIME(h.hora_ini1) AND :HORA_ACTUAL <= TIME(h.hora_fin1)) OR
+              (:HORA_ACTUAL >= TIME(h.hora_ini2) AND :HORA_ACTUAL <= TIME(h.hora_fin2)) OR
+              (TIME(h.hora_ini1) > TIME(h.hora_fin1) AND (:HORA_ACTUAL >= TIME(h.hora_ini1) OR :HORA_ACTUAL <= TIME(h.hora_fin1))) OR
+              (TIME(h.hora_ini2) > TIME(h.hora_fin2) AND (:HORA_ACTUAL >= TIME(h.hora_ini2) OR :HORA_ACTUAL <= TIME(h.hora_fin2))))
+        THEN 'libre'
+        ELSE 'fuera de servicio'
+    END
+    WHERE v.fecha_fin <= :HORA_ACTUAL_EPOCH
+      AND c.estado = 'ocupado'
+      AND v.cancelado = 0";
+        $param = array(
+            "HORA_ACTUAL" => $hora,
+            "HORA_ACTUAL_EPOCH" => $horaEpoch,
+        );
+
+        $this->db->ConsultaSimple($consulta, $param);
+    }
+    // cambia el estado del conductor a ocupado 
+    public function ocuparConductor($id)
+    {
+        $hora = date('H:i:s');
+        $consulta = "UPDATE Conductor SET estado = :ESTADO where id = :ID";
+        $param = array(
+            ":ID" => $id,
+            ":ESTADO" => 'ocupado',
+        );
+
+        $this->db->ConsultaSimple($consulta, $param);
+    }
+
+    // cambia el estado de ocupado a libre o fuera de servicio dependiendo de la hora
+    public function liberarConductor($id)
+    {
+        $hora = date('H:i:s');
+        $consulta = "
+        UPDATE Conductor c
+    JOIN Horario h ON c.horario = h.id
+    SET c.estado = CASE
+         WHEN ((:HORA_ACTUAL >= TIME(h.hora_ini1) AND :HORA_ACTUAL <= TIME(h.hora_fin1)) OR
+              (:HORA_ACTUAL >= TIME(h.hora_ini2) AND :HORA_ACTUAL <= TIME(h.hora_fin2)) OR
+              (TIME(h.hora_ini1) > TIME(h.hora_fin1) AND (:HORA_ACTUAL >= TIME(h.hora_ini1) OR :HORA_ACTUAL <= TIME(h.hora_fin1))) OR
+              (TIME(h.hora_ini2) > TIME(h.hora_fin2) AND (:HORA_ACTUAL >= TIME(h.hora_ini2) OR :HORA_ACTUAL <= TIME(h.hora_fin2))))
+        THEN 'libre'
+        ELSE 'fuera de servicio'
+    END
+    WHERE c.id = :ID
+        ";
+        $param = array(
+            "ID" => $id,
+            "HORA_ACTUAL" => $hora,
+        );
+
+        $this->db->ConsultaSimple($consulta, $param);
+    }
 }

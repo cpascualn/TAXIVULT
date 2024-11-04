@@ -6,6 +6,7 @@ use App\Middleware\FilterByRolMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 use App\Controllers\UsuarioController;
 use App\Controllers\CiudadController;
+use App\Controllers\ConductorController;
 use App\Middleware\AllowCorsMiddleware;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
@@ -21,9 +22,14 @@ $app->options('/{routes:.+}', function (Request $request, Response $response) {
 $app->group('', function (RouteCollectorProxy $group) {
     $group->post('/register', [UsuarioController::class, 'HandleRegister']);
     $group->post('/login', [UsuarioController::class, 'HandleLogin']);
-    $group->get('/api/ciudades', [CiudadController::class, 'HandleListar']);
-    $group->get('/api/ciudades/{nombre:[a-zA-ZÀ-ÿ\s-]+}', [CiudadController::class, 'handleObtenerPorNombre']);
-    $group->get('/api/ciudades/{id:[0-9]+}', [CiudadController::class, 'handleObtener']);
+
+    $group->group('/api/ciudades', function (RouteCollectorProxy $group) {
+        $group->get('', [CiudadController::class, 'HandleListar']);
+        $group->get('/{nombre:[a-zA-ZÀ-ÿ\s-]+}', [CiudadController::class, 'handleObtenerPorNombre']);
+        $group->get('/{id:[0-9]+}', [CiudadController::class, 'handleObtener']);
+    });
+
+
 })->add(AddJsonResponseHeader::class);
 
 $app->group('/api', function (RouteCollectorProxy $group) {
@@ -35,14 +41,11 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/buscar', [UsuarioController::class, 'HandleBuscar']);
         $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'HandleEliminar']);
     });
+    $group->group('/conductores', function (RouteCollectorProxy $group) {
+        $group->patch('/reload', [ConductorController::class, 'HandleReload']);
+        $group->patch('/{accion:(?:ocupar|liberar)}/{id:[0-9]+}', [ConductorController::class, 'HandleEstado']);
+    });
 
-    // $group->group('/ciudades', function (RouteCollectorProxy $group) {
-    //     $group->post('', [UsuarioController::class, 'HandleInsertar']);
-    //     $group->patch('/{id:[0-9]+}', [UsuarioController::class, 'HandleActualizar']);
-    //     $group->get('/{id:[0-9]+}', [UsuarioController::class, 'HandleObtener']);
-    //     $group->post('/buscar', [UsuarioController::class, 'HandleBuscar']);
-    //     $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'HandleEliminar']);
-    // });
 
 })->add(AddJsonResponseHeader::class)
     ->add(new FilterByRolMiddleware([$adminRol, $conductorRol, $pasajeroRol]))

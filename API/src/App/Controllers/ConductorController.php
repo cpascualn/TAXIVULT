@@ -61,10 +61,10 @@ class ConductorController
         }
         try {
             //primero  insertar el vehiculo  
-          $response = $this->vehiContr->handleInsertar($request, $response);
+            $response = $this->vehiContr->handleInsertar($request, $response);
 
-          if($response->getStatusCode() == 400 || $response->getStatusCode() == 500)
-            throw new Exception("error al insertar vehiculo");
+            if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500)
+                throw new Exception("error al insertar vehiculo");
             //despues crear el conductor
             $conductor = $this->crearConductor($id, $body);
             $this->daoCon->insertar($conductor);
@@ -166,7 +166,80 @@ class ConductorController
         $response->getBody()->write($body);
         return $response->withStatus(200);
     }
+    public function HandleReload(Request $request, Response $response)
+    {
+        try {
+            //actualizar conductores ocupados que hayan acabado el viaje
+            $this->daoCon->actualizarEstadosOcupados();
+            //actualizar todos los estados por el horario menos los ocupados
+            $this->daoCon->actualizarEstados();
 
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'error' => 'error al actualizar',
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
+
+        $body = json_encode([
+            'message' => 'estados actualizados',
+            'success' => true
+        ]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+    public function HandleEstado(Request $request, Response $response, $accion, $id)
+    {
+        try {
+            $conductor = $this->daoCon->obtener($id);
+            if ($conductor === null) {
+                throw new Exception('El conductor no existe');
+            }
+            if ($accion === 'ocupar') {
+                $this->daoCon->ocuparConductor($id);
+            } elseif ($accion === 'liberar') {
+                $this->daoCon->liberarConductor($id);
+            } else {
+                throw new Exception('Error al realizar la accion');
+            }
+        } catch (\Throwable $th) {
+
+            $body = json_encode([
+                'error' => $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
+
+
+        $body = json_encode([
+            'message' => 'Usuario ' . $id . ' ' . $accion,
+            'success' => true
+        ]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+
+    public function crearConductor($id, $body)
+    {
+        $conductor = new Conductor();
+        $conductor->setId($id);
+        $conductor->setDni($body['dni'] ?? null);
+        $conductor->setLicenciaTaxista($body['licenciaVTC'] ?? null);
+        $conductor->setTitularTarjeta($body['titular_tarjeta'] ?? null);
+        $conductor->setIbanTarjeta($body['n_tarjeta'] ?? null);
+        $conductor->setLongEspera($body['lonEspera'] ?? null);
+        $conductor->setLatiEspera($body['latEspera'] ?? null);
+        $conductor->setEstado($body['estado'] ?? 'libre');
+        $conductor->setCoche($body['matricula'] ?? null);
+        $conductor->setHorario($body['horario'] ?? null);
+
+
+        return $conductor;
+    }
 
     private function validarDatos($id, $body)
     {
@@ -238,22 +311,6 @@ class ConductorController
         ];
     }
 
-    public function crearConductor($id, $body)
-    {
-        $conductor = new Conductor();
-        $conductor->setId($id);
-        $conductor->setDni($body['dni'] ?? null);
-        $conductor->setLicenciaTaxista($body['licenciaVTC'] ?? null);
-        $conductor->setTitularTarjeta($body['titular_tarjeta'] ?? null);
-        $conductor->setIbanTarjeta($body['n_tarjeta'] ?? null);
-        $conductor->setLongEspera($body['lonEspera'] ?? null);
-        $conductor->setLatiEspera($body['latEspera'] ?? null);
-        $conductor->setEstado($body['estado'] ?? 'libre');
-        $conductor->setCoche($body['matricula'] ?? null);
-        $conductor->setHorario($body['horario'] ?? null);
 
-
-        return $conductor;
-    }
 
 }

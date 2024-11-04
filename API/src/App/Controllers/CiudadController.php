@@ -40,7 +40,7 @@ class CiudadController
             ]));
             return $response->withStatus(400);
         }
-
+        $horaActual = date('H:i:s'); 
         $response->getBody()->write(json_encode(['ciudad' => $ciudad, 'success' => true]));
         return $response->withStatus(200);
     }

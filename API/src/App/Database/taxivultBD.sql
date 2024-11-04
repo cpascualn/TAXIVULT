@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `Bloqueado_conductor` (
     FOREIGN KEY (`id_conductor`) REFERENCES `Conductor`(`id`)
 );
 CREATE TABLE IF NOT EXISTS `Viaje` (
-    `id` int,
+    `id` int AUTO_INCREMENT,
     `id_conductor` int,
     `id_pasajero` int,
     `lati_ini` decimal(9, 6),
@@ -107,3 +107,59 @@ CREATE TABLE IF NOT EXISTS `pasajero_ubicacion` (
     FOREIGN KEY (`id_pasajero`) REFERENCES `Pasajero`(`id`),
     FOREIGN KEY (`id_ubicacion`) REFERENCES `Ubicacion_fav`(`id`)
 );
+
+
+
+-- eventos de actualizacion de 
+
+CREATE EVENT actualizarEstadoConductor
+ON SCHEDULE EVERY 6 HOUR
+STARTS '2024-11-04 02:00:00.000'
+ON COMPLETION NOT PRESERVE
+ENABLE
+DO BEGIN
+    -- Establecer la variable con la hora actual
+    -- Establecer la hora actual completa (hora y minutos)
+    SET @hora_actual = TIME(NOW());
+
+    -- Actualizar el estado de los conductores
+    UPDATE Conductor c
+    JOIN Horario h ON c.horario = h.id
+    SET c.estado = CASE
+        -- Cambiar a 'libre' si el conductor está dentro de su horario, considerando horas y minutos
+        WHEN ((@hora_actual >= TIME(h.hora_ini1) AND @hora_actual <= TIME(h.hora_fin1)) OR
+              (@hora_actual >= TIME(h.hora_ini2) AND @hora_actual <= TIME(h.hora_fin2)) OR
+              (TIME(h.hora_ini1) > TIME(h.hora_fin1) AND (@hora_actual >= TIME(h.hora_ini1) OR @hora_actual <= TIME(h.hora_fin1))) OR
+              (TIME(h.hora_ini2) > TIME(h.hora_fin2) AND (@hora_actual >= TIME(h.hora_ini2) OR @hora_actual <= TIME(h.hora_fin2))))
+        THEN 'libre'
+        ELSE 'fuera de servicio'
+    END
+    WHERE h.nombre IN ('diurno', 'nocturno') 
+      AND c.estado != 'ocupado';
+END;
+
+CREATE EVENT actualizarEstadoConductor2
+ON SCHEDULE EVERY 12 HOUR
+STARTS '2024-11-04 04:00:00.000'
+ON COMPLETION NOT PRESERVE
+ENABLE
+DO BEGIN
+    -- Establecer la variable con la hora actual
+    -- Establecer la hora actual completa (hora y minutos)
+    SET @hora_actual = TIME(NOW());
+
+    -- Actualizar el estado de los conductores
+    UPDATE Conductor c
+    JOIN Horario h ON c.horario = h.id
+    SET c.estado = CASE
+        -- Cambiar a 'libre' si el conductor está dentro de su horario, considerando horas y minutos
+        WHEN ((@hora_actual >= TIME(h.hora_ini1) AND @hora_actual <= TIME(h.hora_fin1)) OR
+              (@hora_actual >= TIME(h.hora_ini2) AND @hora_actual <= TIME(h.hora_fin2)) OR
+              (TIME(h.hora_ini1) > TIME(h.hora_fin1) AND (@hora_actual >= TIME(h.hora_ini1) OR @hora_actual <= TIME(h.hora_fin1))) OR
+              (TIME(h.hora_ini2) > TIME(h.hora_fin2) AND (@hora_actual >= TIME(h.hora_ini2) OR @hora_actual <= TIME(h.hora_fin2))))
+        THEN 'libre'
+        ELSE 'fuera de servicio'
+    END
+    WHERE h.nombre IN ('diurno', 'nocturno') 
+      AND c.estado != 'ocupado';
+END;
