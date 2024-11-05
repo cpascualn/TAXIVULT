@@ -169,6 +169,8 @@ class ConductorController
     public function HandleReload(Request $request, Response $response)
     {
         try {
+            //actualizar conductores que tengan un viaje en curso
+            $this->daoCon->ocuparConductores();
             //actualizar conductores ocupados que hayan acabado el viaje
             $this->daoCon->actualizarEstadosOcupados();
             //actualizar todos los estados por el horario menos los ocupados
@@ -176,7 +178,7 @@ class ConductorController
 
         } catch (\Throwable $th) {
             $body = json_encode([
-                'error' => 'error al actualizar: ' . $th->getMessage() ,
+                'error' => 'error al actualizar: ' . $th->getMessage(),
                 'success' => false
             ]);
             $response->getBody()->write($body);

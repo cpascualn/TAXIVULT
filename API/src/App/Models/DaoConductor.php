@@ -126,8 +126,7 @@ class DaoConductor extends Database
     public function actualizarEstados()
     {
         $hora = date('H:i:s');
-        $consulta = "
-        UPDATE Conductor c
+        $consulta = "UPDATE Conductor c
     JOIN Horario h ON c.horario = h.id
     SET c.estado = CASE
          WHEN ((:HORA_ACTUAL >= TIME(h.hora_ini1) AND :HORA_ACTUAL <= TIME(h.hora_fin1)) OR
@@ -146,13 +145,12 @@ class DaoConductor extends Database
 
         $this->db->ConsultaSimple($consulta, $param);
     }
-    // actualiza los estados de conductores ocupados que ya hayan acabado el viaje
+    // actualiza los estados de conductores ocupados que ya hayan acabado el viaje (desocupar)
     public function actualizarEstadosOcupados()
     {
         $hora = date('H:i:s');
         $horaEpoch = time();
-        $consulta = "
-         UPDATE Conductor c
+        $consulta = "UPDATE Conductor c
     JOIN Viaje v ON v.id_conductor = c.id
     JOIN Horario h ON c.horario = h.id
     SET c.estado = CASE
@@ -173,10 +171,64 @@ class DaoConductor extends Database
 
         $this->db->ConsultaSimple($consulta, $param);
     }
+
+    // actualiza a ocupado todos los conductores que tengan un viaje en el momento de la llamada 
+    public function ocuparConductores()
+    {
+        $horaEpoch = time();
+        $consulta = "UPDATE Conductor c
+                    JOIN Viaje v ON c.id = v.id_conductor
+                    SET c.estado = 'ocupado'
+                    WHERE v.fecha_ini <= :HORA_ACTUAL_EPOCH 
+                    AND v.fecha_fin > :HORA_ACTUAL_EPOCH
+                    AND v.cancelado = 0
+                    ";
+        $param = array(
+            ":HORA_ACTUAL_EPOCH" => $horaEpoch,
+        );
+
+        $this->db->ConsultaSimple($consulta, $param);
+    }
+
+    //buscar conductores que no tengan viajes dentro del rango horario establecido, y que tampoco tengan viajes que se puedan solapar con el buscado
+    public function buscarConductoresDisponibles($hora_ini, $hora_fin, $id_ciudad)
+    {
+        $consulta = " SELECT c.id, u.nombre,u.apellidos,u.telefono,c.estado,ve.fabricante,ve.modelo,ve.capacidad,ve.tipo,ve.imagen
+                        FROM Conductor c
+                        JOIN Usuario u ON c.id = u.id JOIN Vehiculo ve on ve.matricula = c.coche
+                        WHERE c.id NOT IN (
+                            SELECT v.id_conductor
+                            FROM Viaje v
+                            WHERE 
+                                -- Viajes que empiezan antes de la hora de fin buscada y terminan después de la hora de inicio buscada (solapan con el rango deseado)
+                                (v.fecha_ini < :HORA_FIN AND v.fecha_fin > :HORA_INI)
+                                
+                                -- Y viajes que empiezan después de la hora de fin deseada pero se solapan con un viaje existente
+                                AND (v.fecha_ini >= :HORA_FIN AND EXISTS (
+                                    SELECT 1
+                                    FROM Viaje v2
+                                    WHERE v2.id_conductor = v.id_conductor
+                                    AND v2.fecha_fin > v.fecha_ini
+                                ))
+                        ) AND u.ciudad = :CIUDAD
+                    ";
+        $param = array(
+            ":HORA_INI" => $hora_ini,
+            ":HORA_FIN" => $hora_fin,
+            ":CIUDAD" => $id_ciudad,
+        );
+
+        $this->db->ConsultaSimple($consulta, $param);
+
+
+
+
+    }
+
     // cambia el estado del conductor a ocupado 
     public function ocuparConductor($id)
     {
-        $hora = date('H:i:s');
+
         $consulta = "UPDATE Conductor SET estado = :ESTADO where id = :ID";
         $param = array(
             ":ID" => $id,
