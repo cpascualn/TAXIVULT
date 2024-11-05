@@ -176,7 +176,7 @@ class ConductorController
 
         } catch (\Throwable $th) {
             $body = json_encode([
-                'error' => 'error al actualizar',
+                'error' => 'error al actualizar: ' . $th->getMessage() ,
                 'success' => false
             ]);
             $response->getBody()->write($body);

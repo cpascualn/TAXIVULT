@@ -153,7 +153,7 @@ class DaoConductor extends Database
         $horaEpoch = time();
         $consulta = "
          UPDATE Conductor c
-    JOIN viaje v ON v.id_conductor = c.id
+    JOIN Viaje v ON v.id_conductor = c.id
     JOIN Horario h ON c.horario = h.id
     SET c.estado = CASE
         WHEN ((:HORA_ACTUAL >= TIME(h.hora_ini1) AND :HORA_ACTUAL <= TIME(h.hora_fin1)) OR

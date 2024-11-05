@@ -30,6 +30,7 @@ defineExpose({
 .modal-content {
   background-color: #0b151c;
   color: white;
+  border: none;
 }
 
 .modal-body {
