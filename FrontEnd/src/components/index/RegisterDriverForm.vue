@@ -215,7 +215,8 @@
                   class="invalidFeedback"
                   :style="{ display: displayValidTarjeta[1] }"
                 >
-                  El iban no es correcto  (debe ser ESXX XXXX XXXX XXXX XXXX XXXX)
+                  El iban no es correcto (debe ser ESXX XXXX XXXX XXXX XXXX
+                  XXXX)
                 </div>
               </div>
 
@@ -504,7 +505,30 @@
                 </div>
               </div>
             </div>
+            <div class="form-group">
+              <div class="input-group">
+                <label for="image">Imagen del Vehiculo (opcional)</label>
+                <input
+                  type="file"
+                  id="image"
+                  accept="image/*"
+                  @change="onImageChange"
+                />
 
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidImagen[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidImagen[1] }"
+                >
+                  la imagen no contiene un vehiculo valido
+                </div>
+              </div>
+            </div>
             <div class="form-group cta-step">
               <div class="cta prev">
                 <button class="submit-next-button" @click.prevent="prev()">
@@ -537,9 +561,15 @@ import { ref, onMounted } from "vue";
 import ciudadService from "@/services/ciudad.service";
 import regFormCheck from "@/mixins/regFormCheck";
 import authService from "@/services/auth.service";
+import encodeImageToBase64 from "@/assets/utils/imageEncoder";
 
 const step = ref(1);
-const titulos = ["PERSONAL", "INFORMACIÓN BANCARIA", "CONDUCTOR", "INFO VEHICULO"];
+const titulos = [
+  "PERSONAL",
+  "INFORMACIÓN BANCARIA",
+  "CONDUCTOR",
+  "INFO VEHICULO",
+];
 const tiposVehi = ["comun", "van"];
 const ciudades = ref(["Madrid"]);
 
@@ -548,6 +578,7 @@ const latitude = ref(null);
 const longitude = ref(null);
 const errorMessage = ref("");
 const locations = ref([]);
+const imageFile = ref(null);
 
 // propiedades del css para mostrar los validadores, [0] para el correcto y [1] para el incorrecto
 const displayValidMail = ref(["none", "none"]);
@@ -569,7 +600,7 @@ const displayValidCapacidad = ref(["none", "none"]);
 const displayValidFabricante = ref(["none", "none"]);
 const displayValidModelo = ref(["none", "none"]);
 const displayValidTipoCoche = ref(["none", "none"]);
-
+const displayValidImagen = ref(["none", "none"]);
 // se reemplazaran por la llamada a la api
 const horarios = [
   { id: 1, name: "diurno" },
@@ -598,7 +629,8 @@ const usuario = ref({
   capacidad: "",
   fabricante: "",
   modelo: "",
-  tipo: "", // desplegable con los valores que llegen del servidor
+  tipo: "",
+  imagen: "", // desplegable con los valores que llegen del servidor
 });
 
 async function searchLocations() {
@@ -626,8 +658,34 @@ function selectLocation(location) {
   locations.value = [];
 
   // limitar la cadena a 12 digitos
-  usuario.value.latEspera = location.lat.length > 12 ? location.lat.slice(0, 12) : location.lat;
-  usuario.value.lonEspera = location.lon.length > 12 ? location.lon.slice(0, 12) : location.lon;
+  usuario.value.latEspera =
+    location.lat.length > 12 ? location.lat.slice(0, 12) : location.lat;
+  usuario.value.lonEspera =
+    location.lon.length > 12 ? location.lon.slice(0, 12) : location.lon;
+}
+
+async function onImageChange(event) {
+  const file = event.target.files[0];
+  if (file && file.type.startsWith("image/")) {
+    const result = await regFormCheck.checkImagenCoche(file);
+    if (result) {
+      imageFile.value = file;
+      usuario.value.imagen = await encodeImageToBase64(file);
+      displayValidImagen.value[0] = "block";
+      displayValidImagen.value[1] = "none";
+    } else {
+      imageFile.value = null;
+      usuario.value.imagen = null;
+      displayValidImagen.value[0] = "none";
+      displayValidImagen.value[1] = "block";
+    }
+  } else {
+    imageFile.value = null;
+    usuario.value.imagen = null;
+    displayValidImagen.value[0] = "none";
+    displayValidImagen.value[1] = "block";
+    alert("Por favor, selecciona un archivo de imagen válido.");
+  }
 }
 
 const hasSeenCongrats = ref(false);
@@ -1150,6 +1208,25 @@ input[type="date"] {
   padding: 1.3rem 1rem;
   width: 100%;
   max-width: 12rem;
+}
+input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden; /* Ocultar texto */
+}
+
+input[type="file"] {
+  cursor: pointer;
+  border-radius: 5 rem;
+  background-color: #ffc000;
+  color: black; /* Ocultar texto */
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+}
+
+input[type="file"]:hover {
+  background-color: #ffcb2d;
+  transform: scale(1.1);
+  box-shadow: 0 18px 25px #162430;
 }
 
 input[type="submit"] {

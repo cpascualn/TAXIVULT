@@ -1,4 +1,4 @@
-
+import imageService from "@/services/image.service";
 
 export default {
 
@@ -67,4 +67,20 @@ export default {
         const regexMatricula = /^\d{4}\s?[A-Z]{3}$/;
         return regexMatricula.test(matricula);
     },
+    async checkImagenCoche(img) {
+        // si la ia devuelve alguna de estas palabras clave, es true
+        const keywords = ['car', 'taxi', 'vehicle', 'cab', 'hack', 'taxi', 'taxicab', 'van','minvan','sports car','sport car'];
+        try {
+            const result = await imageService.checkImage(img);
+            // Procesa el resultado para verificar si hay un vehículo
+            if (!result) return false;
+            const isVehicle = result.some(item =>
+                keywords.some(keyword => item.label.toLowerCase().includes(keyword))
+            );
+            return isVehicle;
+        } catch (error) {
+            console.log('Error al verificar la imagen:', error);
+            return false;
+        }
+    }
 }

@@ -1,6 +1,5 @@
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-
 // query de metodos sin body y  sin necesidad de token
 export const simpleQuery = async (path, method = 'GET') => {
   const url = `${API_URL}${path}`

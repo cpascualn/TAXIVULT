@@ -192,6 +192,31 @@ class ConductorController
         $response->getBody()->write($body);
         return $response->withStatus(200);
     }
+
+    public function HandleBuscarDisponiblesEnciudad(Request $request, Response $response)
+    {
+        try {
+
+            $body = $request->getParsedBody();
+            //actualizar conductores que tengan un viaje en curso
+            $conductores = $this->daoCon->buscarConductoresDisponibles($body['hora_ini'], $body['hora_fin'], $body['ciudad']);
+
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'error' => 'error al buscar: ' . $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
+
+        $body = json_encode([
+            'conductores' => $conductores,
+            'success' => true
+        ]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
     public function HandleEstado(Request $request, Response $response, $accion, $id)
     {
         try {
@@ -239,7 +264,6 @@ class ConductorController
         $conductor->setCoche($body['matricula'] ?? null);
         $conductor->setHorario($body['horario'] ?? null);
 
-
         return $conductor;
     }
 
@@ -266,8 +290,8 @@ class ConductorController
             'licenciaVTC' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'n_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
-            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
-            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
+            'lonEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
+            'latEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
             'horario' => ['required', 'integer']
         ]);
