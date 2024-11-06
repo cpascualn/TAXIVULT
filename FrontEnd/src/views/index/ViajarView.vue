@@ -2,6 +2,11 @@
   <div>
     <Header></Header>
     <LoadingPage ref="loading"></LoadingPage>
+    <ModalStepperViaje
+      ref="modelStep"
+      @step-change="gestionarModal"
+      :params="stepData"
+    ></ModalStepperViaje>
     <section class="trip-booking">
       <div class="trip-booking__container">
         <div class="trip-booking__content">
@@ -25,10 +30,12 @@ import Header from "./components/Header.vue";
 import LoadingPage from "@/components/index/LoadingPage.vue";
 import SearchTrip from "@/components/index/SearchTrip.vue";
 import LeafMap from "@/components/index/LeafMap.vue";
+import ModalStepperViaje from "@/components/index/ModalStepperViaje.vue";
 import { ref, watch } from "vue";
 
-let entradas = ref();
-let searchParams = ref({
+const entradas = ref();
+const stepData = ref();
+const searchParams = ref({
   date: "",
   time: "",
   startLocation: "",
@@ -36,9 +43,27 @@ let searchParams = ref({
   distance: "",
   duration: "",
 });
+const viaje = ref({
+  id_conductor: "",
+  id_pasajero: "",
+  lati_ini: "",
+  longi_ini: "",
+  lati_fin: "",
+  longi_fin: "",
+  fecha_ini: "",
+  fecha_fin: "",
+  metodo_pago: "",
+  distancia: "",
+  duracion_min: "",
+  precio_total: "",
+  ciudad: "",
+  lugar_salida: "",
+  lugar_llegada: "",
+});
 
 const loading = ref(null);
 const isReady = ref(false);
+const modelStep = ref(null);
 
 const handleFromMap = (data) => {
   entradas.value = data;
@@ -57,7 +82,79 @@ const handleFromSearch = (data) => {
   searchParams.value.time = data.time;
 
   console.log(searchParams.value);
+  //si no hay parametros de busqueda no abrir el modal
+
+  if (
+    modelStep.value &&
+    !Object.values(searchParams.value).some((value) => value === "")
+  ) {
+    modelStep.value.openModal();
+  } else {
+    alert(" rellena todos los datos de la busqueda");
+  }
 };
+
+const gestionarModal = (step, metodoPago = "") => {
+  // mostrar en un modal con steps
+  // step 1 mostrar precios con detalles (nombre sitio inicio, nombre sitio final, duracion,distancia)
+  // seleccionar metodo de pago (desplegable obligatorio)
+  if (step == 1) {
+    stepData.value = verPrecios();
+  }
+  //step 2 mostrar conductores
+  if (step == 2) {
+    // asignar el metodo de pago que viene del step 1
+    viaje.value.metodo_pago = metodoPago;
+    verConductores();
+  }
+
+  //step 3 mostrar toda la informacion del viaje y boton reservar
+  if (step == 3) {
+    generarViaje();
+  }
+
+  if (step == 4) {
+    reservarViaje();
+  }
+};
+
+function verPrecios() {
+  // llamar a la api para ver la tarifa por minuto del horario correspondiente a  la hora de inicio
+  // calcular el precio del viaje multiplicando la (duracion/60) * tarifa_min del horario
+  const tarifa = 1.5;
+  const duracion = Math.round(searchParams.value.duration / 60);
+  const precio = (duracion * tarifa).toFixed(2);
+  const start = searchParams.value.startLocation.name;
+  const end = searchParams.value.endLocation.name;
+  const distancia = searchParams.value.distance;
+
+  // asignar valores a viaje
+  viaje.value = Object.assign(viaje.value, {
+    distancia: distancia,
+    duracion_min: duracion,
+    precio_total: precio,
+    lugar_salida: start,
+    lugar_llegada: end,
+  });
+
+  console.log(viaje.value);
+
+  return { precio, duracion, tarifa, start, end, distancia };
+}
+
+function verConductores() {
+  // mostrar en un modal con steps el precio del viaje, llamar a la api para ver la tarifa por minuto del horario correspondiente a  la hora de inicio
+  // calcular el precio del viaje multiplicando la (duracion/60) * tarifa_min del horario
+}
+
+function generarViaje() {
+  // mostrar en un modal con steps el precio del viaje, llamar a la api para ver la tarifa por minuto del horario correspondiente a  la hora de inicio
+  // calcular el precio del viaje multiplicando la (duracion/60) * tarifa_min del horario
+}
+
+function reservarViaje() {
+  // mandar a la api el post del viaje con los datos
+}
 
 const loadFinished = () => {
   if (loading.value) {

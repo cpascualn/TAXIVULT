@@ -42,7 +42,12 @@
             class="trip-booking__arrow-icon"
           />
         </button>
-        <div class="datetimeSel">
+        <div
+          :class="[
+            'datetimeSel',
+            mostrarCuando ? 'activeCuando' : 'inactiveCuando',
+          ]"
+        >
           <h2>Seleccione la fecha de recogida</h2>
           <div class="datetimeWrapper">
             <div class="trip-booking__dates-group">
@@ -68,14 +73,16 @@
 </template>
 
 <script setup>
+import { jwtDecode } from "jwt-decode";
 import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 
 // Definir los eventos que puede emitir este componente
 const emits = defineEmits(["send-datos"]);
 const props = defineProps(["data"]); // Definir las props esperadas
 const entradas = ref(props.data);
+const mostrarCuando = ref(false);
 let start, end;
 
 const date = ref("");
@@ -84,7 +91,7 @@ const token = localStorage.getItem("authToken");
 const router = useRouter();
 
 const openDatetimeSelection = () => {
-  document.querySelector(".datetimeSel").style.display = "flex";
+  mostrarCuando.value = !mostrarCuando.value;
 };
 
 const handleSubmit = (e) => {
@@ -92,8 +99,22 @@ const handleSubmit = (e) => {
   let datos = { date: date.value, time: time.value };
 
   if (!token) {
-    router.push({ name: 'login' });
+    router.push({ name: "login" });
   }
+
+  const decoded = jwtDecode(token);
+  const userRol = decoded.data.rol;
+  if(userRol == 2){
+    alert('Solo para usuarios')
+    window.location.href = 'http://localhost:5173/dashboard/';
+  }
+  
+  // llamar a la api para ver si ya tiene viajes programados
+  if(userRol == 2){
+    alert('Ya tienes un viaje programado')
+    window.location.href = 'http://localhost:5173/dashboard/';
+  }
+   
   emits("send-datos", datos);
 };
 
@@ -104,20 +125,30 @@ const minDate = computed(() => {
 });
 
 const maxDate = computed(() => {
-  // Calcular la fecha máxima permitida (hoy + 14 días)
+  // Calcular la fecha máxima permitida (hoy + 1 dia)
   const maxDate = new Date();
-  maxDate.setDate(maxDate.getDate() + 14);
+  maxDate.setDate(maxDate.getDate() + 1);
   return maxDate.toISOString().split("T")[0]; // Formato YYYY-MM-DD
 });
 
 const minTime = computed(() => {
-  // Calcular la hora mínima permitida (si es hoy)
+  // Calcular la hora mínima permitida (si es hoy, tienes que pedirlo con un minimo de 5 minutos posterior a la hora actual.Si es mañana puede pedirlo a cualquier hora)
   const today = new Date();
-  const currentHour = today.getHours() + 1;
-  const currentMinute = today.getMinutes();
-  return `${currentHour < 10 ? "0" : ""}${currentHour}:${
-    currentMinute < 10 ? "0" : ""
-  }${currentMinute}`;
+  const currentHour = today.getHours();
+  const currentMinute = today.getMinutes() + 5;
+
+  const formattedDate = `${today.getFullYear()}-${String(
+    today.getMonth() + 1
+  ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+  let min = `00:00`;
+  if (date && date.value === formattedDate) {
+    min = `${currentHour < 10 ? "0" : ""}${currentHour}:${
+      currentMinute < 10 ? "0" : ""
+    }${currentMinute}`;
+  }
+
+  return min;
 });
 
 onMounted(() => {
@@ -292,8 +323,15 @@ onMounted(() => {
 }
 
 @media (max-width: 991px) {
+  .trip-booking__title{
+    padding-top: 1rem
+  }
   .trip-booking__search-text {
     white-space: initial;
+  }
+
+  .trip-booking__search-button{
+   margin-bottom: 1rem;
   }
 }
 
@@ -311,6 +349,12 @@ onMounted(() => {
   align-items: center;
   flex-direction: column;
   gap: 20px;
+}
+.activeCuando {
+  display: flex;
+}
+.inactiveCuando {
+  display: none;
 }
 
 .datetimeWrapper {

@@ -45,6 +45,23 @@ defineExpose({
 </script>
 
 <style scoped>
+
+.modal-content {
+  background-color: #0b151c;
+  color: white;
+  border: none;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.btn {
+  background-color: #ffc000;
+  color: #0b151c;
+}
+
 .modal-content {
   background-color: #0b151c;
   color: white;
