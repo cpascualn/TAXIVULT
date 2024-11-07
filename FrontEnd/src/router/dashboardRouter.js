@@ -10,7 +10,7 @@ import Notifications from "@/views/dashboard/Notifications.vue"
 import Profile from "@/views/dashboard/Profile.vue"
 import Tables from "@/views/dashboard/Tables.vue"
 import LoginView from '@/views/index/LoginView.vue'
-
+import authService from '@/services/auth.service';
 
 const dashboardRouter = createRouter({
     history: createWebHistory('/dashboard'),
@@ -118,6 +118,10 @@ dashboardRouter.beforeEach((to, from, next) => {
     if (token) {
         decoded = jwtDecode(token);
         userRol = decoded.data.rol;
+        if (authService.isTokenExpired(token)) {
+            alert('tu tiempo de sesion ha expirado, Inicia Sesion de nuevo');
+            authService.logout()
+        }
     }
 
 

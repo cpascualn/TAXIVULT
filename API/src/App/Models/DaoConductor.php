@@ -193,7 +193,7 @@ class DaoConductor extends Database
     //buscar conductores que no tengan viajes dentro del rango horario establecido, y que tampoco tengan viajes que se puedan solapar con el buscado
     public function buscarConductoresDisponibles($hora_ini, $hora_fin, $id_ciudad)
     {
-        $consulta = " SELECT c.id, u.nombre,u.apellidos,u.telefono,c.estado,ve.fabricante,ve.modelo,ve.capacidad,ve.tipo,ve.imagen
+        $consulta = " SELECT c.id, u.nombre,u.telefono,c.estado,ve.fabricante,ve.modelo,ve.capacidad,ve.tipo,ve.imagen
                         FROM Conductor c
                         JOIN Usuario u ON c.id = u.id JOIN Vehiculo ve on ve.matricula = c.coche
                         WHERE c.id NOT IN (

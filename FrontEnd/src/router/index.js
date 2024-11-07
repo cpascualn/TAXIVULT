@@ -9,7 +9,7 @@ import ViajarView from '@/views/index/ViajarView.vue'
 import ConduceMain from '@/views/index/components/ConduceMain.vue'
 import HomeMain from "@/views/index/components/HomeMain.vue";
 const APP_URL = 'http://localhost:5173';
-
+import authService from '@/services/auth.service';
 
 
 
@@ -86,6 +86,11 @@ router.beforeEach((to, from, next) => {
   if (token) {
     decoded = jwtDecode(token);
     userRol = decoded.data.rol;
+    if (authService.isTokenExpired(token)) {
+      alert('tu tiempo de sesion ha expirado, Inicia Sesion de nuevo');
+      authService.logout();
+    }
+
   }
 
   // check if route is restricted by role

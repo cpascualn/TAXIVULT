@@ -206,6 +206,8 @@ export default {
       // si el usuario bloquea la ubicacion del navegador y se asgina la ubicacion de su ciudad , si la llamada falla se muestra madrid
       try {
         const { latitud, longitud } = await this.getCurrentPositionPromise();
+        console.log(latitud,longitud);
+        
         return {
           latitud,
           longitud,

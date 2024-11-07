@@ -123,7 +123,15 @@
                 </div>
               </div>
             </div>
-            <div v-if="step == 2"></div>
+            <div v-if="step == 2">
+              <!-- <button
+                v-for="conductor in conductores"
+                :key="conductor.id"
+                @click="handleConductorClick(conductor.id)"
+              >
+                Seleccionar Conductor {{ conductor.id }}
+              </button> -->
+            </div>
             <div v-if="step == 3"></div>
           </div>
           <div class="modal-footer">
@@ -139,11 +147,11 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps } from "vue";
+import { ref, defineEmits, defineProps, watch } from "vue";
 
 const emit = defineEmits(["step-change"]);
-const params = defineProps(["params"]); // Definir las props esperadas
-const jsonData = ref(params.params);
+const props = defineProps(["params"]); // Definir las props esperadas
+const jsonData = ref({});
 const modalClass = ref("modal fade");
 const titulos = [
   "Precio del viaje",
@@ -153,6 +161,16 @@ const titulos = [
 
 const step = ref(1);
 const metodoPago = ref("");
+
+watch(
+  () => props.params,
+  (newParams) => {
+    if (newParams) {
+      jsonData.value = newParams;
+    }
+  },
+  { immediate: true } // Ejecuta el watcher inmediatamente si `params` ya tiene valor
+);
 
 const openModal = () => {
   modalClass.value = "modal fade show";

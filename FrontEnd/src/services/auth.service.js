@@ -1,5 +1,5 @@
 import { Query } from "@/assets/utils/fetchHelper";
-
+import { jwtDecode } from "jwt-decode";
 export default {
 
   async login(user) {
@@ -26,4 +26,12 @@ export default {
       return { "error": error, "success": false };
     }
   },
+  isTokenExpired(token) {
+    if (!token || token == null)
+      return true;
+    const decodedToken = jwtDecode(token);
+    const currentTime = new Date().getTime() / 1000;
+
+    return decodedToken.exp < currentTime;
+  }
 }
