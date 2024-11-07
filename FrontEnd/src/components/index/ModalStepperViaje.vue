@@ -161,8 +161,8 @@
                           {{ conductor.nombre }}
                         </span>
                       </span>
-                      <span class="car_type"
-                        > <i class="bi bi-telephone-fill"></i> Telefono :
+                      <span class="car_type">
+                        <i class="bi bi-telephone-fill"></i> Telefono :
                         <strong> {{ conductor.telefono }}</strong></span
                       >
                       <div>
@@ -187,7 +187,6 @@
               <p>Seleccionado: {{ conductorSeleccionado }}</p>
             </div>
             <div v-if="step == 3">
-              
               <div class="row justify-content-center align-items-center">
                 <div class="col-md-12">
                   <ul class="list-unstyled">
@@ -354,14 +353,14 @@ const conductores = ref([
   },
 ]);
 
-const modalClass = ref("modal fade show");
+const modalClass = ref("modal fade");
 const titulos = [
   "Precio del viaje",
   "Conductores disponibles",
   "Confirmar Viaje",
 ];
 
-const step = ref(2);
+const step = ref(1);
 const metodoPago = ref("");
 const conductorSeleccionado = ref(0);
 
@@ -400,7 +399,12 @@ const next = () => {
       return;
     }
     step.value++;
-    emit("step-change", step.value, metodoPago.value,conductorSeleccionado.value);
+    emit(
+      "step-change",
+      step.value,
+      metodoPago.value,
+      conductorSeleccionado.value
+    );
   } else {
     emit("step-change", step.value + 1);
     closeModal();
