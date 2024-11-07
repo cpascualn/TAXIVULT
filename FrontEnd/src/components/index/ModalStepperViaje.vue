@@ -378,6 +378,8 @@ const openModal = (reset = false) => {
   if (reset) {
     jsonData.value = {};
     step.value = 1;
+    metodoPago.value = "";
+    conductorSeleccionado.value = 0;
   }
   modalClass.value = "modal fade show";
   emit("step-change", step.value);
