@@ -43,6 +43,14 @@ const searchParams = ref({
   distance: "",
   duration: "",
 });
+const auxSearchParams = ref({
+  date: "",
+  time: "",
+  startLocation: "",
+  endLocation: "",
+  distance: "",
+  duration: "",
+});
 const viaje = ref({
   id_conductor: "",
   id_pasajero: "",
@@ -83,18 +91,29 @@ const handleFromSearch = (data) => {
 
   console.log(searchParams.value);
   //si no hay parametros de busqueda no abrir el modal
-
   if (
     modelStep.value &&
     !Object.values(searchParams.value).some((value) => value === "")
   ) {
-    modelStep.value.openModal();
+    // si algun  parametro de busqueda ha cambiado (se abre el modal con los nuevos datos) se reinician los datos dentro del modal
+    if (
+      Object.keys(searchParams.value).some(
+        (key) => searchParams.value[key] !== auxSearchParams.value[key]
+      )
+    ) {
+      auxSearchParams.value = { ...searchParams.value };
+      modelStep.value.openModal(true);
+      modelStep.value.params = searchParams.value;
+    } else {
+      modelStep.value.params = searchParams.value;
+      modelStep.value.openModal();
+    }
   } else {
     alert(" rellena todos los datos de la busqueda");
   }
 };
 
-const gestionarModal = (step, metodoPago = "") => {
+const gestionarModal = (step, metodoPago = "", idConductor = "") => {
   // mostrar en un modal con steps
   // step 1 mostrar precios con detalles (nombre sitio inicio, nombre sitio final, duracion,distancia)
   // seleccionar metodo de pago (desplegable obligatorio)
@@ -110,6 +129,7 @@ const gestionarModal = (step, metodoPago = "") => {
 
   //step 3 mostrar toda la informacion del viaje y boton reservar
   if (step == 3) {
+    viaje.value.id_conductor = idConductor;
     generarViaje();
   }
 
@@ -137,8 +157,6 @@ function verPrecios() {
     lugar_llegada: end,
   });
 
-  console.log(viaje.value);
-
   return { precio, duracion, tarifa, start, end, distancia };
 }
 
@@ -148,8 +166,7 @@ function verConductores() {
 }
 
 function generarViaje() {
-  // mostrar en un modal con steps el precio del viaje, llamar a la api para ver la tarifa por minuto del horario correspondiente a  la hora de inicio
-  // calcular el precio del viaje multiplicando la (duracion/60) * tarifa_min del horario
+  // guardar todos los valores restantes en viaje y mandar viaje  como params viajeFinal para mostrar sus datos en el step 3 y final
 }
 
 function reservarViaje() {

@@ -107,14 +107,14 @@ const handleSubmit = (e) => {
   
   const userRol = decoded.data.rol;
   if(userRol == 2){
-    alert('Solo para usuarios')
-    window.location.href = 'http://localhost:5173/dashboard/';
+    alert('Solo para pasajeros')
+    window.location.href = '/dashboard/';
   }
   
   // llamar a la api para ver si ya tiene viajes programados
   if(userRol == 2){
     alert('Ya tienes un viaje programado')
-    window.location.href = 'http://localhost:5173/dashboard/';
+    window.location.href = '/dashboard/';
   }
    
   emits("send-datos", datos);
