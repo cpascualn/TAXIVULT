@@ -9,6 +9,14 @@
             layer-type="base"
             name="OpenStreetMap"
           ></l-tile-layer>
+          <l-marker
+            v-for="conductor in drivers"
+            :key="conductor.id"
+            :lat-lng="[conductor.latitud, conductor.longitud]"
+            :icon="carIcon"
+          >
+            <l-popup>Conductor activo ahora en tu ciudad</l-popup>
+          </l-marker>
         </l-map>
       </div>
     </div>
@@ -17,17 +25,19 @@
 
 <script>
 import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup } from "@vue-leaflet/vue-leaflet";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import "leaflet-control-geocoder";
-import { latLng } from "leaflet";
 import ciudadService from "@/services/ciudad.service";
+import conductoresService from "@/services/conductores.service";
 
 export default {
   components: {
     LMap,
     LTileLayer,
+    LMarker,
+    LPopup,
   },
   data: () => ({
     map: null,
@@ -39,6 +49,11 @@ export default {
     distance: "", // en metros
     time: "", // en segundos
     viewbox: "", // <long_min>,<lat_min>,<long_max>,<lat_max>,
+    drivers: [],
+    carIcon: new L.Icon({
+      iconUrl: "/img/taxiIcon.png", // URL de la imagen del icono
+      iconSize: [40,30 ], // Tamaño del icono
+    }),
   }),
   mounted() {
     // DO
@@ -48,6 +63,8 @@ export default {
   },
   methods: {
     async onMapReady() {
+      const conductores = await this.getConductoresLibresCiudad();
+      this.drivers = conductores;
       const pos = await this.centerLocation();
       this.center = [pos.latitud, pos.longitud];
       const vBox = await this.getViewBox();
@@ -244,6 +261,13 @@ export default {
       if (!ciudad) return "";
       const vBox = `${ciudad.long_min}, ${ciudad.lat_min}, ${ciudad.long_max}, ${ciudad.lat_max}`;
       return vBox;
+    },
+    async getConductoresLibresCiudad() {
+      const ciudad = await ciudadService.getCiudadUsuario();
+      const conductores = await conductoresService.getConductoresLibresCiudad(
+        ciudad
+      );
+      return conductores;
     },
   },
 };
