@@ -51,8 +51,8 @@ export default {
     viewbox: "", // <long_min>,<lat_min>,<long_max>,<lat_max>,
     drivers: [],
     carIcon: new L.Icon({
-      iconUrl: "/img/taxiIcon.png", // URL de la imagen del icono
-      iconSize: [40,30 ], // Tamaño del icono
+      iconUrl: "/img/taxiIcon.jpg", // URL de la imagen del icono
+      iconSize: [50, 25], // Tamaño del icono
     }),
   }),
   mounted() {
@@ -223,8 +223,8 @@ export default {
       // si el usuario bloquea la ubicacion del navegador y se asgina la ubicacion de su ciudad , si la llamada falla se muestra madrid
       try {
         const { latitud, longitud } = await this.getCurrentPositionPromise();
-        console.log(latitud,longitud);
-        
+        console.log(latitud, longitud);
+
         return {
           latitud,
           longitud,
