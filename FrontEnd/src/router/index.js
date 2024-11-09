@@ -89,6 +89,8 @@ router.beforeEach((to, from, next) => {
     if (authService.isTokenExpired(token)) {
       alert('tu tiempo de sesion ha expirado, Inicia Sesion de nuevo');
       authService.logout();
+      location.reload();
+
     }
 
   }

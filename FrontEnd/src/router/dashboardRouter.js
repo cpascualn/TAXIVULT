@@ -120,7 +120,9 @@ dashboardRouter.beforeEach((to, from, next) => {
         userRol = decoded.data.rol;
         if (authService.isTokenExpired(token)) {
             alert('tu tiempo de sesion ha expirado, Inicia Sesion de nuevo');
-            authService.logout()
+            authService.logout();
+            location.reload();
+
         }
     }
 

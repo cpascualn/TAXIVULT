@@ -20,7 +20,6 @@ export default {
             const result = await response.json();
             return result;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }

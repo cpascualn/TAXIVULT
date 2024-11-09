@@ -33,7 +33,7 @@
 
       <transition name="slide-fade">
         <section v-show="step === 1">
-          <form class="form" @submit.prevent="next">
+          <form novalidate class="form" @submit.prevent="next">
             <div class="form-group">
               <div class="input-group">
                 <input
@@ -196,7 +196,7 @@
       </transition>
       <transition name="slide-fade">
         <section v-show="step === 2">
-          <form class="form" method="post" @submit.prevent="next">
+          <form novalidate class="form" method="post" @submit.prevent="next">
             <div class="form-group">
               <div class="input-group">
                 <input
@@ -274,7 +274,7 @@
 
       <transition name="slide-fade">
         <section v-show="step === 3">
-          <form class="form" method="post" @submit.prevent="next">
+          <form novalidate class="form" method="post" @submit.prevent="next">
             <div class="form-group">
               <div class="input-group">
                 <input
@@ -328,19 +328,20 @@
                   >
                     {{ item.name }}
                   </option>
-                  <div
-                    class="validFeedback"
-                    :style="{ display: displayValidHorario[0] }"
-                  >
-                    Correcto
-                  </div>
-                  <div
-                    class="invalidFeedback"
-                    :style="{ display: displayValidHorario[1] }"
-                  >
-                    Selecciona un Horario
-                  </div>
                 </select>
+
+                <div
+                  class="validFeedback"
+                  :style="{ display: displayValidHorario[0] }"
+                >
+                  Correcto
+                </div>
+                <div
+                  class="invalidFeedback"
+                  :style="{ display: displayValidHorario[1] }"
+                >
+                  Selecciona un Horario
+                </div>
               </div>
 
               <div class="buscador">
@@ -352,7 +353,9 @@
                   @input="searchLocations"
                 />
                 <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
-
+                <p v-if="!errorMessage && cityName != ''" style="color: green">
+                  Correcto
+                </p>
                 <ul v-if="locations.length > 0" class="desplegable">
                   <li
                     v-for="location in locations"
@@ -396,7 +399,7 @@
 
       <transition name="slide-fade">
         <section v-show="step === 4">
-          <form class="form" @submit.prevent="register">
+          <form novalidate class="form" @submit.prevent="register">
             <div class="form-group">
               <div class="input-group">
                 <input
@@ -491,6 +494,7 @@
                     {{ item }}
                   </option>
                 </select>
+
                 <div
                   class="validFeedback"
                   :style="{ display: displayValidTipoCoche[0] }"
@@ -698,13 +702,14 @@ onMounted(async () => {
 });
 
 const validarStep1 = () => {
+  let valid = true;
   if (regFormCheck.checkMail(usuario.value.email)) {
     displayValidMail.value[0] = "none";
     displayValidMail.value[1] = "block";
   } else {
     displayValidMail.value[0] = "block";
     displayValidMail.value[1] = "none";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNombre(usuario.value.nombre)) {
@@ -713,7 +718,7 @@ const validarStep1 = () => {
   } else {
     displayValidNombre.value[0] = "none";
     displayValidNombre.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkTelefono(usuario.value.telefono)) {
@@ -722,7 +727,7 @@ const validarStep1 = () => {
   } else {
     displayValidTelefono.value[0] = "none";
     displayValidTelefono.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNombre(usuario.value.apellidos)) {
@@ -731,7 +736,16 @@ const validarStep1 = () => {
   } else {
     displayValidApellido.value[0] = "none";
     displayValidApellido.value[1] = "block";
-    return false;
+    valid = false;
+  }
+
+  if (usuario.value.ciudad && usuario.value.ciudad != "") {
+    displayValidCiudad.value[0] = "block";
+    displayValidCiudad.value[1] = "none";
+  } else {
+    displayValidCiudad.value[0] = "none";
+    displayValidCiudad.value[1] = "block";
+    valid = false;
   }
 
   if (regFormCheck.checkContrasena(usuario.value.contrasena)) {
@@ -740,19 +754,20 @@ const validarStep1 = () => {
   } else {
     displayValidContra.value[0] = "none";
     displayValidContra.value[1] = "block";
-    return false;
+    valid = false;
   }
 
-  return true;
+  return valid;
 };
 const validarStep2 = () => {
+  let valid = true;
   if (regFormCheck.checkIban(usuario.value.n_tarjeta)) {
     displayValidTarjeta.value[0] = "block";
     displayValidTarjeta.value[1] = "none";
   } else {
     displayValidTarjeta.value[0] = "none";
     displayValidTarjeta.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNombre(usuario.value.titular_tarjeta)) {
@@ -761,19 +776,20 @@ const validarStep2 = () => {
   } else {
     displayValidNombreTarjeta.value[0] = "none";
     displayValidNombreTarjeta.value[1] = "block";
-    return false;
+    valid = false;
   }
 
-  return true;
+  return valid;
 };
 const validarStep3 = () => {
+  let valid = true;
   if (regFormCheck.checkDNI(usuario.value.dni)) {
     displayValidDNI.value[0] = "block";
     displayValidDNI.value[1] = "none";
   } else {
     displayValidDNI.value[0] = "none";
     displayValidDNI.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkVTC(usuario.value.licenciaVTC)) {
@@ -782,19 +798,36 @@ const validarStep3 = () => {
   } else {
     displayValidVTC.value[0] = "none";
     displayValidVTC.value[1] = "block";
-    return false;
+    valid = false;
   }
 
-  return true;
+  if (usuario.value.horario && usuario.value.horario != "") {
+    displayValidHorario.value[0] = "block";
+    displayValidHorario.value[1] = "none";
+  } else {
+    displayValidHorario.value[0] = "none";
+    displayValidHorario.value[1] = "block";
+    valid = false;
+  }
+
+  if (cityName.value == "") {
+    errorMessage.value = "seleccione su barrio";
+    valid = false;
+  } else {
+    errorMessage.value = "";
+  }
+
+  return valid;
 };
 const validarStep4 = () => {
+  let valid = true;
   if (regFormCheck.checkMatricula(usuario.value.matricula)) {
     displayValidMatricula.value[0] = "block";
     displayValidMatricula.value[1] = "none";
   } else {
     displayValidMatricula.value[0] = "none";
     displayValidMatricula.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (usuario.value.capacidad >= 5) {
@@ -803,7 +836,7 @@ const validarStep4 = () => {
   } else {
     displayValidCapacidad.value[0] = "none";
     displayValidCapacidad.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNomCoche(usuario.value.fabricante)) {
@@ -812,7 +845,7 @@ const validarStep4 = () => {
   } else {
     displayValidFabricante.value[0] = "none";
     displayValidFabricante.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNomCoche(usuario.value.modelo)) {
@@ -821,9 +854,19 @@ const validarStep4 = () => {
   } else {
     displayValidModelo.value[0] = "none";
     displayValidModelo.value[1] = "block";
-    return false;
+    valid = false;
   }
-  return true;
+
+  if (usuario.value.tipo && usuario.value.tipo != "") {
+    displayValidTipoCoche.value[0] = "block";
+    displayValidTipoCoche.value[1] = "none";
+  } else {
+    displayValidTipoCoche.value[0] = "none";
+    displayValidTipoCoche.value[1] = "block";
+    valid = false;
+  }
+
+  return valid;
 };
 
 const validaciones = [

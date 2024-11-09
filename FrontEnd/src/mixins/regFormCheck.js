@@ -74,6 +74,7 @@ export default {
             const result = await imageService.checkImage(img);
             // Procesa el resultado para verificar si hay un vehículo
             if (!result) return false;
+            if(result.error) return false;
             const isVehicle = result.some(item =>
                 keywords.some(keyword => item.label.toLowerCase().includes(keyword))
             );

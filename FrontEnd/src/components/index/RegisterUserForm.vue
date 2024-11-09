@@ -21,7 +21,7 @@
 
       <transition name="slide-fade">
         <section v-show="step === 1">
-          <form class="form" @submit.prevent="next">
+          <form novalidate class="form" @submit.prevent="next">
             <div class="form-group">
               <div class="input-group">
                 <input
@@ -171,13 +171,13 @@
               data-alignment="right"
               data-text-color="custom"
             >
-                  <button class="submit-next-button" type="submit">
-                    <img
-                      src="/src/assets/img/flecha-correcta.png"
-                      alt=""
-                      class="icono-flecha"
-                    />
-                  </button>   
+              <button class="submit-next-button" type="submit">
+                <img
+                  src="/src/assets/img/flecha-correcta.png"
+                  alt=""
+                  class="icono-flecha"
+                />
+              </button>
             </div>
           </form>
         </section>
@@ -185,6 +185,7 @@
       <transition name="slide-fade">
         <section v-show="step === 2">
           <form
+            novalidate
             class="form"
             method="post"
             @submit.prevent="register"
@@ -366,13 +367,14 @@ const next = () => {
 };
 
 const validarStep1 = () => {
+  let valid = true;
   if (regFormCheck.checkMail(usuario.value.email)) {
     displayValidMail.value[0] = "none";
     displayValidMail.value[1] = "block";
   } else {
     displayValidMail.value[0] = "block";
     displayValidMail.value[1] = "none";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNombre(usuario.value.nombre)) {
@@ -381,7 +383,7 @@ const validarStep1 = () => {
   } else {
     displayValidNombre.value[0] = "none";
     displayValidNombre.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkTelefono(usuario.value.telefono)) {
@@ -390,7 +392,7 @@ const validarStep1 = () => {
   } else {
     displayValidTelefono.value[0] = "none";
     displayValidTelefono.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNombre(usuario.value.apellidos)) {
@@ -399,7 +401,16 @@ const validarStep1 = () => {
   } else {
     displayValidApellido.value[0] = "none";
     displayValidApellido.value[1] = "block";
-    return false;
+    valid = false;
+  }
+
+  if (usuario.value.ciudad && usuario.value.ciudad != "") {
+    displayValidCiudad.value[0] = "block";
+    displayValidCiudad.value[1] = "none";
+  } else {
+    displayValidCiudad.value[0] = "none";
+    displayValidCiudad.value[1] = "block";
+    valid = false;
   }
 
   if (regFormCheck.checkContrasena(usuario.value.contrasena)) {
@@ -408,19 +419,20 @@ const validarStep1 = () => {
   } else {
     displayValidContra.value[0] = "none";
     displayValidContra.value[1] = "block";
-    return false;
+    valid = false;
   }
 
-  return true;
+  return valid;
 };
 const validarStep2 = () => {
+  let valid = true;
   if (regFormCheck.checkTarjeta(usuario.value.n_tarjeta)) {
     displayValidTarjeta.value[0] = "block";
     displayValidTarjeta.value[1] = "none";
   } else {
     displayValidTarjeta.value[0] = "none";
     displayValidTarjeta.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkNombre(usuario.value.titular_tarjeta)) {
@@ -429,7 +441,7 @@ const validarStep2 = () => {
   } else {
     displayValidNombreTarjeta.value[0] = "none";
     displayValidNombreTarjeta.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkExpTarjeta(usuario.value.caducidad_tarjeta)) {
@@ -438,7 +450,7 @@ const validarStep2 = () => {
   } else {
     displayValidExpTarjeta.value[0] = "none";
     displayValidExpTarjeta.value[1] = "block";
-    return false;
+    valid = false;
   }
 
   if (regFormCheck.checkCvcTarjeta(usuario.value.cvv_tarjeta)) {
@@ -447,9 +459,9 @@ const validarStep2 = () => {
   } else {
     displayValidCVC.value[0] = "none";
     displayValidCVC.value[1] = "block";
-    return false;
+    valid = false;
   }
-  return true;
+  return valid;
 };
 
 const register = async () => {
@@ -646,7 +658,7 @@ body {
   vertical-align: middle;
 }
 
-.form{
+.form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -672,7 +684,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.cta{
+.cta {
   display: flex;
   justify-content: center;
 }
@@ -718,9 +730,9 @@ body {
   gap: 8px; /* Espacio entre texto e imagen */
 }
 .submit-next-button:hover {
-  background-color: #ffcb2d; 
-    transform: scale(1.1); 
-    box-shadow: 0 18px 25px #162430; 
+  background-color: #ffcb2d;
+  transform: scale(1.1);
+  box-shadow: 0 18px 25px #162430;
 }
 
 .icono-flecha {
