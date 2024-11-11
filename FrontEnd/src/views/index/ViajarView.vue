@@ -32,6 +32,7 @@ import SearchTrip from "@/components/index/SearchTrip.vue";
 import LeafMap from "@/components/index/LeafMap.vue";
 import ModalStepperViaje from "@/components/index/ModalStepperViaje.vue";
 import { ref, watch } from "vue";
+import { jwtDecode } from "jwt-decode";
 
 const entradas = ref();
 const stepData = ref();
@@ -153,8 +154,8 @@ function verPrecios() {
   const tarifa = 1.5;
   const duracion = Math.round(searchParams.value.duration / 60);
   const precio = (duracion * tarifa).toFixed(2);
-  const start = searchParams.value.startLocation.name;
-  const end = searchParams.value.endLocation.name;
+  const desde = searchParams.value.startLocation.name;
+  const hasta = searchParams.value.endLocation.name;
   const distancia = searchParams.value.distance;
 
   // asignar valores a viaje
@@ -166,7 +167,7 @@ function verPrecios() {
     lugar_llegada: end,
   });
 
-  return { precio, duracion, tarifa, start, end, distancia };
+  return { precio, duracion, tarifa, desde, hasta, distancia };
 }
 
 function verConductores() {
@@ -218,15 +219,15 @@ function verConductores() {
 function generarViaje() {
   // guardar todos los valores restantes en viaje y mandar viaje  como params viajeFinal para mostrar sus datos en el step 3 y final
   // asignar valores a viaje
-  viaje.value = Object.assign(viaje.value, {
-    distancia: distancia,
-    duracion_min: duracion,
-    precio_total: precio,
-    lugar_salida: start,
-    lugar_llegada: end,
-  });
+  const TOKEN = JSON.parse(localStorage.getItem("authToken"));
+  const decoded = jwtDecode(TOKEN);
 
-  return { precio, duracion, tarifa, start, end, distancia };
+  viaje.value = Object.assign(viaje.value, {
+    id_pasajero: decoded.data.userId,
+  });
+  const pasajero = decoded.data.email;
+
+  return { pasajero };
 }
 
 function reservarViaje() {

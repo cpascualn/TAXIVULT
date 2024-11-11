@@ -154,7 +154,7 @@ class UsuarioController
             $this->daoUsu->insertar($usu);
             $usu = $this->daoUsu->obtenerPorEmail($usu->getEmail());
 
-            $response = $this->insertarUsuarioEnSuRol($request, $response, $usu, $body);
+            $response = $this->insertarUsuarioEnSuRol($request, $response, $usu);
 
             if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
                 $this->daoUsu->eliminar($usu->getId());
@@ -313,34 +313,27 @@ class UsuarioController
         return $usu;
     }
 
-    private function insertarUsuarioEnSuRol($request, $response, $usu, $body)
+    private function insertarUsuarioEnSuRol($request, $response, $usu)
     {
         switch ($usu->getRol()) {
             case '1': //admin
                 break;
             case '2': //conductor
-
                 $response = $this->controladorCon->HandleInsertar($request, $response, $usu->getId());
-                //si no se ha podido insertar en su rol se borra el usuario
-
-                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
-                    $this->daoUsu->eliminar($usu->getId());
-                    return $response->withStatus(400);
-                }
 
                 break;
             case '3': //pasajero
                 $response = $this->controladorPas->HandleInsertar($request, $response, $usu->getId());
-                //si no se ha podido insertar en su rol se borra el usuario
-
-                if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
-                    $this->daoUsu->eliminar($usu->getId());
-                    return $response->withStatus(400);
-                }
 
                 break;
             default:
                 break;
+        }
+        //si no se ha podido insertar en su rol se borra el usuario
+
+        if ($response->getStatusCode() == 400 || $response->getStatusCode() == 500) {
+            $this->daoUsu->eliminar($usu->getId());
+            return $response->withStatus(400);
         }
 
         return $response->withStatus(200);

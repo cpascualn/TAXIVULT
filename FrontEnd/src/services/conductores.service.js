@@ -5,7 +5,6 @@ export default {
 
     async getConductoresLibresCiudad(ciudad) {
         try {
-            console.log('entra');
 
             return new Promise((resolve, reject) => {
                 resolve([{

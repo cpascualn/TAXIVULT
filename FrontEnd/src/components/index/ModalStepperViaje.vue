@@ -22,13 +22,13 @@
                       <i class="bi bi-pin-map fs-4 text-info"></i>
                       <strong> Desde:</strong>
                       <p class="list-unstyled ms-5">
-                        {{ jsonData.start }}
+                        {{ jsonData.desde }}
                       </p>
                     </li>
                     <li>
                       <i class="bi bi-pin-map-fill fs-4 text-info"></i>
                       <strong> Hasta:</strong>
-                      <p class="list-unstyled ms-5">{{ jsonData.end }}</p>
+                      <p class="list-unstyled ms-5">{{ jsonData.hasta }}</p>
                     </li>
                   </ul>
                 </div>
@@ -96,7 +96,7 @@
                       'driver-button',
                       { active: metodoPago === 'efectivo' },
                     ]"
-                    @click="metodoPago = 'efectivo'"
+                    @click="selectPayment('efectivo')"
                   >
                     <i class="bi bi-wallet fs-3"></i> &nbsp;
                     <label class="form-check-label" for="efectivo">
@@ -110,7 +110,7 @@
                       'driver-button',
                       { active: metodoPago === 'tarjeta' },
                     ]"
-                    @click="metodoPago = 'tarjeta'"
+                    @click="selectPayment('tarjeta')"
                   >
                     <i class="bi bi-credit-card fs-3"></i>&nbsp;
                     <label class="form-check-label" for="tarjeta">
@@ -198,62 +198,73 @@
               <p>Seleccionado: {{ conductorSeleccionado }}</p>
             </div>
             <div v-if="step == 3">
-              <div class="row justify-content-center align-items-center">
-                <div class="col-md-12">
+              <div class="row justify-content-center align-items-center mb-3">
+                <div
+                  class="col-6 col-md-4 d-flex justify-content-center align-items-center"
+                >
+                  <i class="bi bi-person-vcard fs-2"></i>
+                  <strong> Conductor:</strong>&nbsp;
+                  {{ selecConductor.nombre }}
+                </div>
+                <div
+                  class="col-6 col-md-4 d-flex justify-content-center align-items-center"
+                >
+                  <i class="bi bi-person-square fs-2"></i>
+                  <strong> Pasajero:</strong>&nbsp;
+                  {{ jsonData.pasajero }}
+                </div>
+              </div>
+              <div class="row justify-content-center align-items-center mb-3">
+                <div class="col-md-9">
                   <ul class="list-unstyled">
                     <li>
                       <i class="bi bi-pin-map fs-4 text-info"></i>
                       <strong> Desde:</strong>
                       <p class="list-unstyled ms-5">
-                        {{ jsonData.start }}
+                        {{ jsonData.desde }}
                       </p>
                     </li>
                     <li>
                       <i class="bi bi-pin-map-fill fs-4 text-info"></i>
                       <strong> Hasta:</strong>
-                      <p class="list-unstyled ms-5">{{ jsonData.end }}</p>
+                      <p class="list-unstyled ms-5">{{ jsonData.hasta }}</p>
                     </li>
                   </ul>
                 </div>
               </div>
-              <div class="row justify-content-center align-items-center">
-                <div class="col-md-12">
+              <div class="row justify-content-center align-items-center mb-3">
+                <div
+                  class="col-md-4 d-flex justify-content-center align-items-center"
+                >
                   <i class="bi bi-fast-forward fs-4 text-secondary"></i>
                   <strong> Distancia:</strong>
                   <p class="badge bg-secondary">
                     {{ jsonData.distancia }} metros
                   </p>
                 </div>
+                <div
+                  class="col-md-4 d-flex justify-content-center align-items-center"
+                >
+                  <strong>
+                    <i class="bi bi-stopwatch fs-4"></i> Hora de salida:</strong
+                  >
+                  <p class="badge bg-secondary">
+                    {{ jsonData.fecha_ini }}
+                  </p>
+                </div>
+                <div
+                  class="col-md-4 d-flex justify-content-center align-items-center"
+                >
+                  <strong
+                    ><i class="bi bi-stopwatch-fill fs-4"></i> Hora de
+                    llegada:</strong
+                  >
+                  <p class="badge bg-secondary">
+                    {{ jsonData.fecha_fin }}
+                  </p>
+                </div>
               </div>
-              <div class="row justify-content-center align-items-center">
-                <div
-                  class="col-md-4 d-flex justify-content-center align-items-center"
-                >
-                  <div class="text-center">
-                    <i class="bi bi-receipt fs-1 text-primary"></i>
-                    <p>
-                      <strong> Tarifa x Minuto:</strong>
-                      <span class="badge bg-primary"
-                        >{{ jsonData.tarifa }}€</span
-                      >
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  class="col-md-4 d-flex justify-content-center align-items-center"
-                >
-                  <div class="text-center">
-                    <i class="bi bi-cash-stack fs-1 text-success"></i>
-                    <p>
-                      <strong> Precio:</strong>
-                      <span class="badge bg-success"
-                        >{{ jsonData.precio }}€</span
-                      >
-                    </p>
-                  </div>
-                </div>
-
+              <div class="row justify-content-center align-items-center mb-3">
                 <div
                   class="col-md-4 d-flex justify-content-center align-items-center"
                 >
@@ -267,41 +278,48 @@
                     </p>
                   </div>
                 </div>
-              </div>
-              <div class="row justify-content-center">
-                <div class="col-12 text-center">
-                  <h4>Método de pago</h4>
-                </div>
-                <div class="col-6 col-md-4 d-flex justify-content-center">
-                  <div class="form-check">
-                    &nbsp;
-                    <i class="bi bi-wallet fs-3"></i> &nbsp;
-                    <label class="form-check-label" for="efectivo">
-                      Efectivo
-                    </label>
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="paymentMethod"
-                      value="efectivo"
-                      v-model="metodoPago"
-                    />
+                <div
+                  class="col-md-4 d-flex justify-content-center align-items-center"
+                >
+                  <div class="text-center">
+                    <i class="bi bi-receipt fs-1 text-primary"></i>
+                    <p>
+                      <strong> Tarifa x Minuto:</strong>
+                      <span class="badge bg-primary"
+                        >{{ jsonData.tarifa }}€</span
+                      >
+                    </p>
                   </div>
                 </div>
-                <div class="col-6 col-md-4 d-flex justify-content-center">
-                  <div class="form-check">
-                    &nbsp;
-                    <i class="bi bi-credit-card fs-3"></i>&nbsp;
-                    <label class="form-check-label" for="tarjeta">
-                      Tarjeta
-                    </label>
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="paymentMethod"
-                      value="tarjeta"
-                      v-model="metodoPago"
-                    />
+                <div
+                  class="col-md-4 d-flex justify-content-center align-items-center"
+                >
+                  <div class="text-center">
+                    <i
+                      v-if="metodoPago == 'tarjeta'"
+                      class="bi bi-credit-card fs-1 text-info"
+                    ></i>
+                    <i
+                      v-if="metodoPago == 'efectivo'"
+                      class="bi bi-cash-coin fs-1 text-info"
+                    ></i>
+                    <p>
+                      <strong> Metodo Pago:</strong>
+                      <span class="badge bg-info"> {{ metodoPago }}</span>
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="col-md-4 d-flex justify-content-center align-items-center"
+                >
+                  <div class="text-center">
+                    <i class="bi bi-cash-stack fs-1 text-success"></i>
+                    <p>
+                      <strong> Precio:</strong>
+                      <span class="badge bg-success"
+                        >{{ jsonData.precio }}€</span
+                      >
+                    </p>
                   </div>
                 </div>
               </div>
@@ -309,7 +327,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn" @click="back" v-if="step > 1">ATRAS</button>
-            <button class="btn" @click="next">
+            <button :class="['btn', nextButtonClass]" @click="next">
               {{ step == titulos.length ? "RESERVAR" : "CONTINUAR" }}
             </button>
           </div>
@@ -325,16 +343,17 @@ import { ref, defineEmits, defineProps, watch } from "vue";
 const emit = defineEmits(["step-change"]);
 const props = defineProps(["params"]); // Definir las props esperadas
 const jsonData = ref({});
-const conductores = ref();
+const selecConductor = ref({ nombre: "" });
 
 const modalClass = ref("modal fade show");
+const nextButtonClass = ref("btn-noAllowed");
 const titulos = [
   "Precio del viaje",
   "Conductores disponibles",
   "Confirmar Viaje",
 ];
 
-const step = ref(1);
+const step = ref(3);
 const metodoPago = ref("");
 const conductorSeleccionado = ref(0);
 
@@ -375,6 +394,8 @@ const next = () => {
       return;
     }
     step.value++;
+    if (step.value == 2 && conductorSeleccionado.value == 0)
+      nextButtonClass.value = "btn-noAllowed";
     emit(
       "step-change",
       step.value,
@@ -388,14 +409,23 @@ const next = () => {
   }
 };
 
+const selectPayment = (metodo) => {
+  metodoPago.value = metodo;
+  nextButtonClass.value = "";
+};
+
 const selectConductor = (conductor) => {
-  console.log(conductor);
   conductorSeleccionado.value = conductor.id;
+  selecConductor.value.nombre = conductor.nombre;
+  nextButtonClass.value = "";
 };
 
 const back = () => {
   if (step.value > 1) {
     step.value--;
+  }
+  if (nextButtonClass.value != "") {
+    nextButtonClass.value = "";
   }
 };
 
@@ -418,6 +448,17 @@ defineExpose({
   background-color: #ffcb2d;
   transform: scale(1.1);
   box-shadow: 0 18px 25px #162430;
+}
+.btn-noAllowed {
+  background-color: gray;
+  color: #0b151c;
+}
+.btn-noAllowed:hover {
+  color: #0b151c;
+  transform: scale(1.1);
+  background-color: rgb(61, 61, 61);
+  box-shadow: 0 18px 25px #162430;
+  cursor: not-allowed;
 }
 .btn-close-white {
   filter: brightness(0) invert(1);
@@ -464,6 +505,9 @@ defineExpose({
 }
 .bg-warning {
   background-color: #ffc107a2 !important;
+}
+.bg-info {
+  background-color: #0dcaf0ad !important;
 }
 .badge {
   font-size: 1em;
@@ -529,7 +573,7 @@ defineExpose({
 }
 .car-image {
   border: 1px solid black;
-  height: 15vh;
+  height: 12vh;
   border-radius: 5px;
   width: 10rem;
   object-fit: contain;
