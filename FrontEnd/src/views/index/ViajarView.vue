@@ -90,7 +90,6 @@ const handleFromSearch = (data) => {
   searchParams.value.date = data.date;
   searchParams.value.time = data.time;
 
-  console.log(searchParams.value);
   //si no hay parametros de busqueda no abrir el modal
   if (
     modelStep.value &&
@@ -163,16 +162,15 @@ function verPrecios() {
     distancia: distancia,
     duracion_min: duracion,
     precio_total: precio,
-    lugar_salida: start,
-    lugar_llegada: end,
+    lugar_salida: desde,
+    lugar_llegada: hasta,
   });
 
   return { precio, duracion, tarifa, desde, hasta, distancia };
 }
 
 function verConductores() {
-  // mostrar en un modal con steps el precio del viaje, llamar a la api para ver la tarifa por minuto del horario correspondiente a  la hora de inicio
-  // calcular el precio del viaje multiplicando la (duracion/60) * tarifa_min del horario
+
 
   return [
     {
@@ -222,16 +220,35 @@ function generarViaje() {
   const TOKEN = JSON.parse(localStorage.getItem("authToken"));
   const decoded = jwtDecode(TOKEN);
 
-  viaje.value = Object.assign(viaje.value, {
-    id_pasajero: decoded.data.userId,
-  });
   const pasajero = decoded.data.email;
 
-  return { pasajero };
+  const fecha_ini = new Date(
+    `${searchParams.value.date}T${searchParams.value.time}:00`
+  );
+  const fecha_fin = new Date(
+    fecha_ini.getTime() + viaje.value.duracion_min * 60000
+  );
+
+  const startLoc = searchParams.value.startLocation;
+  const endLoc = searchParams.value.endLocation;
+  viaje.value = Object.assign(viaje.value, {
+    id_pasajero: decoded.data.userId,
+    lati_ini: startLoc.latLng.lat,
+    longi_ini: startLoc.latLng.lng,
+    lati_fin: endLoc.latLng.lat,
+    longi_fin: endLoc.latLng.lng,
+    fecha_ini: fecha_ini.getTime(),
+    fecha_fin: fecha_fin.getTime(),
+  });
+  const fechaIniString = ` ${fecha_ini.toTimeString().split(" ")[0]}`;
+  const fechaFinString = `${fecha_fin.toTimeString().split(" ")[0]}`;
+
+  return { pasajero, fecha_ini: fechaIniString, fecha_fin: fechaFinString };
 }
 
 function reservarViaje() {
   // mandar a la api el post del viaje con los datos
+  console.log(viaje.value);
 }
 
 const loadFinished = () => {

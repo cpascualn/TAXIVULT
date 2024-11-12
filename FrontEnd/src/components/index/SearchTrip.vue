@@ -103,7 +103,6 @@ const handleSubmit = (e) => {
   }
 
   const decoded = jwtDecode(token);
-  console.log(decoded);
   
   const userRol = decoded.data.rol;
   if(userRol == 2){

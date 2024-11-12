@@ -214,7 +214,7 @@
                   {{ jsonData.pasajero }}
                 </div>
               </div>
-              <div class="row justify-content-center align-items-center mb-3">
+              <div class="row justify-content-center align-items-center mb-5">
                 <div class="col-md-9">
                   <ul class="list-unstyled">
                     <li>
@@ -232,15 +232,15 @@
                   </ul>
                 </div>
               </div>
-              <div class="row justify-content-center align-items-center mb-3">
+              <div class="row justify-content-center align-items-center mb-5">
                 <div
                   class="col-md-4 d-flex justify-content-center align-items-center"
                 >
                   <i class="bi bi-fast-forward fs-4 text-secondary"></i>
                   <strong> Distancia:</strong>
-                  <p class="badge bg-secondary">
+                  <span class="badge bg-secondary">
                     {{ jsonData.distancia }} metros
-                  </p>
+                  </span>
                 </div>
                 <div
                   class="col-md-4 d-flex justify-content-center align-items-center"
@@ -248,9 +248,9 @@
                   <strong>
                     <i class="bi bi-stopwatch fs-4"></i> Hora de salida:</strong
                   >
-                  <p class="badge bg-secondary">
+                  <span class="badge bg-secondary">
                     {{ jsonData.fecha_ini }}
-                  </p>
+                  </span>
                 </div>
                 <div
                   class="col-md-4 d-flex justify-content-center align-items-center"
@@ -259,9 +259,9 @@
                     ><i class="bi bi-stopwatch-fill fs-4"></i> Hora de
                     llegada:</strong
                   >
-                  <p class="badge bg-secondary">
+                  <span class="badge bg-secondary">
                     {{ jsonData.fecha_fin }}
-                  </p>
+                  </span>
                 </div>
               </div>
               <div class="row justify-content-center align-items-center mb-3">
@@ -345,7 +345,7 @@ const props = defineProps(["params"]); // Definir las props esperadas
 const jsonData = ref({});
 const selecConductor = ref({ nombre: "" });
 
-const modalClass = ref("modal fade show");
+const modalClass = ref("modal fade ");
 const nextButtonClass = ref("btn-noAllowed");
 const titulos = [
   "Precio del viaje",
@@ -353,7 +353,7 @@ const titulos = [
   "Confirmar Viaje",
 ];
 
-const step = ref(3);
+const step = ref(1);
 const metodoPago = ref("");
 const conductorSeleccionado = ref(0);
 
