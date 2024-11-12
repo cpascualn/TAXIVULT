@@ -258,6 +258,7 @@ class ConductorController
         $conductor->setLicenciaTaxista($body['licenciaVTC'] ?? null);
         $conductor->setTitularTarjeta($body['titular_tarjeta'] ?? null);
         $conductor->setIbanTarjeta($body['n_tarjeta'] ?? null);
+        $conductor->setUbiEspera($body['ubiEspera'] ?? null);
         $conductor->setLongEspera($body['lonEspera'] ?? null);
         $conductor->setLatiEspera($body['latEspera'] ?? null);
         $conductor->setEstado($body['estado'] ?? 'libre');
@@ -290,6 +291,7 @@ class ConductorController
             'licenciaVTC' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'n_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
+            'ubiEspera' => [['lengthMax', 1000]],
             'lonEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
             'latEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
@@ -317,6 +319,7 @@ class ConductorController
             'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
+            'ubiEspera' => [['lengthMax', 1000]],
             'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
             'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
             'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores

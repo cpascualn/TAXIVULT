@@ -625,6 +625,7 @@ const usuario = ref({
   //step 3
   dni: "",
   licenciaVTC: "",
+  ubiEspera: "",
   latEspera: "",
   lonEspera: "",
   horario: "", // desplegable con los valores que llegen del servidor
@@ -666,6 +667,7 @@ function selectLocation(location) {
     location.lat.length > 12 ? location.lat.slice(0, 12) : location.lat;
   usuario.value.lonEspera =
     location.lon.length > 12 ? location.lon.slice(0, 12) : location.lon;
+  usuario.value.ubiEspera = location.display_name;
 }
 
 async function onImageChange(event) {

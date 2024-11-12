@@ -69,12 +69,13 @@ export default {
     },
     async checkImagenCoche(img) {
         // si la ia devuelve alguna de estas palabras clave, es true
-        const keywords = ['car', 'taxi', 'vehicle', 'cab', 'hack', 'taxi', 'taxicab', 'van','minvan','sports car','sport car'];
+        const keywords = ['car', 'taxi', 'vehicle', 'cab', 'hack', 'taxi', 'taxicab', 'van', 'minvan', 'minivan', 'minibus', 'moving van', 'sports car', 'sport car'];
+
         try {
             const result = await imageService.checkImage(img);
             // Procesa el resultado para verificar si hay un vehículo
             if (!result) return false;
-            if(result.error) return false;
+            if (result.error) return false;
             const isVehicle = result.some(item =>
                 keywords.some(keyword => item.label.toLowerCase().includes(keyword))
             );
