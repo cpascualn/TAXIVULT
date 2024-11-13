@@ -12,16 +12,9 @@ class Horario implements JsonSerializable
     private $tarifa_dia;
     private $tarifa_minuto;
 
-    public function __construct($nombre, $hora_ini1, $hora_fin1, $tarifa_dia, $tarifa_minuto, $hora_ini2 = null, $hora_fin2 = null, $id = null)
+
+    public function __construct()
     {
-        $this->id = $id;
-        $this->nombre = $nombre;
-        $this->hora_ini1 = $hora_ini1;
-        $this->hora_fin1 = $hora_fin1;
-        $this->hora_ini2 = $hora_ini2;
-        $this->hora_fin2 = $hora_fin2;
-        $this->tarifa_dia = $tarifa_dia;
-        $this->tarifa_minuto = $tarifa_minuto;
     }
 
     public function __get($propiedad)

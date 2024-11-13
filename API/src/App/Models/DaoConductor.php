@@ -247,6 +247,38 @@ class DaoConductor extends Database
 
     }
 
+    public function buscarConductoreslibresCiudad($id_ciudad)
+    {
+        $consulta = " SELECT c.* from Conductor c join Usuario u on c.id = u.id  where estado = 'libre' and u.ciudad = :CIUDAD";
+        $param = array(
+            ":CIUDAD" => $id_ciudad,
+        );
+
+        $this->db->ConsultaDatos($consulta, $param);
+
+        $this->conductores = [];
+        foreach ($this->db->filas as $fila) {
+            $con = new Conductor();
+            $con->setId($fila['id']);
+            $con->setDni($fila['dni']);
+            $con->setLicenciaTaxista($fila['licencia_taxista']);
+            $con->setTitularTarjeta($fila['titular_tarjeta']);
+            $con->setIbanTarjeta($fila['iban_tarjeta']);
+            $con->setUbiEspera($fila['ubi_espera']);
+            $con->setLongEspera($fila['long_espera']);
+            $con->setLatiEspera($fila['lati_espera']);
+            $con->setEstado($fila['estado']);
+            $con->setCoche($fila['coche']);
+            $con->setHorario($fila['horario']);
+
+            $this->conductores[] = $con;   //Insertamos el objeto con los valores de esa fila en el array de objetos
+
+        }
+
+        return $this->conductores;
+
+    }
+
     // cambia el estado del conductor a ocupado 
     public function ocuparConductor($id)
     {

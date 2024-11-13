@@ -73,10 +73,10 @@
 </template>
 
 <script setup>
+import horarioService from "@/services/horario.service";
 import { jwtDecode } from "jwt-decode";
 import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
 import { useRouter } from "vue-router";
-
 
 // Definir los eventos que puede emitir este componente
 const emits = defineEmits(["send-datos"]);
@@ -94,7 +94,7 @@ const openDatetimeSelection = () => {
   mostrarCuando.value = !mostrarCuando.value;
 };
 
-const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
   let datos = { date: date.value, time: time.value };
 
@@ -103,19 +103,26 @@ const handleSubmit = (e) => {
   }
 
   const decoded = jwtDecode(token);
-  
+
   const userRol = decoded.data.rol;
-  if(userRol == 2){
-    alert('Solo para pasajeros')
-    window.location.href = '/dashboard/';
+  if (userRol == 2) {
+    alert("Solo para pasajeros");
+    window.location.href = "/dashboard/";
   }
-  
+
   // llamar a la api para ver si ya tiene viajes programados
-  if(userRol == 2){
-    alert('Ya tienes un viaje programado')
-    window.location.href = '/dashboard/';
+  if (userRol == 2) {
+    alert("Ya tienes un viaje programado");
+    window.location.href = "/dashboard/";
   }
-   
+  const horario = await horarioService.getHorario({
+    horario: datos.time,
+  });
+  if (!horario.success) {
+    alert("Nuestros servicios no estan disponibles a esa hora");
+    return;
+  }
+
   emits("send-datos", datos);
 };
 
@@ -324,15 +331,15 @@ onMounted(() => {
 }
 
 @media (max-width: 991px) {
-  .trip-booking__title{
-    padding-top: 1rem
+  .trip-booking__title {
+    padding-top: 1rem;
   }
   .trip-booking__search-text {
     white-space: initial;
   }
 
-  .trip-booking__search-button{
-   margin-bottom: 1rem;
+  .trip-booking__search-button {
+    margin-bottom: 1rem;
   }
 }
 

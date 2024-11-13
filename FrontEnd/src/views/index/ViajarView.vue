@@ -33,6 +33,7 @@ import LeafMap from "@/components/index/LeafMap.vue";
 import ModalStepperViaje from "@/components/index/ModalStepperViaje.vue";
 import { ref, watch } from "vue";
 import { jwtDecode } from "jwt-decode";
+import horarioService from "@/services/horario.service";
 
 const entradas = ref();
 const stepData = ref();
@@ -113,12 +114,12 @@ const handleFromSearch = (data) => {
   }
 };
 
-const gestionarModal = (step, metodoPago = "", idConductor = "") => {
+const gestionarModal = async (step, metodoPago = "", idConductor = "") => {
   // mostrar en un modal con steps
   // step 1 mostrar precios con detalles (nombre sitio inicio, nombre sitio final, duracion,distancia)
   // seleccionar metodo de pago (desplegable obligatorio)
   if (step == 1) {
-    stepData.value = verPrecios();
+    stepData.value = await verPrecios();
   }
   //step 2 mostrar conductores
   if (step == 2) {
@@ -147,10 +148,15 @@ const gestionarModal = (step, metodoPago = "", idConductor = "") => {
   }
 };
 
-function verPrecios() {
+async function verPrecios() {
   // llamar a la api para ver la tarifa por minuto del horario correspondiente a  la hora de inicio
   // calcular el precio del viaje multiplicando la (duracion/60) * tarifa_min del horario
-  const tarifa = 1.5;
+
+  const horario = await horarioService.getHorario({
+    horario: searchParams.value.time,
+  });
+  
+  const tarifa = horario.horario.tarifa_minuto;
   const duracion = Math.round(searchParams.value.duration / 60);
   const precio = (duracion * tarifa).toFixed(2);
   const desde = searchParams.value.startLocation.name;
@@ -170,8 +176,6 @@ function verPrecios() {
 }
 
 function verConductores() {
-
-
   return [
     {
       id: 1,

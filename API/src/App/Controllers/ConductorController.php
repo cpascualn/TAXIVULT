@@ -217,6 +217,29 @@ class ConductorController
         $response->getBody()->write($body);
         return $response->withStatus(200);
     }
+
+    public function HandleBuscarLibresEnciudad(Request $request, Response $response, $idCiudad)
+    {
+        try {
+            //actualizar conductores que tengan un viaje en curso
+            $conductores = $this->daoCon->buscarConductoreslibresCiudad($idCiudad);
+
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'error' => 'error al buscar: ' . $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
+
+        $body = json_encode([
+            'conductores' => $conductores,
+            'success' => true
+        ]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
     public function HandleEstado(Request $request, Response $response, $accion, $id)
     {
         try {

@@ -12,7 +12,7 @@
           <l-marker
             v-for="conductor in drivers"
             :key="conductor.id"
-            :lat-lng="[conductor.latitud, conductor.longitud]"
+            :lat-lng="[conductor.lati_espera, conductor.long_espera]"
             :icon="carIcon"
           >
             <l-popup>Conductor activo ahora en tu ciudad</l-popup>
@@ -267,7 +267,7 @@ export default {
       const conductores = await conductoresService.getConductoresLibresCiudad(
         ciudad
       );
-      return conductores;
+      return conductores.conductores ? conductores.conductores: null;
     },
   },
 };

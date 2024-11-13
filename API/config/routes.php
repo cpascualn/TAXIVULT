@@ -7,6 +7,7 @@ use Slim\Routing\RouteCollectorProxy;
 use App\Controllers\UsuarioController;
 use App\Controllers\CiudadController;
 use App\Controllers\ConductorController;
+use App\Controllers\HorarioController;
 use App\Middleware\AllowCorsMiddleware;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
@@ -44,6 +45,10 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     $group->group('/conductores', function (RouteCollectorProxy $group) {
         $group->patch('/reload', [ConductorController::class, 'HandleReload']);
         $group->patch('/{accion:(?:ocupar|liberar)}/{id:[0-9]+}', [ConductorController::class, 'HandleEstado']);
+        $group->get('/libres/{id:[0-9]+}', [ConductorController::class, 'HandleBuscarLibresEnciudad']);
+    });
+    $group->group('/horarios', function (RouteCollectorProxy $group) {
+        $group->post('/buscarHora', [HorarioController::class, 'handleBuscarHorario']);
     });
 
 
