@@ -264,10 +264,12 @@ export default {
     },
     async getConductoresLibresCiudad() {
       const ciudad = await ciudadService.getCiudadUsuario();
+      if (!ciudad) return null;
       const conductores = await conductoresService.getConductoresLibresCiudad(
         ciudad
       );
-      return conductores.conductores ? conductores.conductores: null;
+      if (!conductores) return null;
+      return conductores.conductores ? conductores.conductores : null;
     },
   },
 };

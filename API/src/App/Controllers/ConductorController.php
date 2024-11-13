@@ -6,6 +6,7 @@ use Slim\Psr7\Response;
 use Valitron\Validator;
 use App\Models\DaoConductor;
 use App\Entities\Conductor;
+use App\Entities\ConductorDisponible;
 use App\Controllers\VehiculoController;
 use Exception;
 

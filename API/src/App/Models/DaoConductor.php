@@ -3,6 +3,9 @@ namespace App\Models;
 use App\Database\Database;
 
 use App\Entities\Conductor;
+use App\Entities\ConductorDisponible;
+
+
 
 class DaoConductor extends Database
 {
@@ -197,9 +200,9 @@ class DaoConductor extends Database
     //buscar conductores que no tengan viajes dentro del rango horario establecido, y que tampoco tengan viajes que se puedan solapar con el buscado
     public function buscarConductoresDisponibles($hora_ini, $hora_fin, $id_ciudad)
     {
-        $consulta = " SELECT c.id, u.nombre,u.telefono,c.estado,ve.fabricante,ve.modelo,ve.capacidad,ve.tipo,ve.imagen
+        $consulta = " SELECT c.id, u.nombre,u.telefono,c.estado,ve.fabricante,ve.modelo,ve.capacidad,ve.tipo,ve.imagen,c.ubi_espera
                         FROM Conductor c
-                        JOIN Usuario u ON c.id = u.id JOIN Vehiculo ve on ve.matricula = c.coche
+                        JOIN Usuario u ON c.id = u.id JOIN Vehiculo ve on ve.matricula = c.coche JOIN Horario h ON h.id = c.horario
                         WHERE c.id NOT IN (
                             SELECT v.id_conductor
                             FROM Viaje v
@@ -208,42 +211,59 @@ class DaoConductor extends Database
                                 (v.fecha_ini < :HORA_FIN AND v.fecha_fin > :HORA_INI)
                                 
                                 -- Y viajes que empiezan después de la hora de fin deseada pero se solapan con un viaje existente
-                                AND (v.fecha_ini >= :HORA_FIN AND EXISTS (
+                                OR (v.fecha_ini >= :HORA_FIN AND EXISTS (
                                     SELECT 1
                                     FROM Viaje v2
                                     WHERE v2.id_conductor = v.id_conductor
                                     AND v2.fecha_fin > v.fecha_ini
                                 ))
-                        ) AND u.ciudad = :CIUDAD
+                        ) AND u.ciudad = :CIUDAD  
+                        AND (
+                            -- Verifica que el conductor está dentro del primer rango de su horario
+                            (:HORA_INI_TIME >= TIME(h.hora_ini1) AND :HORA_FIN_TIME <= TIME(h.hora_fin1))
+                            
+                            -- Verifica el segundo rango en caso de que el conductor tenga dos turnos
+                            OR (:HORA_INI_TIME >= TIME(h.hora_ini2) AND :HORA_FIN_TIME <= TIME(h.hora_fin2))
+                            
+                            -- Considera el caso de horario cruzando medianoche para el primer rango
+                            OR (h.hora_ini1 > h.hora_fin1 AND (:HORA_INI_TIME >= TIME(h.hora_ini1) OR :HORA_FIN_TIME <= TIME(h.hora_fin1)))
+                            
+                            -- Considera el caso de horario cruzando medianoche para el segundo rango
+                            OR (h.hora_ini2 > h.hora_fin2 AND (:HORA_INI_TIME >= TIME(h.hora_ini2) OR :HORA_FIN_TIME <= TIME(h.hora_fin2)))
+    )
                     ";
+
+        $hora_ini_time = date("H:i:s", $hora_ini);
+        $hora_fin_time = date("H:i:s", $hora_fin);
         $param = array(
             ":HORA_INI" => $hora_ini,
             ":HORA_FIN" => $hora_fin,
             ":CIUDAD" => $id_ciudad,
+            ":HORA_INI_TIME" => $hora_ini_time,
+            ":HORA_FIN_TIME" => $hora_fin_time,
         );
 
         $this->db->ConsultaDatos($consulta, $param);
 
-        $this->conductores = [];
-        foreach ($this->filas as $fila) {
-            $con = new Conductor();
+        $datos = [];
+        foreach ($this->db->filas as $fila) {
+            $con = new ConductorDisponible();
             $con->setId($fila['id']);
-            $con->setDni($fila['dni']);
-            $con->setLicenciaTaxista($fila['licencia_taxista']);
-            $con->setTitularTarjeta($fila['titular_tarjeta']);
-            $con->setIbanTarjeta($fila['iban_tarjeta']);
-            $con->setUbiEspera($fila['ubi_espera']);
-            $con->setLongEspera($fila['long_espera']);
-            $con->setLatiEspera($fila['lati_espera']);
+            $con->setNombre($fila['nombre']);
+            $con->setTelefono($fila['telefono']);
             $con->setEstado($fila['estado']);
-            $con->setCoche($fila['coche']);
-            $con->setHorario($fila['horario']);
+            $con->setFabricante($fila['fabricante']);
+            $con->setModelo($fila['modelo']);
+            $con->setCapacidad($fila['capacidad']);
+            $con->setTipo($fila['tipo']);
+            // $con->setImagen($fila['imagen']);
+            $con->setUbiEspera($fila['ubi_espera']);
 
-            $this->conductores[] = $con;   //Insertamos el objeto con los valores de esa fila en el array de objetos
+            $datos[] = $con;   //Insertamos el objeto con los valores de esa fila en el array de objetos
 
         }
 
-        return $this->conductores;
+        return $datos;
 
     }
 

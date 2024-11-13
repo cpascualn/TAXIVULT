@@ -125,7 +125,11 @@
               <div
                 class="drivers__wrapper justify-content-center align-items-center"
               >
+                <div v-if="!jsonData.conductores" style="color: red">
+                  NO SE HAN ENCONTRADO CONDUCTORES DISPONIBLES
+                </div>
                 <button
+                  v-if="jsonData.conductores"
                   v-for="conductor in jsonData.conductores"
                   :key="conductor.id"
                   :class="[
@@ -174,9 +178,10 @@
                       >
                       <span class="car_type">
                         <i class="bi bi-geo-alt-fill"></i>Desde :
-                        <strong> {{ conductor.ubicacion }}</strong></span
+                        <strong> {{ conductor.ubi_espera }}</strong></span
                       >
                       <div>
+                        Ahora mismo esta: 
                         <div
                           :class="[
                             'badge',
@@ -515,7 +520,7 @@ defineExpose({
 
 .drivers__wrapper {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 0.5rem;
   max-height: 60vh;
   overflow: auto;
