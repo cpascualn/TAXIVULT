@@ -181,7 +181,7 @@
                         <strong> {{ conductor.ubi_espera }}</strong></span
                       >
                       <div>
-                        Ahora mismo esta: 
+                        Ahora mismo esta:
                         <div
                           :class="[
                             'badge',
@@ -200,7 +200,6 @@
                   </div>
                 </button>
               </div>
-              <p>Seleccionado: {{ conductorSeleccionado }}</p>
             </div>
             <div v-if="step == 3">
               <div class="row justify-content-center align-items-center mb-3">
@@ -329,11 +328,14 @@
                 </div>
               </div>
             </div>
+            <div v-if="step == 4">
+              <h1>VIAJE RESERVADO CON EXITO!!!</h1>
+            </div>
           </div>
           <div class="modal-footer">
             <button class="btn" @click="back" v-if="step > 1">ATRAS</button>
             <button :class="['btn', nextButtonClass]" @click="next">
-              {{ step == titulos.length ? "RESERVAR" : "CONTINUAR" }}
+              {{ step == titulos.length-1 ? "RESERVAR" : "CONTINUAR" }}
             </button>
           </div>
         </div>
@@ -356,6 +358,7 @@ const titulos = [
   "Precio del viaje",
   "Conductores disponibles",
   "Confirmar Viaje",
+  "Viaje Reservado"
 ];
 
 const step = ref(1);

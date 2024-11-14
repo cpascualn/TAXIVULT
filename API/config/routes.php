@@ -8,6 +8,7 @@ use App\Controllers\UsuarioController;
 use App\Controllers\CiudadController;
 use App\Controllers\ConductorController;
 use App\Controllers\HorarioController;
+use App\Controllers\ViajeController;
 use App\Middleware\AllowCorsMiddleware;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
@@ -50,6 +51,10 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     });
     $group->group('/horarios', function (RouteCollectorProxy $group) {
         $group->post('/buscarHora', [HorarioController::class, 'handleBuscarHorario']);
+    });
+    $group->group('/viajes', function (RouteCollectorProxy $group) {
+        $group->get('', [ViajeController::class, 'HandleListar']);
+        $group->post('/insertar', [ViajeController::class, 'HandleInsertar']);
     });
 
 

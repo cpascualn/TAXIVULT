@@ -9,6 +9,7 @@ use App\Entities\Conductor;
 use App\Entities\ConductorDisponible;
 use App\Controllers\VehiculoController;
 use Exception;
+use Slim\Factory\AppFactory;
 
 class ConductorController
 {
@@ -200,7 +201,12 @@ class ConductorController
 
             $body = $request->getParsedBody();
             //actualizar conductores que tengan un viaje en curso
-            $conductores = $this->daoCon->buscarConductoresDisponibles($body['hora_ini'], $body['hora_fin'], $body['ciudad']);
+            //refrescar estados de conductores
+            $app = AppFactory::create();
+            $auxResponse = $app->getResponseFactory()->createResponse();
+            $this->HandleReload($request, $auxResponse);
+            if ($auxResponse->getStatusCode() == 200)
+                $conductores = $this->daoCon->buscarConductoresDisponibles($body['hora_ini'], $body['hora_fin'], $body['ciudad']);
 
         } catch (\Throwable $th) {
             $body = json_encode([

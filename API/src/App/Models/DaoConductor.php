@@ -233,11 +233,13 @@ class DaoConductor extends Database
     )
                     ";
 
-        $hora_ini_time = date("H:i:s", $hora_ini);
-        $hora_fin_time = date("H:i:s", $hora_fin);
+        $hora_ini_time = date("H:i:s", ($hora_ini/1000));
+        $hora_fin_time = date("H:i:s", ($hora_fin/1000));
+        $hora_ini_formated = $hora_ini/1000;
+        $hora_fin_formated = $hora_fin/1000;
         $param = array(
-            ":HORA_INI" => $hora_ini,
-            ":HORA_FIN" => $hora_fin,
+            ":HORA_INI" => $hora_ini_formated,
+            ":HORA_FIN" => $hora_fin_formated,
             ":CIUDAD" => $id_ciudad,
             ":HORA_INI_TIME" => $hora_ini_time,
             ":HORA_FIN_TIME" => $hora_fin_time,

@@ -36,6 +36,7 @@ import { jwtDecode } from "jwt-decode";
 import horarioService from "@/services/horario.service";
 import ciudadService from "@/services/ciudad.service";
 import conductoresService from "@/services/conductores.service";
+import viajeService from "@/services/viaje.service";
 
 const entradas = ref();
 const stepData = ref();
@@ -188,7 +189,6 @@ async function verConductores() {
   );
 
   const ciudad = await ciudadService.getCiudadUsuario();
-  console.log(ciudad.id, viaje.value.fecha_ini, viaje.value.fecha_fin);
 
   viaje.value = Object.assign(viaje.value, {
     fecha_ini: fecha_ini.getTime(),
@@ -200,7 +200,7 @@ async function verConductores() {
     viaje.value.fecha_fin,
     ciudad.id
   );
-  console.log(conductores);
+
   if (!conductores) return null;
   if (!conductores.conductores) return null;
   return conductores.conductores;
@@ -269,9 +269,11 @@ function generarViaje() {
   return { pasajero, fecha_ini: fechaIniString, fecha_fin: fechaFinString };
 }
 
-function reservarViaje() {
+async function reservarViaje() {
   // mandar a la api el post del viaje con los datos
   console.log(viaje.value);
+  const respuesta = await viajeService.InsertarViaje(viaje.value);
+  console.log(respuesta);
 }
 
 const loadFinished = () => {
