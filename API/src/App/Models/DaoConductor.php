@@ -258,7 +258,7 @@ class DaoConductor extends Database
             $con->setModelo($fila['modelo']);
             $con->setCapacidad($fila['capacidad']);
             $con->setTipo($fila['tipo']);
-            // $con->setImagen($fila['imagen']);
+            $con->setImagen($fila['imagen']);
             $con->setUbiEspera($fila['ubi_espera']);
 
             $datos[] = $con;   //Insertamos el objeto con los valores de esa fila en el array de objetos

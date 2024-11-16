@@ -125,7 +125,7 @@ class ViajeController
             'fecha_ini' => ['integer'],
             'fecha_fin' => ['integer'],
             'metodo_pago' => [['in', ['efectivo', 'tarjeta']]],
-            'distancia' => ['integer'],
+            'distancia' => ['numeric'],
             'duracion_min' => ['integer'],
             'precio_total' => ['numeric', ['regex', '/^-?\d{1,15}\.\d{1,12}$/']],
             'lugar_salida' => [['lengthMax', 1000]],
