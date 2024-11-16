@@ -1,4 +1,4 @@
-import { simpleQuery, Query, simpleAuthQuery,AuthQuery } from "@/assets/utils/fetchHelper";
+import { simpleQuery, Query, simpleAuthQuery, AuthQuery } from "@/assets/utils/fetchHelper";
 import { jwtDecode } from "jwt-decode";
 const usrToken = localStorage.getItem("authToken");
 export default {
@@ -28,11 +28,18 @@ export default {
       const decoded = jwtDecode(usrToken);
       id = decoded.data.userId;
 
-      return await AuthQuery('/api/viajes/activoUsuario',{id});
+      return await AuthQuery('/api/viajes/activoUsuario', { id });
 
     } catch (err) {
       console.log(err);
     }
   },
+  getRol() {
+    if (!usrToken)
+      return 0;
+    const decoded = jwtDecode(usrToken);
+    let rol = decoded.data.rol;
+    return rol;
+  }
 
 }

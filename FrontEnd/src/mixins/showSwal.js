@@ -22,11 +22,11 @@ export default {
         },
         showSwalConfirmationDelete() {
             const swalDelete = new Swal({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
+                title: "¿Estas Seguro?",
+                text: "Este cambio es irreversible",
                 showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel!",
+                confirmButtonText: "Sí, eliminar!",
+                cancelButtonText: "No, cancelar!",
                 reverseButtons: true,
                 customClass: {
                   confirmButton: "btn bg-gradient-success",

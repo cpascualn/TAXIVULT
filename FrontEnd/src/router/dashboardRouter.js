@@ -22,18 +22,6 @@ const dashboardRouter = createRouter({
             meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },
         {
-            path: '/',
-            name: 'Dashboard2',
-            component: Dashboard,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
-            path: '/dashboard',
-            name: 'Dashboard3',
-            component: Dashboard,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
             path: "/tables",
             name: "Tables",
             component: Tables,
@@ -70,39 +58,9 @@ const dashboardRouter = createRouter({
             meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },
         {
-            path: "/sign-in",
-            name: "SignIn",
-            component: UsersList,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
-            path: "/sign-up",
-            name: "SignUp",
-            component: UsersList,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
             path: "/login",
             name: "Login",
             component: LoginView,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
-            path: "/signup",
-            name: "Signup",
-            component: UsersList,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
-            path: "/password-forgot",
-            name: "Password Forgot",
-            component: UsersList,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
-            path: "/password-reset",
-            name: "Password Reset",
-            component: UsersList,
             meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },
     ]

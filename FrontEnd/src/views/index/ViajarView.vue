@@ -200,7 +200,8 @@ async function verConductores() {
     viaje.value.fecha_fin,
     ciudad.id
   );
-
+  console.log(conductores);
+  
   if (!conductores) return null;
   if (!conductores.conductores) return null;
   return conductores.conductores;
@@ -234,6 +235,9 @@ async function reservarViaje() {
   console.log(viaje.value);
   const respuesta = await viajeService.InsertarViaje(viaje.value);
   console.log(respuesta);
+  if (respuesta && respuesta.success) {
+    alert(respuesta.message);
+  }
 }
 
 const loadFinished = () => {

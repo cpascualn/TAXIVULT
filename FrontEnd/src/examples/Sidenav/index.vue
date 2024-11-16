@@ -27,9 +27,6 @@
           style="max-height: 5rem"
           alt="main_logo"
         />
-        <!-- <span class="ms-2 font-weight-bold text-white"
-          >Material Dashboard 2 Laravel</span
-        > -->
       </a>
     </div>
     <hr class="horizontal light mt-0 mb-2" />
