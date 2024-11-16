@@ -52,6 +52,90 @@ class DaoViaje
         return $this->viajes;
     }
 
+    public function obtenerViajesActivosUsuario($id)
+    {
+        $consulta = 'SELECT count(*) as cantidad FROM Viaje where id_pasajero = :ID and fecha_fin > UNIX_TIMESTAMP()';
+        $param = array(":ID" => $id);
+        $this->viajes = array();  //Vaciamos el array de las situaciones entre consulta y consulta
+
+        $this->db->ConsultaDatos($consulta, $param);
+        $cantidad=0 ;
+        foreach ($this->db->filas as $fila) {
+            $cantidad = $fila['cantidad'];
+        }
+
+        return $cantidad;
+    }
+
+    public function obtenerViajesUsuario($id)
+    {
+        $consulta = 'SELECT * FROM Viaje where id_pasajero = :ID';
+        $param = array(":ID" => $id);
+        $this->viajes = array();  //Vaciamos el array de las situaciones entre consulta y consulta
+
+        $this->db->ConsultaDatos($consulta, $param);
+
+        foreach ($this->db->filas as $fila) {
+            $viaje = new Viaje();
+            $viaje->setId($fila['id']);
+            $viaje->setIdConductor($fila['id_conductor']);
+            $viaje->setIdPasajero($fila['id_pasajero']);
+            $viaje->setLatiIni($fila['lati_ini']);
+            $viaje->setLongiIni($fila['longi_ini']);
+            $viaje->setLatiFin($fila['lati_fin']);
+            $viaje->setLongiFin($fila['longi_fin']);
+            $viaje->setFechaIni($fila['fecha_ini']);
+            $viaje->setFechaFin($fila['fecha_fin']);
+            $viaje->setMetodoPago($fila['metodo_pago']);
+            $viaje->setDistancia($fila['distancia']);
+            $viaje->setDuracionMin($fila['duracion_min']);
+            $viaje->setPrecioTotal($fila['precio_total']);
+            $viaje->setCiudad($fila['ciudad']);
+            $viaje->setLugarSalida($fila['lugar_salida']);
+            $viaje->setLugarLlegada($fila['lugar_llegada']);
+
+
+            $this->viajes[] = $viaje;   //Insertamos el objeto con los valores de esa fila en el array de objetos
+        }
+
+        return $this->viajes;
+    }
+
+    public function obtenerViajesConductor($id)
+    {
+        $consulta = 'SELECT * FROM Viaje where ';
+
+        $this->viajes = array();  //Vaciamos el array de las situaciones entre consulta y consulta
+
+        $this->db->ConsultaDatos($consulta);
+
+        foreach ($this->db->filas as $fila) {
+            $viaje = new Viaje();
+            $viaje->setId($fila['id']);
+            $viaje->setIdConductor($fila['id_conductor']);
+            $viaje->setIdPasajero($fila['id_pasajero']);
+            $viaje->setLatiIni($fila['lati_ini']);
+            $viaje->setLongiIni($fila['longi_ini']);
+            $viaje->setLatiFin($fila['lati_fin']);
+            $viaje->setLongiFin($fila['longi_fin']);
+            $viaje->setFechaIni($fila['fecha_ini']);
+            $viaje->setFechaFin($fila['fecha_fin']);
+            $viaje->setMetodoPago($fila['metodo_pago']);
+            $viaje->setDistancia($fila['distancia']);
+            $viaje->setDuracionMin($fila['duracion_min']);
+            $viaje->setPrecioTotal($fila['precio_total']);
+            $viaje->setCiudad($fila['ciudad']);
+            $viaje->setLugarSalida($fila['lugar_salida']);
+            $viaje->setLugarLlegada($fila['lugar_llegada']);
+
+
+            $this->viajes[] = $viaje;   //Insertamos el objeto con los valores de esa fila en el array de objetos
+        }
+
+        return $this->viajes;
+    }
+
+
 
     public function insertar($viaje)
     {

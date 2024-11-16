@@ -158,6 +158,7 @@ const submitForm = async (event) => {
 
     try {
       const data = await authService.login(user);
+      if (!data) throw new Error("Error de inicio de sesion");
       if (!data.success) throw new Error(data.error);
       router.push("/");
     } catch (error) {

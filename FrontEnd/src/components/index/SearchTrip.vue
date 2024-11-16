@@ -77,6 +77,7 @@ import horarioService from "@/services/horario.service";
 import { jwtDecode } from "jwt-decode";
 import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
 import { useRouter } from "vue-router";
+import profileService from "@/services/profile.service";
 
 // Definir los eventos que puede emitir este componente
 const emits = defineEmits(["send-datos"]);
@@ -111,14 +112,16 @@ const handleSubmit = async (e) => {
   }
 
   // llamar a la api para ver si ya tiene viajes programados
-  if (userRol == 2) {
+  const viajes = await profileService.verViajes();
+
+  if (viajes && viajes.activos > 0 ) {
     alert("Ya tienes un viaje programado");
     window.location.href = "/dashboard/";
   }
   const horario = await horarioService.getHorario({
     horario: datos.time,
   });
-  if (!horario.success) {
+  if (horario && !horario.success) {
     alert("Nuestros servicios no estan disponibles a esa hora");
     return;
   }

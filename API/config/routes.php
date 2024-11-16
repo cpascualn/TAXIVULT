@@ -55,6 +55,8 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     $group->group('/viajes', function (RouteCollectorProxy $group) {
         $group->get('', [ViajeController::class, 'HandleListar']);
         $group->post('/insertar', [ViajeController::class, 'HandleInsertar']);
+        $group->post('/activoUsuario', [ViajeController::class, 'HandleObtenerViajesActivosUsuario']);
+        $group->post('/usuario', [ViajeController::class, 'HandleObtenerViajesUsuario']);
     });
 
 

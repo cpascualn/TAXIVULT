@@ -26,6 +26,26 @@ class ViajeController
         return $response->withStatus(200);
     }
 
+    public function HandleObtenerViajesActivosUsuario(Request $request, Response $response)
+    {
+        $body = $request->getParsedBody();
+        $cantidad = $this->daoViaje->obtenerViajesActivosUsuario($body['id']);
+
+        $body = json_encode(['activos' => $cantidad, 'success' => true]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+
+    public function HandleObtenerViajesUsuario(Request $request, Response $response)
+    {
+        $body = $request->getParsedBody();
+        $this->daoViaje->obtenerViajesUsuario($body['id']);
+
+        $body = json_encode(['viajes' => $this->daoViaje->viajes, 'success' => true]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+
 
     public function HandleInsertar(Request $request, Response $response)
     {
@@ -72,8 +92,8 @@ class ViajeController
 
         $viaje = new Viaje();
         $distancia = floor($body['distancia'] * 100) / 100; // Truncar a 2 decimales
-        $fecha_ini = $body['fecha_ini']/1000;
-        $fecha_fin = $body['fecha_fin']/1000;
+        $fecha_ini = $body['fecha_ini'] / 1000;
+        $fecha_fin = $body['fecha_fin'] / 1000;
         $viaje->setIdConductor($body['id_conductor']);
         $viaje->setIdPasajero($body['id_pasajero']);
         $viaje->setLatiIni($body['lati_ini']);
@@ -105,7 +125,7 @@ class ViajeController
             'fecha_ini' => ['integer'],
             'fecha_fin' => ['integer'],
             'metodo_pago' => [['in', ['efectivo', 'tarjeta']]],
-            'distancia' => ['numeric', ['regex', '/^-?\d{1,15}\.\d{1,12}$/']],
+            'distancia' => ['integer'],
             'duracion_min' => ['integer'],
             'precio_total' => ['numeric', ['regex', '/^-?\d{1,15}\.\d{1,12}$/']],
             'lugar_salida' => [['lengthMax', 1000]],
