@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
-
+import regFormCheck from "./regFormCheck";
 export default {
-    methods:{
+    methods: {
         showSwal(options) {
             new Swal({
                 toast: true,
@@ -17,7 +17,7 @@ export default {
                 showCloseButton: true,
                 timer: 2000,
                 timerProgressBar: true,
-                
+
             });
         },
         showSwalConfirmationDelete() {
@@ -29,13 +29,150 @@ export default {
                 cancelButtonText: "No, cancelar!",
                 reverseButtons: true,
                 customClass: {
-                  confirmButton: "btn bg-gradient-success",
-                  cancelButton: "btn bg-gradient-danger",
+                    confirmButton: "btn bg-gradient-success",
+                    cancelButton: "btn bg-gradient-danger",
                 },
                 buttonsStyling: false,
-              });
-            
+            });
+
             return swalDelete;
+        },
+        async showAddUser() {
+            const { value: formValues } = await Swal.fire({
+                title: "Crear un Administrador",
+                html: `
+             <div>
+                <label for="swal-input-email" style="width: 4.5rem;">Email</label>
+                <input id="swal-input-email" class="swal2-input" placeholder="Email">
+                
+                <label for="swal-input-nombre" style="width: 4.5rem;">Nombre</label>
+                <input id="swal-input-nombre" class="swal2-input" placeholder="Nombre">
+                
+                <label for="swal-input-apellidos" style="width: 4.5rem;">Apellidos</label>
+                <input id="swal-input-apellidos" class="swal2-input" placeholder="Apellidos">
+                
+                <label for="swal-input-telefono" style="width: 4.5rem;">Teléfono</label>
+                <input id="swal-input-telefono" class="swal2-input" placeholder="Teléfono">
+
+                 <label for="swal-input-contrasena" style="width: 4.5rem;">Contraseña</label>
+                <input id="swal-input-contrasena" type="password" class="swal2-input" placeholder="Contraseña" >
+            </div>
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: () => {
+                    const email = document.getElementById("swal-input-email").value;
+                    const nombre = document.getElementById("swal-input-nombre").value;
+                    const apellidos = document.getElementById("swal-input-apellidos").value;
+                    const telefono = document.getElementById("swal-input-telefono").value;
+                    const contrasena = document.getElementById("swal-input-contrasena").value;
+
+                    if (!email || !nombre || !apellidos || !telefono) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false; // Evita cerrar el modal
+                    }
+                    // Puedes validar los valores aquí
+                    if (!regFormCheck.checkMail(email)) {
+                        Swal.showValidationMessage('El correo no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNombre(nombre)) {
+                        Swal.showValidationMessage('El nombre no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkTelefono(telefono)) {
+                        Swal.showValidationMessage('El teléfono no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNombre(apellidos)) {
+                        Swal.showValidationMessage('Los apellidos no son válidos.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkContrasena(contrasena)) {
+                        Swal.showValidationMessage('La contraseña no es válida.');
+                        return false;
+                    }
+
+
+                    return { email, nombre, apellidos, telefono, contrasena, rol: 1 };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+                // Puedes manejar los valores aquí
+            } else {
+                return null;
+            }
+        },
+        async showEditUser(admin) {
+            const { value: formValues } = await Swal.fire({
+                title: "Editar un Administrador",
+                html: `
+                <label for="swal-input-email" style="width: 4.5rem;">Email</label>
+                <input id="swal-input-email" class="swal2-input" placeholder="Email" value="${admin.email}">
+
+                <label for="swal-input-nombre" style="width: 4.5rem;">Nombre</label>
+                <input id="swal-input-nombre" class="swal2-input" placeholder="Nombre" value="${admin.nombre}">
+
+                <label for="swal-input-apellidos" style="width: 4.5rem;">Apellidos</label>
+                <input id="swal-input-apellidos" class="swal2-input" placeholder="Apellidos" value="${admin.apellidos}">
+
+                <label for="swal-input-telefono" style="width: 4.5rem;">Teléfono</label>
+                <input id="swal-input-telefono" class="swal2-input" placeholder="Teléfono" value="${admin.telefono}">
+
+                 <label for="swal-input-contrasena"style="width: 4.5rem;"> Contraseña</label>
+                <input id="swal-input-contrasena" type="password" class="swal2-input" placeholder="Nueva Contraseña" >
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: () => {
+                    const email = document.getElementById("swal-input-email").value;
+                    const nombre = document.getElementById("swal-input-nombre").value;
+                    const apellidos = document.getElementById("swal-input-apellidos").value;
+                    const telefono = document.getElementById("swal-input-telefono").value;
+                    const contrasena = document.getElementById("swal-input-contrasena").value;
+
+                    if (!email || !nombre || !apellidos || !telefono) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false;
+                    }
+                    // Puedes validar los valores aquí
+                    if (!regFormCheck.checkMail(email)) {
+                        Swal.showValidationMessage('El correo no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNombre(nombre)) {
+                        Swal.showValidationMessage('El nombre no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkTelefono(telefono)) {
+                        Swal.showValidationMessage('El teléfono no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNombre(apellidos)) {
+                        Swal.showValidationMessage('Los apellidos no son válidos.');
+                        return false;
+                    }
+                    if (contrasena != null && contrasena != '' && !regFormCheck.checkContrasena(contrasena)) {
+                        Swal.showValidationMessage('La contraseña no es válida.');
+                        return false;
+                    }
+
+
+                    return { id:admin.id, email, nombre, apellidos, telefono, contrasena };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
         },
     }
 }

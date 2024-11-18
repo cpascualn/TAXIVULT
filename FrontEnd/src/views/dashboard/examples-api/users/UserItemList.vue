@@ -35,6 +35,7 @@
 <script>
 import MaterialButton from "@/components/dashboard/MaterialButton.vue";
 import showSwal from "@/mixins/showSwal";
+import userService from "@/services/user.service";
 
 export default {
   name: "UserItemList",
@@ -43,7 +44,7 @@ export default {
   },
   props: {
     id: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
     email: {
@@ -64,7 +65,7 @@ export default {
       required: true,
     },
     ciudad: {
-      type: String,
+      type: [String, Number, null],
       required: true,
     },
     creado: {
@@ -72,20 +73,99 @@ export default {
       required: true,
     },
     rol: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
   },
   methods: {
     eliminarUsuario() {
-      showSwal.methods.showSwalConfirmationDelete();
+      if (this.rol === "administrador") {
+        showSwal.methods.showSwal({
+          type: "error",
+          message: "No puedes borrar a un administrador",
+          width: 500,
+        });
+      } else {
+        showSwal.methods
+          .showSwalConfirmationDelete()
+          .then((result) => {
+            if (result.isConfirmed) {
+              userService
+                .eliminarUsuario(this.id)
+                .then((result) => {
+                  if (result.success) {
+                    showSwal.methods.showSwal({
+                      type: "success",
+                      message: "Usuario eliminado correctamente",
+                      width: 500,
+                    });
+                  } else {
+                    showSwal.methods.showSwal({
+                      type: "error",
+                      message: "Error al eliminar el usuario",
+                      width: 500,
+                    });
+                  }
+                })
+                .catch((err) => {
+                  showSwal.methods.showSwal({
+                    type: "error",
+                    message: err,
+                    width: 500,
+                  });
+                });
+            }
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      }
     },
-    editarUsuario() {
-      showSwal.methods.showSwal({
-        type: "error",
-        message: "Solo puedes editar Administradores",
-        width: 500,
-      });
+    async editarUsuario() {
+      if (this.rol !== "administrador") {
+        showSwal.methods.showSwal({
+          type: "error",
+          message: "Solo puedes editar Administradores",
+          width: 500,
+        });
+        return;
+      }
+      const user = {
+        id: this.id,
+        email: this.email,
+        nombre: this.nombre,
+        apellidos: this.apellidos,
+        telefono: this.telefono,
+      };
+
+
+      const datos = await showSwal.methods.showEditUser(user);
+      if (!datos) return;
+
+      userService
+        .actualizarUsuario(datos)
+        .then((result) => {
+          if (result.success) {
+            showSwal.methods.showSwal({
+              type: "success",
+              message: "Usuario actualizado correctamente",
+              width: 500,
+            });
+          } else {
+            showSwal.methods.showSwal({
+              type: "error",
+              message: "Error al editar el usuario",
+              width: 500,
+            });
+          }
+        })
+        .catch((err) => {
+          showSwal.methods.showSwal({
+            type: "error",
+            message: err,
+            width: 500,
+          });
+        });
     },
   },
 };

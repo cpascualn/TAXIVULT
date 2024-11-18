@@ -23,12 +23,32 @@
 
           <!-- Card body -->
           <div class="px-0 pb-0 card-body">
-            <material-input
-              type="search"
-              label="Buscar..."
-              name="search"
-              v-model="searchQuery"
-            />
+            <div class="row">
+              <material-input
+                id="buscar"
+                :value="searchQuery"
+                type="text"
+                label="Buscar..."
+                class="col-9"
+                @update:value="upval"
+              />
+
+              <material-button
+                class="float-right btn btm-sm col-2"
+                @click="resetFilter()"
+              >
+                <i class="fa fa-undo" aria-hidden="true"></i>
+                Resetear filtros
+              </material-button>
+              <material-button
+                class="float-right btn btm-sm col-1 ml-3"
+                @click="reloadUsers()"
+                color="info"
+              >
+                <i class="fa fa-undo" aria-hidden="true"></i>
+                Recargar
+              </material-button>
+            </div>
             <!-- Table -->
             <table class="table table-flush mt-3">
               <thead class="thead-light">
@@ -64,7 +84,7 @@
             class="card-footer d-flex justify-content-evenly align-items-center"
           >
             <div>
-              mostrando {{ paginatedData.length }} de {{ users.length }}
+              mostrando {{ paginatedData.length }} de {{ filteredItems.length }}
             </div>
 
             <material-pagination>
@@ -76,7 +96,7 @@
                 v-for="page in totalPages"
                 :key="page"
                 :active="page === paginaActual"
-                :label="page"
+                :label="page.toString()"
                 @click="cambiarPagina(page)"
               />
               <material-pagination-item
@@ -105,6 +125,7 @@ import MaterialPagination from "@/components/dashboard/MaterialPagination.vue";
 import MaterialPaginationItem from "@/components/dashboard/MaterialPaginationItem.vue";
 import MaterialInput from "@/components/dashboard/MaterialInput.vue";
 import userService from "@/services/user.service";
+import authService from "@/services/auth.service";
 export default {
   name: "UsersList",
   components: {
@@ -130,31 +151,7 @@ export default {
         "Fecha_creacion",
         "Rol",
       ],
-      users: [
-        {
-          id: 1,
-          email: "admin@taxivult.app",
-          telefono: "123456789",
-          nombre: "admin",
-          apellidos: "admin",
-          contrasena:
-            "$2y$10$3G/s1ebD.NJoIYYihmGqHOXxZWC7PvDsEVODU4/Zo5.24bbteoHGm",
-          ciudad: 1,
-          creado: "2024-10-29",
-          rol: 1,
-        },
-        {
-          id: 4,
-          email: "usuariooo@example.com",
-          telefono: "1234567890",
-          nombre: "Juan",
-          apellidos: "Pérez",
-          contrasena: "$2y$10$nr.Kbe.MVOqEgw2Ln8vSYO/",
-          ciudad: 1,
-          creado: "2024-06-30",
-          rol: 3,
-        },
-      ],
+      users: [],
     };
   },
   async mounted() {
@@ -186,12 +183,11 @@ export default {
       });
     },
     totalPages() {
-      return Math.ceil(this.users.length / this.usuariosPorPagina); // Total de páginas
+      return Math.ceil(this.filteredItems.length / this.usuariosPorPagina); // Total de páginas
     },
     paginatedData() {
       const start = (this.paginaActual - 1) * this.usuariosPorPagina;
       const end = start + parseInt(this.usuariosPorPagina, 10);
-      console.log(this.sortedItems);
 
       return this.sortedItems.slice(start, end); // Datos de la página actual
     },
@@ -204,12 +200,25 @@ export default {
         width: 500,
       });
     },
-    addUser() {
-      showSwal.methods.showSwal({
-        type: "success",
-        message: "Usuario creado",
-        width: 500,
-      });
+    async addUser() {
+      const datos = await showSwal.methods.showAddUser();
+      if (!datos) return;
+      console.log(datos);
+      const data = await authService.register(datos);
+      if (!data.success) {
+        let finalMessage = data.error ? `ERROR: ${data.error}` : "ERROR";
+        showSwal.methods.showSwal({
+          type: "error",
+          message: finalMessage,
+          width: 500,
+        });
+      } else {
+        showSwal.methods.showSwal({
+          type: "success",
+          message: "Usuario creado",
+          width: 500,
+        });
+      }
     },
     ordenar(campo) {
       if (this.sortField === campo.toLowerCase()) {
@@ -224,9 +233,23 @@ export default {
         this.paginaActual = pagina;
       }
     },
+    resetFilter() {
+      this.searchQuery = "";
+      this.sortField = null;
+      this.sortDirection = "asc";
+      this.currentPage = 1;
+    },
     async getUsers() {
       return await userService.getUsuarios();
     },
+    upval(e) {
+      this.searchQuery = e;
+    },
+    async reloadUsers(){
+      const users = await this.getUsers();
+      this.users = users.usuarios;
+      this.resetFilter();
+    }
   },
 };
 
@@ -243,5 +266,9 @@ th {
 select {
   background-color: #162430;
   color: white;
+}
+
+.col-9 {
+  width: 70% !important;
 }
 </style>

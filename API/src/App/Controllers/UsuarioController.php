@@ -130,7 +130,11 @@ class UsuarioController
     {
         //recibir datos del body y validarlos
         $body = $request->getParsedBody();
-        $validacion = $this->validarDatos($body);
+
+        //si es el administrador, validar los datos para el administrador
+        $validacion = ($body['rol'] == 1) ? $this->validarDatosActualizacion($body) : $this->validarDatos($body);
+
+
         if (!$validacion['success']) {
             $response->getBody()->write(json_encode([
                 'message' => 'error validacion',
@@ -305,7 +309,7 @@ class UsuarioController
         $usu->setTelefono($body['telefono'] ?? null);
         $usu->setNombre($body['nombre'] ?? null);
         $usu->setApellidos($body['apellidos'] ?? null);
-        $usu->setContrasena(isset($body['contrasena']) ? password_hash($body['contrasena'], PASSWORD_DEFAULT) : null);
+        $usu->setContrasena((isset($body['contrasena']) && $body['contrasena'] != '') ? password_hash($body['contrasena'], PASSWORD_DEFAULT) : null);
         $usu->setCiudad($body['ciudad'] ?? null);
         $usu->setFechaCreacion(date("Y-m-d"));
         $usu->setRol($body['rol'] ?? null);

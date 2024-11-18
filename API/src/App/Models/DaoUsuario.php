@@ -20,7 +20,7 @@ class DaoUsuario
 
     public function listar()       //Lista el contenido de la tabla
     {
-        $consulta = 'SELECT * FROM Usuario';
+        $consulta = 'SELECT u.*,c.nombre as ciudad_nombre,r.nombre as rol_nombre FROM Usuario u left join Ciudad c on u.ciudad = c.id join Rol r on r.id =u.rol';
 
         $this->usuarios = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
@@ -35,9 +35,9 @@ class DaoUsuario
             $usu->setNombre($fila['nombre']);
             $usu->setApellidos($fila['apellidos']);
             $usu->setContrasena($fila['contrasena']);
-            $usu->setCiudad($fila['ciudad']);
+            $usu->setCiudad($fila['ciudad_nombre']);
             $usu->setFechaCreacion($fila['fecha_creacion']);
-            $usu->setRol($fila['rol']);
+            $usu->setRol($fila['rol_nombre']);
 
             $this->usuarios[] = $usu;   //Insertamos el objeto con los valores de esa fila en el array de objetos
         }
@@ -190,8 +190,7 @@ class DaoUsuario
 
     public function actualizar($id, $usuario, $nuevo)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "UPDATE `Usuario` SET `email`=:EMAIL,`telefono`=:TELEFONO,`nombre`=:NOMBRE,`apellidos`=:APELLIDOS,`contrasena`=:CONTRASENA,`ciudad`=:CIUDAD,
-        `rol`=:ROL WHERE id = :ID";
+        $consulta = "UPDATE `Usuario` SET `email`=:EMAIL,`telefono`=:TELEFONO,`nombre`=:NOMBRE,`apellidos`=:APELLIDOS,`contrasena`=:CONTRASENA,`ciudad`=:CIUDAD WHERE id = :ID";
 
         $param = array();
 
@@ -202,7 +201,6 @@ class DaoUsuario
         $param[":APELLIDOS"] = $nuevo->getApellidos() ?? $usuario->getApellidos();
         $param[":CONTRASENA"] = $nuevo->getContrasena() ?? $usuario->getContrasena();
         $param[":CIUDAD"] = $nuevo->getCiudad() ?? $usuario->getCiudad();
-        $param[":ROL"] = $nuevo->getRol() ?? $usuario->getRol();
 
 
         $this->db->ConsultaSimple($consulta, $param);

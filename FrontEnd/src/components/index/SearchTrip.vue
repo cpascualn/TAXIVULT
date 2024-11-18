@@ -106,7 +106,7 @@ const handleSubmit = async (e) => {
   const decoded = jwtDecode(token);
 
   const userRol = decoded.data.rol;
-  if (userRol == 2) {
+  if (userRol != 3) {
     alert("Solo para pasajeros");
     window.location.href = "/dashboard/";
   }
