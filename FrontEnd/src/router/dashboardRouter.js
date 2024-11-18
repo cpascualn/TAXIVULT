@@ -5,12 +5,14 @@ import { Roles } from './Roles'
 import Billing from "@/views/dashboard/Billing.vue"
 import Dashboard from "@/views/dashboard/Dashboard.vue"
 import UserProfile from "@/views/dashboard/examples-api/profile/UserProfile.vue"
-import UsersList from "@/views/dashboard/examples-api/users/UsersList.vue"
 import Notifications from "@/views/dashboard/Notifications.vue"
 import Profile from "@/views/dashboard/Profile.vue"
 import Tables from "@/views/dashboard/Tables.vue"
 import LoginView from '@/views/index/LoginView.vue'
 import authService from '@/services/auth.service';
+import Horarios from '@/views/dashboard/Horarios.vue'
+import Usuarios from '@/views/dashboard/Usuarios.vue'
+import Ciudades from '@/views/dashboard/Ciudades.vue'
 
 const dashboardRouter = createRouter({
     history: createWebHistory('/dashboard'),
@@ -54,7 +56,19 @@ const dashboardRouter = createRouter({
         {
             path: '/users',
             name: "Users",
-            component: UsersList,
+            component: Usuarios,
+            meta: { authorize: [Roles.Admin] },
+        },
+        {
+            path: '/horarios',
+            name: "Horarios",
+            component: Horarios,
+            meta: { authorize: [Roles.Admin] },
+        },
+        {
+            path: '/ciudades',
+            name: "Ciudades",
+            component: Ciudades,
             meta: { authorize: [Roles.Admin] },
         },
         {

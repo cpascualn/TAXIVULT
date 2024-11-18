@@ -122,9 +122,9 @@ class Usuario implements JsonSerializable
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'telefono' => $this->telefono,
             'nombre' => $this->nombre,
             'apellidos' => $this->apellidos,
+            'telefono' => $this->telefono,
             'contrasena' => $this->contrasena,
             'ciudad' => $this->ciudad,
             'fecha_creacion' => $this->fecha_creacion,

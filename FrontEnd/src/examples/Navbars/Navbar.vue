@@ -192,6 +192,7 @@ export default {
 
     logout() {
       this.$store.dispatch("auth/logout");
+      location.reload();
     },
   },
   components: {
