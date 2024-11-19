@@ -13,6 +13,7 @@
           class="m-1 btn-circle"
           title="edit"
           size="sm"
+          v-if="onEdit"
           @click="onEdit(this.item)"
         >
           <i class="fas fa-pen"></i>
@@ -23,6 +24,7 @@
           size="sm"
           color="danger"
           title="delete"
+          v-if="onDelete"
           @click="onDelete(this.item)"
         >
           <i class="fas fa-trash"></i>

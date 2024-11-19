@@ -38,7 +38,9 @@ export default {
     } catch (err) {
       console.log(err);
     }
-  }
+  },
+  async addCiudad(ciudad) {
+  },
 
 
 }

@@ -30,6 +30,7 @@ import Header from "./components/Header.vue";
 import LoadingPage from "@/components/index/LoadingPage.vue";
 import SearchTrip from "@/components/index/SearchTrip.vue";
 import LeafMap from "@/components/index/LeafMap.vue";
+import showSwal from "@/mixins/showSwal";
 import ModalStepperViaje from "@/components/index/ModalStepperViaje.vue";
 import { ref, watch } from "vue";
 import { jwtDecode } from "jwt-decode";
@@ -113,7 +114,11 @@ const handleFromSearch = (data) => {
       modelStep.value.openModal();
     }
   } else {
-    alert(" rellena todos los datos de la busqueda");
+    showSwal.methods.showSwal({
+      type: "error",
+      message: "rellena todos los datos de la busqueda",
+      width: 1000,
+    });
   }
 };
 
@@ -236,7 +241,11 @@ async function reservarViaje() {
   const respuesta = await viajeService.InsertarViaje(viaje.value);
   console.log(respuesta);
   if (respuesta && respuesta.success) {
-    alert(respuesta.message);
+    showSwal.methods.showSwal({
+      type: "success",
+      message: respuesta.message,
+      width: 1000,
+    });
   }
 }
 

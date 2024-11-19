@@ -35,7 +35,6 @@ onMounted(async () => {
 async function addUser() {
   const datos = await showSwal.methods.showAddUser();
   if (!datos) return;
-  console.log(datos);
   const data = await authService.register(datos);
   if (!data.success) {
     let finalMessage = data.error ? `ERROR: ${data.error}` : "ERROR";
@@ -136,7 +135,11 @@ async function deleteUser(user) {
         }
       })
       .catch((err) => {
-        alert(err);
+        showSwal.methods.showSwal({
+          type: "error",
+          message: err,
+          width: 500,
+        });
       });
   }
 }

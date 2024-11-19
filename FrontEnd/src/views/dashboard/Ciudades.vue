@@ -1,11 +1,11 @@
 <template>
   <DataTable
-    :item-type="'Usuarios'"
+    :item-type="'Ciudades'"
     :columns="columns"
-    :items="users"
-    v-on:add="addUser"
-    v-on:edit="editUser"
-    v-on:delete="deleteUser"
+    :items="ciudades"
+    v-on:add="addciudad"
+    v-on:edit="editciudad"
+    v-on:delete="deleteciudad"
     v-on:reload="reload"
   />
 </template>
@@ -13,30 +13,24 @@
 <script setup>
 import DataTable from "@/views/dashboard/components/DataTable.vue";
 import { onMounted, ref } from "vue";
-import userService from "@/services/user.service";
+import ciudadService from "@/services/ciudad.service";
 import showSwal from "@/mixins/showSwal";
 import authService from "@/services/auth.service";
-const columns = [
-  "Email",
-  "Nombre",
-  "Apellidos",
-  "Telefono",
-  "Ciudad",
-  "Fecha_creacion",
-  "Rol",
-];
-const users = ref([]);
+const columns = ["Nombre", "Comunidad", "Pais", "Lat", "Long"];
+const ciudades = ref([]);
 
 onMounted(async () => {
-  const data = await userService.getUsuarios();
-  users.value = data.usuarios;
+  const data = await ciudadService.getCiudades();
+  ciudades.value = data.ciudades;
 });
 
-async function addUser() {
-  const datos = await showSwal.methods.showAddUser();
+async function addciudad() {
+  //https://nominatim.openstreetmap.org/search?city=barcelona&country=es&format=json&limit=1
+  //recoger de esa api los lat,long y boundingbox con valores ["latMin","latMax","LongMin","LongMax"]
+  const datos = await showSwal.methods.showAddciudad();
   if (!datos) return;
   console.log(datos);
-  const data = await authService.register(datos);
+  const data = await ciudadService.addCiudad(datos);
   if (!data.success) {
     let finalMessage = data.error ? `ERROR: ${data.error}` : "ERROR";
     showSwal.methods.showSwal({
@@ -47,13 +41,13 @@ async function addUser() {
   } else {
     showSwal.methods.showSwal({
       type: "success",
-      message: "Usuario creado",
+      message: "Ciudad creado",
       width: 500,
     });
   }
 }
-async function editUser(user) {
-  console.log(user);
+async function editciudad(ciudad) {
+  console.log(ciudad);
 
   if (this.rol !== "administrador") {
     showSwal.methods.showSwal({
@@ -63,7 +57,7 @@ async function editUser(user) {
     });
     return;
   }
-  const newUser = {
+  const newciudad = {
     id: this.id,
     email: this.email,
     nombre: this.nombre,
@@ -71,22 +65,22 @@ async function editUser(user) {
     telefono: this.telefono,
   };
 
-  const datos = await showSwal.methods.showEditUser(newUser);
+  const datos = await showSwal.methods.showEditciudad(newciudad);
   if (!datos) return;
 
-  userService
-    .actualizarUsuario(datos)
+  ciudadeservice
+    .actualizarCiudad(datos)
     .then((result) => {
       if (result.success) {
         showSwal.methods.showSwal({
           type: "success",
-          message: "Usuario actualizado correctamente",
+          message: "Ciudad actualizado correctamente",
           width: 500,
         });
       } else {
         showSwal.methods.showSwal({
           type: "error",
-          message: "Error al editar el usuario",
+          message: "Error al editar el Ciudad",
           width: 500,
         });
       }
@@ -99,8 +93,8 @@ async function editUser(user) {
       });
     });
 }
-async function deleteUser(user) {
-  console.log(user);
+async function deleteciudad(ciudad) {
+  console.log(ciudad);
 
   if (this.rol === "administrador") {
     showSwal.methods.showSwal({
@@ -113,19 +107,19 @@ async function deleteUser(user) {
       .showSwalConfirmationDelete()
       .then((result) => {
         if (result.isConfirmed) {
-          userService
-            .eliminarUsuario(this.id)
+          ciudadservice
+            .eliminarCiudad(this.id)
             .then((result) => {
               if (result.success) {
                 showSwal.methods.showSwal({
                   type: "success",
-                  message: "Usuario eliminado correctamente",
+                  message: "Ciudad eliminado correctamente",
                   width: 500,
                 });
               } else {
                 showSwal.methods.showSwal({
                   type: "error",
-                  message: "Error al eliminar el usuario",
+                  message: "Error al eliminar el Ciudad",
                   width: 500,
                 });
               }
@@ -145,7 +139,7 @@ async function deleteUser(user) {
   }
 }
 async function reload() {
-  const data = await userService.getUsuarios();
-  users.value = data.usuarios;
+  const data = await ciudadservice.getCiudades();
+  ciudades.value = data.ciudades;
 }
 </script>

@@ -50,7 +50,9 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/disponibles', [ConductorController::class, 'HandleBuscarDisponiblesEnciudad']);
     });
     $group->group('/horarios', function (RouteCollectorProxy $group) {
+        $group->get('', [HorarioController::class, 'HandleListar']);
         $group->post('/buscarHora', [HorarioController::class, 'handleBuscarHorario']);
+        $group->patch('/{id:[0-9]+}', [HorarioController::class, 'handleActualizar']);
     });
     $group->group('/viajes', function (RouteCollectorProxy $group) {
         $group->get('', [ViajeController::class, 'HandleListar']);

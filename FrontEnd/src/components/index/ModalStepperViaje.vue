@@ -346,6 +346,7 @@
 
 <script setup>
 import { ref, defineEmits, defineProps, watch } from "vue";
+import showSwal from "@/mixins/showSwal";
 
 const emit = defineEmits(["step-change"]);
 const props = defineProps(["params"]); // Definir las props esperadas
@@ -391,14 +392,21 @@ const closeModal = () => {
 };
 
 const next = () => {
-  console.log(jsonData.value);
   if (step.value < titulos.length) {
     if (step.value == 1 && metodoPago.value == "") {
-      alert("selecciona un metodo de pago");
+      showSwal.methods.showSwal({
+      type: "error",
+      message: "selecciona un metodo de pago",
+      width: 500,
+    });
       return;
     }
     if (step.value == 2 && conductorSeleccionado.value == 0) {
-      alert("selecciona un conductor");
+      showSwal.methods.showSwal({
+      type: "error",
+      message: "selecciona un conductor",
+      width: 500,
+    });
       return;
     }
     step.value++;

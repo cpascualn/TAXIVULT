@@ -15,7 +15,7 @@ export default {
                 },
                 showConfirmButton: false,
                 showCloseButton: true,
-                timer: 2000,
+                timer: 5000,
                 timerProgressBar: true,
 
             });
@@ -73,7 +73,7 @@ export default {
                         Swal.showValidationMessage("Todos los campos son obligatorios");
                         return false; // Evita cerrar el modal
                     }
-                    // Puedes validar los valores aquí
+                    // validar valores
                     if (!regFormCheck.checkMail(email)) {
                         Swal.showValidationMessage('El correo no es válido.');
                         return false;
@@ -141,7 +141,7 @@ export default {
                         Swal.showValidationMessage("Todos los campos son obligatorios");
                         return false;
                     }
-                    // Puedes validar los valores aquí
+                    // validar valores
                     if (!regFormCheck.checkMail(email)) {
                         Swal.showValidationMessage('El correo no es válido.');
                         return false;
@@ -164,7 +164,55 @@ export default {
                     }
 
 
-                    return { id:admin.id, email, nombre, apellidos, telefono, contrasena };
+                    return { id: admin.id, email, nombre, apellidos, telefono, contrasena };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
+        },
+        async showEditHorario(horario) {
+            const { value: formValues } = await Swal.fire({
+                title: "Editar un Horario",
+                html: `
+                <label for="swal-input-tarifaDia" style="width: 4.9rem;">tarifaDia</label>
+                <input id="swal-input-tarifaDia" class="swal2-input" placeholder="tarifaDia" value="${horario.tarifa_dia}">
+
+                <label for="swal-input-tarifaMinuto" style="width: 4.9rem;">tarifaMinuto</label>
+                <input id="swal-input-tarifaMinuto" class="swal2-input" placeholder="tarifaMinuto" value="${horario.tarifa_minuto}">
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: () => {
+                    const tarifa_dia = document.getElementById("swal-input-tarifaDia").value;
+                    const tarifa_minuto = document.getElementById("swal-input-tarifaMinuto").value;
+
+
+                    if (!tarifa_dia || !tarifa_minuto) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false;
+                    }
+                    // validar valores
+                    const regex = /^(?:\d{1,2}|\d{1,2}\.\d{1,2})$/;
+                    if (!regex.test(tarifa_dia)) {
+                        Swal.showValidationMessage('La tarifa no es válida.');
+                        return false;
+                    }
+                    if (!regex.test(tarifa_minuto)) {
+                        Swal.showValidationMessage('La tarifa no es válida.');
+                        return false;
+                    }
+                    return {
+                        id: horario.id,
+                        nombre: horario.nombre,
+                        tarifa_dia,
+                        tarifa_minuto,
+                    };
                 },
             });
 

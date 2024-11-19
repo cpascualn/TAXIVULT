@@ -161,6 +161,7 @@ const submitForm = async (event) => {
       if (!data) throw new Error("Error de inicio de sesion");
       if (!data.success) throw new Error(data.error);
       router.push("/");
+      location.reload();
     } catch (error) {
       if (errMod.value) {
         errMod.value.openModal("ERROR DE INICIO DE SESION", error);

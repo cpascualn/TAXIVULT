@@ -40,6 +40,25 @@ class DaoHorario
 
         return $this->horarios;
     }
+    public function obtener($id)
+    {
+        $consulta = 'SELECT * FROM Horario WHERE id = :ID';
+        $param[':ID'] = $id;
+        $this->db->ConsultaDatos($consulta, $param);
+        $horario = null;
+        if (count($this->db->filas) > 0) {
+            $horario = new Horario();
+            $horario->setId($this->db->filas[0]['id']);
+            $horario->setNombre($this->db->filas[0]['nombre']);
+            $horario->setHoraIni1($this->db->filas[0]['hora_ini1']);
+            $horario->setHoraFin1($this->db->filas[0]['hora_fin1']);
+            $horario->setHoraIni2($this->db->filas[0]['hora_ini2']);
+            $horario->setHoraFin2($this->db->filas[0]['hora_fin2']);
+            $horario->setTarifaDia($this->db->filas[0]['tarifa_dia']);
+            $horario->setTarifaMinuto($this->db->filas[0]['tarifa_minuto']);
+        }
+        return $horario;
+    }
 
 
     public function buscarHorario($hora)
@@ -75,6 +94,18 @@ class DaoHorario
         }
 
         return $horario;
+    }
+
+    public function actualizar($id, $horario, $nuevo)          //Obtenemos el elemento a partir de su Id
+    {
+        $consulta = "UPDATE `Horario` SET tarifa_dia=:TARIFA_DIA, tarifa_minuto=:TARIFA_MINU WHERE id=:ID ";
+
+        $param = array();
+        $param[":ID"] = $id;
+        $param[":TARIFA_DIA"] = $nuevo->getTarifaDia() ?? $horario->getTarifaDia();
+        $param[":TARIFA_MINU"] = $nuevo->getTarifaMinuto() ?? $horario->getTarifaMinuto();
+        $this->db->ConsultaSimple($consulta, $param);
+
     }
 
 }

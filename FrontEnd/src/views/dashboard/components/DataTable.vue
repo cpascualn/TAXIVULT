@@ -12,9 +12,10 @@
               <div class="col-6 text-end">
                 <material-button
                   class="float-right btn btm-sm"
+                  v-if="onAdd"
                   @click="onAdd()"
                 >
-                  <i class="fas fa-user-plus me-2"></i>
+                  <i class="fa fa-plus-circle me-2"></i>
                   Añadir {{ itemType }}
                 </material-button>
               </div>
@@ -238,5 +239,10 @@ select {
 
 .col-9 {
   width: 70% !important;
+}
+@media (max-width: 1400px) {
+  .card-body {
+    overflow: auto;
+  }
 }
 </style>

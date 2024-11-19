@@ -75,6 +75,7 @@
 <script setup>
 import horarioService from "@/services/horario.service";
 import { jwtDecode } from "jwt-decode";
+import showSwal from "@/mixins/showSwal";
 import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import profileService from "@/services/profile.service";
@@ -107,22 +108,34 @@ const handleSubmit = async (e) => {
 
   const userRol = decoded.data.rol;
   if (userRol != 3) {
-    alert("Solo para pasajeros");
+    showSwal.methods.showSwal({
+      type: "error",
+      message: "Solo para pasajeros",
+      width: 1000,
+    });
     window.location.href = "/dashboard/";
   }
 
   // llamar a la api para ver si ya tiene viajes programados
   const viajes = await profileService.verViajes();
 
-  if (viajes && viajes.activos > 0 ) {
-    alert("Ya tienes un viaje programado");
-    window.location.href = "/dashboard/";
+  if (viajes && viajes.activos > 0) {
+    showSwal.methods.showSwal({
+      type: "error",
+      message: "Ya tienes un viaje programado",
+      width: 1000,
+    });
+    return;
   }
   const horario = await horarioService.getHorario({
     horario: datos.time,
   });
   if (horario && !horario.success) {
-    alert("Nuestros servicios no estan disponibles a esa hora");
+    showSwal.methods.showSwal({
+      type: "error",
+      message: "Nuestros servicios no estan disponibles a esa hora",
+      width: 1000,
+    });
     return;
   }
 
