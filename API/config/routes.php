@@ -60,6 +60,10 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/activoUsuario', [ViajeController::class, 'HandleObtenerViajesActivosUsuario']);
         $group->post('/usuario', [ViajeController::class, 'HandleObtenerViajesUsuario']);
     });
+    $group->group('/ciudades', function (RouteCollectorProxy $group) {
+        $group->post('/insertar', [CiudadController::class, 'HandleInsertar']);
+        $group->delete('/eliminar/{id:[0-9]+}', [CiudadController::class, 'HandleEliminar']);
+    });
 
 
 })->add(AddJsonResponseHeader::class)

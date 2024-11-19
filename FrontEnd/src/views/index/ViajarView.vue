@@ -206,9 +206,10 @@ async function verConductores() {
     ciudad.id
   );
   console.log(conductores);
-  
+
   if (!conductores) return null;
   if (!conductores.conductores) return null;
+  if (conductores.conductores.length === 0) return null;
   return conductores.conductores;
 }
 

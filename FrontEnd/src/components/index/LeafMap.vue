@@ -44,7 +44,7 @@ export default {
     router: null,
     startLocation: "",
     endLocation: "",
-    zoom: 14,
+    zoom: 13,
     center: [0, 0], //[lat,long]
     distance: "", // en metros
     time: "", // en segundos
@@ -211,14 +211,13 @@ export default {
     },
     async centerLocation() {
       const ciudad = await ciudadService.getCiudadUsuario();
-      let lati, longi;
+      //por defecto se hace zoom a madrid
+      let lati = 40.422476;
+      let longi = -3.696139;
       if (ciudad) {
         lati = ciudad.lat;
         longi = ciudad.long;
       }
-
-      lati = 40.422476;
-      longi = -3.696139;
 
       // si el usuario bloquea la ubicacion del navegador y se asgina la ubicacion de su ciudad , si la llamada falla se muestra madrid
       try {

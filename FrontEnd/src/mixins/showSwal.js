@@ -20,10 +20,10 @@ export default {
 
             });
         },
-        showSwalConfirmationDelete() {
+        showSwalConfirmationDelete(extraTxt = "") {
             const swalDelete = new Swal({
                 title: "¿Estas Seguro?",
-                text: "Este cambio es irreversible",
+                text: extraTxt + "Este cambio es irreversible",
                 showCancelButton: true,
                 confirmButtonText: "Sí, eliminar!",
                 cancelButtonText: "No, cancelar!",
@@ -212,6 +212,41 @@ export default {
                         nombre: horario.nombre,
                         tarifa_dia,
                         tarifa_minuto,
+                    };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
+        }, async showAddciudad() {
+            const { value: formValues } = await Swal.fire({
+                title: "Añadir una ciudad",
+                html: `
+                <label for="swal-input-ciudad" style="width: 4.9rem;">ciudad</label>
+                <input id="swal-input-ciudad" class="swal2-input" placeholder="ciudad">
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: () => {
+                    const ciudad = document.getElementById("swal-input-ciudad").value;
+
+
+                    if (!ciudad) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false;
+                    }
+                    // validar valores
+                    if (!regFormCheck.checkNombre(ciudad)) {
+                        Swal.showValidationMessage('La ciudad no es válida.');
+                        return false;
+                    }
+                    return {
+                        ciudad
                     };
                 },
             });

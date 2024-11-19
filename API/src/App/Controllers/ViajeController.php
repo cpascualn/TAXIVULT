@@ -51,8 +51,6 @@ class ViajeController
     {
         //recibir datos del body y validarlos
         try {
-            //code...
-
             $body = $request->getParsedBody();
             $validacion = $this->validarDatos($body);
             if (!$validacion['success']) {

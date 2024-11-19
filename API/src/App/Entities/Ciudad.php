@@ -13,6 +13,8 @@ class Ciudad implements JsonSerializable
     private $long_max;
     private $lat_min;
     private $lat_max;
+    private $usuarios;
+    private $viajes;
 
 
     public function __get($propiedad)
@@ -115,6 +117,22 @@ class Ciudad implements JsonSerializable
     {
         $this->lat_max = $lat_max;
     }
+    public function getUsuarios()
+    {
+        return $this->usuarios;
+    }
+    public function setUsuarios($usuarios)
+    {
+        $this->usuarios = $usuarios;
+    }
+    public function getViajes()
+    {
+        return $this->viajes;
+    }
+    public function setViajes($viajes)
+    {
+        $this->viajes = $viajes;
+    }
 
     // Implementación de JsonSerializable
 
@@ -131,6 +149,8 @@ class Ciudad implements JsonSerializable
             'long_max' => $this->getLong_max(),
             'lat_min' => $this->getLat_min(),
             'lat_max' => $this->getLat_max(),
+            'usuarios' => $this->getUsuarios(),
+            'viajes' => $this->getViajes(),
         ];
     }
 }

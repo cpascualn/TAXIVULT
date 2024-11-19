@@ -4,7 +4,6 @@
     :columns="columns"
     :items="ciudades"
     v-on:add="addciudad"
-    v-on:edit="editciudad"
     v-on:delete="deleteciudad"
     v-on:reload="reload"
   />
@@ -16,7 +15,15 @@ import { onMounted, ref } from "vue";
 import ciudadService from "@/services/ciudad.service";
 import showSwal from "@/mixins/showSwal";
 import authService from "@/services/auth.service";
-const columns = ["Nombre", "Comunidad", "Pais", "Lat", "Long"];
+const columns = [
+  "Nombre",
+  "Comunidad",
+  "Pais",
+  "Lat",
+  "Long",
+  "Usuarios",
+  "Viajes",
+];
 const ciudades = ref([]);
 
 onMounted(async () => {
@@ -25,14 +32,22 @@ onMounted(async () => {
 });
 
 async function addciudad() {
-  //https://nominatim.openstreetmap.org/search?city=barcelona&country=es&format=json&limit=1
-  //recoger de esa api los lat,long y boundingbox con valores ["latMin","latMax","LongMin","LongMax"]
-  const datos = await showSwal.methods.showAddciudad();
-  if (!datos) return;
-  console.log(datos);
-  const data = await ciudadService.addCiudad(datos);
-  if (!data.success) {
-    let finalMessage = data.error ? `ERROR: ${data.error}` : "ERROR";
+  const nombreCiu = await showSwal.methods.showAddciudad();
+  if (!nombreCiu) return;
+  const ciudad = await obtenerDatosCiudad(nombreCiu.ciudad);
+  if (!ciudad) {
+    showSwal.methods.showSwal({
+      type: "error",
+      message: "No se encontró información para esta ciudad.",
+      width: 500,
+    });
+    return;
+  }
+  console.log(ciudad);
+
+  const response = await ciudadService.addCiudad(ciudad);
+  if (!response.success) {
+    let finalMessage = response.error ? `ERROR: ${response.error}` : "ERROR";
     showSwal.methods.showSwal({
       type: "error",
       message: finalMessage,
@@ -41,48 +56,52 @@ async function addciudad() {
   } else {
     showSwal.methods.showSwal({
       type: "success",
-      message: "Ciudad creado",
+      message: "Ciudad creada",
       width: 500,
     });
   }
 }
-async function editciudad(ciudad) {
+async function deleteciudad(ciudad) {
   console.log(ciudad);
-
-  if (this.rol !== "administrador") {
+  // si la ciudad tiene algun usuario no se puede borrar
+  if (ciudad.usuarios > 0) {
     showSwal.methods.showSwal({
       type: "error",
-      message: "Solo puedes editar Administradores",
+      message: "No puedes borrar una ciudad con usuarios",
       width: 500,
     });
     return;
   }
-  const newciudad = {
-    id: this.id,
-    email: this.email,
-    nombre: this.nombre,
-    apellidos: this.apellidos,
-    telefono: this.telefono,
-  };
-
-  const datos = await showSwal.methods.showEditciudad(newciudad);
-  if (!datos) return;
-
-  ciudadeservice
-    .actualizarCiudad(datos)
+  showSwal.methods
+    .showSwalConfirmationDelete(
+      "¡Se ELIMINARÁN todos los VIAJES relacionados! , "
+    )
     .then((result) => {
-      if (result.success) {
-        showSwal.methods.showSwal({
-          type: "success",
-          message: "Ciudad actualizado correctamente",
-          width: 500,
-        });
-      } else {
-        showSwal.methods.showSwal({
-          type: "error",
-          message: "Error al editar el Ciudad",
-          width: 500,
-        });
+      if (result.isConfirmed) {
+        ciudadService
+          .deleteCiudad(ciudad.id)
+          .then((result) => {
+            if (result.success) {
+              showSwal.methods.showSwal({
+                type: "success",
+                message: "Ciudad eliminada correctamente",
+                width: 500,
+              });
+            } else {
+              showSwal.methods.showSwal({
+                type: "error",
+                message: "Error al eliminar el Ciudad",
+                width: 500,
+              });
+            }
+          })
+          .catch((err) => {
+            showSwal.methods.showSwal({
+              type: "error",
+              message: err,
+              width: 500,
+            });
+          });
       }
     })
     .catch((err) => {
@@ -93,53 +112,78 @@ async function editciudad(ciudad) {
       });
     });
 }
-async function deleteciudad(ciudad) {
-  console.log(ciudad);
-
-  if (this.rol === "administrador") {
-    showSwal.methods.showSwal({
-      type: "error",
-      message: "No puedes borrar a un administrador",
-      width: 500,
-    });
-  } else {
-    showSwal.methods
-      .showSwalConfirmationDelete()
-      .then((result) => {
-        if (result.isConfirmed) {
-          ciudadservice
-            .eliminarCiudad(this.id)
-            .then((result) => {
-              if (result.success) {
-                showSwal.methods.showSwal({
-                  type: "success",
-                  message: "Ciudad eliminado correctamente",
-                  width: 500,
-                });
-              } else {
-                showSwal.methods.showSwal({
-                  type: "error",
-                  message: "Error al eliminar el Ciudad",
-                  width: 500,
-                });
-              }
-            })
-            .catch((err) => {
-              showSwal.methods.showSwal({
-                type: "error",
-                message: err,
-                width: 500,
-              });
-            });
-        }
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  }
-}
 async function reload() {
-  const data = await ciudadservice.getCiudades();
+  const data = await ciudadService.getCiudades();
   ciudades.value = data.ciudades;
+}
+
+//recoger de esa api los datos:nombre,comunidad, lat,long y boundingbox con valores ["latMin","latMax","LongMin","LongMax"]
+async function obtenerDatosCiudad(ciudad) {
+  // Lista de comunidades autónomas
+  const url = `https://nominatim.openstreetmap.org/search?city=${ciudad}&country=es&format=json&limit=1`;
+
+  try {
+    const respuesta = await fetch(url);
+    const datos = await respuesta.json();
+    if (datos.length === 0) return null;
+    const comunidades = [
+      "Andalucía",
+      "Aragón",
+      "Asturias",
+      "Cantabria",
+      "Castilla-La Mancha",
+      "Castilla y León",
+      "Cataluña",
+      "Extremadura",
+      "Galicia",
+      "Madrid",
+      "Murcia",
+      "Navarra",
+      "La Rioja",
+      "País Vasco",
+      "Valencia",
+      "Islas Baleares",
+      "Islas Canarias",
+      "Ceuta",
+      "Melilla",
+    ];
+
+    const nombre = datos[0].name;
+    const displayName = datos[0].display_name;
+    const partes = displayName.split(",").map((p) => p.trim());
+    // Buscar la comunidad autónoma en las partes del display_name
+    let comunidad = partes.find((parte) => comunidades.includes(parte));
+    if (!comunidad) {
+      comunidad = datos.display_name;
+    }
+    let lat = datos[0].lat;
+    let long = datos[0].lon;
+    let lat_min = datos[0].boundingbox[0];
+    let lat_max = datos[0].boundingbox[1];
+    let long_min = datos[0].boundingbox[2];
+    let long_max = datos[0].boundingbox[3];
+
+    // limitar la cadena a 12 digitos
+    lat = lat.length > 12 ? lat.slice(0, 12) : lat;
+    long = long.length > 12 ? long.slice(0, 12) : long;
+    lat_min = lat_min.length > 12 ? lat_min.slice(0, 12) : lat_min;
+    lat_max = lat_max.length > 12 ? lat_max.slice(0, 12) : lat_max;
+    long_min = long_min.length > 12 ? long_min.slice(0, 12) : long_min;
+    long_max = long_max.length > 12 ? long_max.slice(0, 12) : long_max;
+
+    return {
+      nombre,
+      comunidad,
+      pais: "España",
+      lat,
+      long,
+      lat_min,
+      lat_max,
+      long_min,
+      long_max,
+    };
+  } catch (error) {
+    return null;
+  }
 }
 </script>

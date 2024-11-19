@@ -18,7 +18,7 @@ class DaoCiudad
 
     public function listar()
     {
-        $consulta = 'SELECT * FROM Ciudad';
+        $consulta = 'SELECT c.*,(SELECT count(*) from Usuario where ciudad = c.id) as usuarios,(SELECT count(*)  FROM Viaje where ciudad = c.id) as viajes from Ciudad c';
 
         $this->ciudades = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
@@ -36,6 +36,8 @@ class DaoCiudad
             $ciu->setLong_max($fila['long_max']);
             $ciu->setLat_min($fila['lat_min']);
             $ciu->setLat_max($fila['lat_max']);
+            $ciu->setUsuarios($fila['usuarios']);
+            $ciu->setViajes($fila['viajes']);
 
             $this->ciudades[] = $ciu;   //Insertamos el objeto con los valores de esa fila en el array de objetos
         }
@@ -99,4 +101,33 @@ class DaoCiudad
         return $ciu;
     }
 
+    public function insertar($ciudad)
+    {
+        $consulta = 'INSERT INTO Ciudad (`nombre`, `comunidad`, `pais`, `lat_min`, `lat_max`, `long_min`, `long_max`, `lat`, `long`)
+                     VALUES(:NOMBRE, :COMUNIDAD, :PAIS, :LAT_MIN, :LAT_MAX, :LONG_MIN, :LONG_MAX, :LAT, :LONG)';
+        $param = array(
+            ":NOMBRE" => $ciudad->getNombre(),
+            ":COMUNIDAD" => $ciudad->getComunidad(),
+            ":PAIS" => $ciudad->getPais(),
+            ":LAT_MIN" => $ciudad->getLat_min(),
+            ":LAT_MAX" => $ciudad->getLat_max(),
+            ":LONG_MIN" => $ciudad->getLong_min(),
+            ":LONG_MAX" => $ciudad->getLong_max(),
+            ":LAT" => $ciudad->getLat(),
+            ":LONG" => $ciudad->getLong(),
+        );
+
+        $this->db->ConsultaSimple($consulta, $param);
+    }
+
+    public function eliminar($id)
+    {
+        $consulta = 'DELETE FROM Ciudad WHERE id=:ID';
+        $param = array(
+            ":ID" => $id
+        );
+
+
+        $this->db->ConsultaSimple($consulta, $param);
+    }
 }
