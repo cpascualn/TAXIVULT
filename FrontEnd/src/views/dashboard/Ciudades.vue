@@ -120,7 +120,7 @@ async function reload() {
 //recoger de esa api los datos:nombre,comunidad, lat,long y boundingbox con valores ["latMin","latMax","LongMin","LongMax"]
 async function obtenerDatosCiudad(ciudad) {
   // Lista de comunidades autónomas
-  const url = `https://nominatim.openstreetmap.org/search?city=${ciudad}&country=es&format=json&limit=1`;
+  const url = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(ciudad)}&country=es&format=json&limit=1`;
 
   try {
     const respuesta = await fetch(url);

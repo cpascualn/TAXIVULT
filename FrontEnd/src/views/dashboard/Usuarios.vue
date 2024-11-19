@@ -52,27 +52,35 @@ async function addUser() {
   }
 }
 async function editUser(user) {
-  if (user.rol !== "administrador") {
-    showSwal.methods.showSwal({
-      type: "error",
-      message: "Solo puedes editar Administradores",
-      width: 500,
-    });
-    return;
-  }
-  const newUser = {
+  let data;
+  if (user.rol === "administrador") {
+    const newUser = {
     id: user.id,
     email: user.email,
     nombre: user.nombre,
     apellidos: user.apellidos,
     telefono: user.telefono,
   };
-
-  const datos = await showSwal.methods.showEditUser(newUser);
-  if (!datos) return;
+    const datos = await showSwal.methods.showEditAdmin(newUser);
+    if (!datos) return;
+    data = datos;
+  } else {
+    const newUser = {
+    id: user.id,
+    email: user.email,
+    nombre: user.nombre,
+    apellidos: user.apellidos,
+    telefono: user.telefono,
+    ciudad:user.ciudad,
+    rol: user.rol,
+  };
+    const datos = await showSwal.methods.showEditUser(newUser);
+    if (!datos) return;
+    data = datos;
+  }
 
   userService
-    .actualizarUsuario(datos)
+    .actualizarUsuario(data)
     .then((result) => {
       if (result.success) {
         showSwal.methods.showSwal({
