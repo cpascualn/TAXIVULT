@@ -65,7 +65,7 @@ const redirigirDash = () => {
   window.location.href = "/dashboard";
 };
 const redirigirViajes = () => {
-  window.location.href = "/dashboard/tables";
+  window.location.href = "/dashboard/viajes";
 };
 </script>
 

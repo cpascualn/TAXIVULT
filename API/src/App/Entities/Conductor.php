@@ -5,6 +5,12 @@ class Conductor implements JsonSerializable
 {
     private $id;
     private $dni;
+    private $email;
+    private $telefono;
+    private $nombre;
+    private $apellidos;
+    private $ciudad;
+    private $fecha_creacion;
     private $licencia_taxista;
     private $titular_tarjeta;
     private $iban_tarjeta;
@@ -14,6 +20,7 @@ class Conductor implements JsonSerializable
     private $estado;
     private $coche;
     private $horario;
+    private $viajes;
 
 
     public function __get($propiedad)
@@ -47,6 +54,37 @@ class Conductor implements JsonSerializable
     {
         $this->dni = $dni;
     }
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    public function getApellidos()
+    {
+        return $this->apellidos;
+    }
+
+
+    public function getCiudad()
+    {
+        return $this->ciudad;
+    }
+
+    public function getFechaCreacion()
+    {
+        return $this->fecha_creacion;
+    }
+
 
     public function getLicenciaTaxista()
     {
@@ -138,6 +176,42 @@ class Conductor implements JsonSerializable
         $this->horario = $horario;
     }
 
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+    }
+
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+    }
+
+    public function setApellidos($apellidos)
+    {
+        $this->apellidos = $apellidos;
+    }
+
+    public function setCiudad($ciudad)
+    {
+        $this->ciudad = $ciudad;
+    }
+
+    public function setFechaCreacion($fecha_creacion)
+    {
+        $this->fecha_creacion = $fecha_creacion;
+    }
+    public function setViajes($viajes){
+        $this->viajes = $viajes;
+    }
+    public function getViajes(){
+        return $this->viajes;
+    }
+
     // Implementación de JsonSerializable
 
     public function jsonSerialize(): array
@@ -145,15 +219,22 @@ class Conductor implements JsonSerializable
         return [
             'id' => $this->getId(),
             'dni' => $this->getDni(),
+            'email' => $this->getEmail(),
+            'telefono' => $this->getTelefono(),
+            'nombre' => $this->getNombre(),
+            'apellidos' => $this->getApellidos(),
             'licencia_taxista' => $this->getLicenciaTaxista(),
             'titular_tarjeta' => $this->getTitularTarjeta(),
             'iban_tarjeta' => $this->getIbanTarjeta(),
             'ubi_espera' => $this->getUbiEspera(),
             'long_espera' => $this->getLongEspera(),
             'lati_espera' => $this->getLatiEspera(),
-            'estado' => $this->getEstado(),
             'coche' => $this->getCoche(),
+            'ciudad' => $this->getCiudad(),
             'horario' => $this->getHorario(),
+            'estado' => $this->getEstado(),
+            'fecha_creacion' => $this->getFechaCreacion(),
+            'viajes'=>$this->getViajes(),
         ];
     }
 }

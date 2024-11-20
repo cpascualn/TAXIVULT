@@ -130,19 +130,16 @@
     <div class="row">
       <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
         <project-card
-          title="Projects"
-          description="<i class='fa fa-check text-info' aria-hidden='true'></i> <span class='font-weight-bold ms-1'>30 done</span> this month"
-          :headers="['Companies', 'Members', 'Budget', 'Progress']"
+          title="Ciudades"
+          :headers="['Ciudad', 'Usuarios', 'dinero Total','viajes']"
           :projects="[
             {
-              logo: logoXD,
               title: 'Material XD Material XD Version',
               members: [team1, team2, team3, team4],
               budget: '$14,000',
-              progress: { percentage: 60, color: 'info' },
+              progress: { percentage: 100, color: 'info' },
             },
             {
-              logo: logoSpotify,
               title: 'Launch our Mobile App',
               members: [team4, team3, team4, team1],
               budget: '$20,500',
@@ -150,6 +147,32 @@
             },
           ]"
         />
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <timeline-list
+          class="h-100"
+          title="Horarios"
+          description="<i class='fa fa-arrow-up text-success' aria-hidden='true'></i>
+        <span class='font-weight-bold'>24%</span> this month"
+        >
+          <timeline-item
+            :icon="{
+              component: 'light_mode',
+              class: 'text-warning',
+            }"
+            title="$2400 nombre horario y dinero generado"
+            date-time="22 DEC 7:20 PM"
+          />
+          <TimelineItem
+            :icon="{
+              component: 'dark_mode',
+              class: 'text-dark',
+            }"
+            title="New order #1832412"
+            date-time="21 DEC 11 PM"
+          />
+        
+        </timeline-list>
       </div>
     </div>
   </div>

@@ -15,6 +15,36 @@ class VehiculoController
     ) {
     }
 
+    public function Handlelistar(Request $request, Response $response)
+    {
+
+        $this->daoVeh->listar();
+
+        $body = json_encode(['vehiculos' => $this->daoVeh->vehiculos, 'success' => true]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+
+    public function HandlelistarLibres(Request $request, Response $response)
+    {
+
+        $this->daoVeh->listarLibres();
+
+        $body = json_encode(['vehiculos' => $this->daoVeh->vehiculos, 'success' => true]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+    public function HandleObtenerPorMatricula(Request $request, Response $response)
+    {
+        $body = $request->getParsedBody();
+        $vehiculo = $this->daoVeh->obtenerPorMatricula($body['matricula']);
+
+        $body = json_encode(['vehiculo' => $vehiculo, 'success' => true]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+
+
     public function handleInsertar(Request $request, Response $response)
     {
         try {
@@ -130,13 +160,13 @@ class VehiculoController
         $v = new Validator($body);
         $v->mapFieldsRules([
             'id' => ['integer'],  // Validación para ID autoincremental
-            'matricula' => ['required', ['lengthMax' , 12], ['regex', '/^\d{4}\s?[A-Z]{3}$/']],  // matricula
-            'capacidad' => ['required', 'integer', ['min' , 5]],  // minimo para 5 pasajeros
-            'fabricante' => ['required', ['lengthMax' , 30]],  // Máximo de 30 caracteres
-            'modelo' => ['required', ['lengthMax' , 30]],  // Máximo de 30 caracteres
+            'matricula' => ['required', ['lengthMax', 12], ['regex', '/^\d{4}\s?[A-Z]{3}$/']],  // matricula
+            'capacidad' => ['required', 'integer', ['min', 5]],  // minimo para 5 pasajeros
+            'fabricante' => ['required', ['lengthMax', 30]],  // Máximo de 30 caracteres
+            'modelo' => ['required', ['lengthMax', 30]],  // Máximo de 30 caracteres
             'tipo' => ['required', ['in', ['comun', 'van']]],  // Solo acepta 'comun' o 'van'
             'imagen' => ['optional'],  // Validación para datos binarios
-            'conductor' => ['integer','optional']  // Entero opcional (puede ser NULL)
+            'conductor' => ['integer', 'optional']  // Entero opcional (puede ser NULL)
         ]);
 
         if (!$v->validate()) {

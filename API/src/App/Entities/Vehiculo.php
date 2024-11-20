@@ -114,13 +114,13 @@ class Vehiculo implements JsonSerializable
     public function jsonSerialize(): mixed
     {
         return [
+            'imagen' => $this->imagen,
             'id' => $this->id,
             'matricula' => $this->matricula,
             'capacidad' => $this->capacidad,
             'fabricante' => $this->fabricante,
             'modelo' => $this->modelo,
             'tipo' => $this->tipo,
-            'imagen' => $this->imagen,
             'conductor' => $this->conductor,
         ];
     }

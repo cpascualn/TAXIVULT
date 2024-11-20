@@ -1,6 +1,8 @@
 import Swal from "sweetalert2";
 import regFormCheck from "./regFormCheck";
 import ciudadService from "@/services/ciudad.service";
+import horarioService from "@/services/horario.service";
+import vehiculosService from "@/services/vehiculos.service";
 
 export default {
     methods: {
@@ -351,6 +353,103 @@ export default {
                     return {
                         ciudad
                     };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
+        },
+        async showEditConductor(conductor) {
+            // recoger coches 
+            const response = await vehiculosService.getVehiculosLibres();
+            let coches = [];
+            let cocheActual = await vehiculosService.getVehiculosMatricula(conductor.coche);
+
+            cocheActual = { id: cocheActual.vehiculo.id, matricula: cocheActual.vehiculo.matricula }
+            if (response.success) {
+                response.vehiculos.forEach((coche) => {
+                    coches.push({ id: coche.id, matricula: coche.matricula });
+                });
+            }
+
+            //recoger horarios
+            const response2 = await horarioService.getHorarios();
+            let horarios = [];
+            let horarioActual;
+            if (response2.success) {
+                response2.horarios.forEach((horario) => {
+                    horarios.push({ id: horario.id, nombre: horario.nombre });
+                });
+                horarioActual = horarios.find((horario) => horario.nombre === conductor.horario);
+            }
+
+            const { value: formValues } = await Swal.fire({
+                title: "Editar un Conductor",
+                html: `
+                 <label for="swal-select-coche"style="width: 4.5rem;"> Coches Libres </label>
+                <select
+                  id="swal-select-coche"
+                  class="swal2-select"
+                  autocomplete="usuario.coche"
+                  placeholder="coche"
+                  required
+                >
+                  <option value="${cocheActual.matricula}" selected style="color: black;">${cocheActual.matricula}</option>
+
+                ${coches.map(coche => {
+                    if (coche.id === cocheActual.id) return '';
+                    return `
+                    <option
+                    value="${coche.matricula}"
+                    style="color: black;"
+                    >
+                    ${coche.matricula}
+                    </option>
+                `
+                }).join('')}
+                </select>
+
+                 <label for="swal-select-horario"style="width: 4.5rem;"> Horario </label>
+                <select
+                  id="swal-select-horario"
+                  class="swal2-select"
+                  autocomplete="usuario.horario"
+                  placeholder="horario"
+                  required
+                >
+                  <option value="${horarioActual.id}" selected style="color: black;">${horarioActual.nombre}</option>
+
+                ${horarios.map(horario => {
+                    if (horario.id === horarioActual.id) return '';
+                    return `
+                    <option
+                    value="${horario.id}"
+                    style="color: black;"
+                    >
+                    ${horario.nombre}
+                    </option>
+                `
+                }).join('')}
+                </select>
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: () => {
+                    const coche = document.getElementById("swal-select-coche").value;
+                    const horario = document.getElementById("swal-select-horario").value;
+
+
+                    if (!coche || !horario) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false;
+                    }
+
+                    return { id: conductor.id, matricula:coche, horario };
                 },
             });
 

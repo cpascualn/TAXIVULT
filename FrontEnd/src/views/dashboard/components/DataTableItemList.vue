@@ -4,9 +4,8 @@
       v-for="(value, key) in this.filteredItems"
       :key="key"
       class="text-sm font-weight-normal"
-    >
-      {{ value }}
-    </td>
+      v-html="renderColumn(value, key)"
+    ></td>
     <td class="text-sm font-weight-normal">
       <div class="text-end">
         <material-button
@@ -59,6 +58,20 @@ export default {
             .includes(key.toLowerCase())
         )
       );
+    },
+  },
+  methods: {
+    renderColumn(value, key) {
+      const colores = {
+        libre: "success",
+        "fuera de servicio": "secondary",
+        ocupado: "danger",
+      };
+
+      if (key === "estado") {
+        return `<span class="badge badge-sm bg-gradient-${colores[value]}">${value}</span>`;
+      }
+      return value;
     },
   },
 };

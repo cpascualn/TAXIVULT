@@ -63,7 +63,7 @@
                     {{ valor }} <i class="fa fa-sort" aria-hidden="true"></i>
                   </th>
 
-                  <th class="text-end">Acciones</th>
+                  <th class="text-end" v-if="onEdit || onDelete">Acciones</th>
                 </tr>
               </thead>
               <tbody>

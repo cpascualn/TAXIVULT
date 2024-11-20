@@ -100,11 +100,8 @@ class ConductorController
         return $response->withStatus(200);
     }
 
-    public function HandleActualizar(Request $request, Response $response, array $args)
+    public function HandleActualizar(Request $request, Response $response, $id)
     {
-
-        $id = $args['id'];
-
         //comprobar que existe
         $conductor = $this->daoCon->obtener($id);
         if ($conductor === null) {
@@ -129,10 +126,7 @@ class ConductorController
         $nuevo = $this->crearConductor($id, $body);
         $this->daoCon->actualizar($id, $conductor, $nuevo);
         $nuevo = $this->daoCon->obtener($id);
-        $valores = ': ';
-        foreach ($body as $key => $value) {
-            $valores .= $key . ', ';
-        }
+
         $body = json_encode([
             'message' => 'valores actualizados en el usuario ' . $id,
             'success' => true
@@ -345,16 +339,16 @@ class ConductorController
     {
         $v = new Validator($body);
         $v->mapFieldsRules([
-            'dni' => ['required', ['lengthMax', 15]],  // Campo obligatorio, longitud máxima de 15
+            'dni' => [ ['lengthMax', 15]],  // Campo obligatorio, longitud máxima de 15
             'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
             'ubiEspera' => [['lengthMax', 1000]],
-            'lonEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
-            'latEspera' => ['required', 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
-            'estado' => ['required', ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
+            'lonEspera' => [ 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
+            'latEspera' => [ 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
+            'estado' => [ ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
-            'horario' => ['required', 'integer']
+            'horario' => [ 'integer']
         ]);
 
         if (!$v->validate()) {

@@ -7,12 +7,13 @@ import Dashboard from "@/views/dashboard/Dashboard.vue"
 import UserProfile from "@/views/dashboard/examples-api/profile/UserProfile.vue"
 import Notifications from "@/views/dashboard/Notifications.vue"
 import Profile from "@/views/dashboard/Profile.vue"
-import Tables from "@/views/dashboard/Tables.vue"
-import LoginView from '@/views/index/LoginView.vue'
 import authService from '@/services/auth.service';
 import Horarios from '@/views/dashboard/Horarios.vue'
 import Usuarios from '@/views/dashboard/Usuarios.vue'
 import Ciudades from '@/views/dashboard/Ciudades.vue'
+import Conductores from '@/views/dashboard/Conductores.vue'
+import Vehiculos from '@/views/dashboard/Vehiculos.vue'
+import Viajes from '@/views/dashboard/Viajes.vue'
 
 const dashboardRouter = createRouter({
     history: createWebHistory('/dashboard'),
@@ -21,12 +22,6 @@ const dashboardRouter = createRouter({
             path: '',
             name: 'Dashboard',
             component: Dashboard,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
-            path: "/tables",
-            name: "Tables",
-            component: Tables,
             meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },
         {
@@ -54,8 +49,8 @@ const dashboardRouter = createRouter({
             meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },
         {
-            path: '/users',
-            name: "Users",
+            path: '/usuarios',
+            name: "Usuarios",
             component: Usuarios,
             meta: { authorize: [Roles.Admin] },
         },
@@ -72,10 +67,22 @@ const dashboardRouter = createRouter({
             meta: { authorize: [Roles.Admin] },
         },
         {
-            path: "/login",
-            name: "Login",
-            component: LoginView,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
+            path: '/conductores',
+            name: "Conductores",
+            component: Conductores,
+            meta: { authorize: [Roles.Admin] },
+        },
+        {
+            path: '/vehiculos',
+            name: "Vehiculos",
+            component: Vehiculos,
+            meta: { authorize: [Roles.Admin] },
+        },
+        {
+            path: '/viajes',
+            name: "Viajes",
+            component: Viajes,
+            meta: { authorize: [Roles.Admin] },
         },
     ]
 });

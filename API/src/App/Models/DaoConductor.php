@@ -22,14 +22,18 @@ class DaoConductor extends Database
     //lista de conductores
     public function listar()
     {
-        $consulta = "SELECT * FROM Conductor";
+        $consulta = "SELECT c.*,u.*,ciu.nombre as ciudad_nombre,h.nombre as horario_nombre,(SELECT count(*)  FROM Viaje where id_conductor = c.id) as viajes FROM Conductor c JOIN Usuario u ON u.id = c.id  join Ciudad ciu on u.ciudad = ciu.id join Horario h on h.id = c.horario ";
         $this->db->ConsultaDatos($consulta);
 
         $this->conductores = [];
-        foreach ($this->filas as $fila) {
+        foreach ($this->db->filas as $fila) {
             $con = new Conductor();
             $con->setId($fila['id']);
             $con->setDni($fila['dni']);
+            $con->setEmail($fila['email']);
+            $con->setTelefono($fila['telefono']);
+            $con->setNombre($fila['nombre']);
+            $con->setApellidos($fila['apellidos']);
             $con->setLicenciaTaxista($fila['licencia_taxista']);
             $con->setTitularTarjeta($fila['titular_tarjeta']);
             $con->setIbanTarjeta($fila['iban_tarjeta']);
@@ -38,7 +42,10 @@ class DaoConductor extends Database
             $con->setLatiEspera($fila['lati_espera']);
             $con->setEstado($fila['estado']);
             $con->setCoche($fila['coche']);
-            $con->setHorario($fila['horario']);
+            $con->setHorario($fila['horario_nombre']);
+            $con->setCiudad($fila['ciudad_nombre']);
+            $con->setFechaCreacion($fila['fecha_creacion']);
+            $con->setViajes($fila['viajes']);
 
             $this->conductores[] = $con;   //Insertamos el objeto con los valores de esa fila en el array de objetos
 
@@ -56,8 +63,8 @@ class DaoConductor extends Database
 
         $conductor = null;
 
-        if (count($this->filas) == 1) {
-            $fila = $this->filas[0];  //Recuperamos la fila devuelta
+        if (count($this->db->filas) == 1) {
+            $fila = $this->db->filas[0];  //Recuperamos la fila devuelta
             $conductor = new Conductor();
             $conductor->setId($fila['id']);
             $conductor->setDni($fila['dni']);
@@ -233,10 +240,10 @@ class DaoConductor extends Database
     )
                     ";
 
-        $hora_ini_time = date("H:i:s", ($hora_ini/1000));
-        $hora_fin_time = date("H:i:s", ($hora_fin/1000));
-        $hora_ini_formated = $hora_ini/1000;
-        $hora_fin_formated = $hora_fin/1000;
+        $hora_ini_time = date("H:i:s", ($hora_ini / 1000));
+        $hora_fin_time = date("H:i:s", ($hora_fin / 1000));
+        $hora_ini_formated = $hora_ini / 1000;
+        $hora_fin_formated = $hora_fin / 1000;
         $param = array(
             ":HORA_INI" => $hora_ini_formated,
             ":HORA_FIN" => $hora_fin_formated,

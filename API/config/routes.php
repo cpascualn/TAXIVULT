@@ -8,6 +8,7 @@ use App\Controllers\UsuarioController;
 use App\Controllers\CiudadController;
 use App\Controllers\ConductorController;
 use App\Controllers\HorarioController;
+use App\Controllers\VehiculoController;
 use App\Controllers\ViajeController;
 use App\Middleware\AllowCorsMiddleware;
 use Slim\Psr7\Request;
@@ -44,10 +45,12 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->delete('/{id:[0-9]+}', [UsuarioController::class, 'HandleEliminar']);
     });
     $group->group('/conductores', function (RouteCollectorProxy $group) {
+        $group->get('', [ConductorController::class, 'HandleListar']);
         $group->patch('/reload', [ConductorController::class, 'HandleReload']);
         $group->patch('/{accion:(?:ocupar|liberar)}/{id:[0-9]+}', [ConductorController::class, 'HandleEstado']);
         $group->get('/libres/{id:[0-9]+}', [ConductorController::class, 'HandleBuscarLibresEnciudad']);
         $group->post('/disponibles', [ConductorController::class, 'HandleBuscarDisponiblesEnciudad']);
+        $group->patch('/actualizar/{id:[0-9]+}', [ConductorController::class, 'HandleActualizar']);
     });
     $group->group('/horarios', function (RouteCollectorProxy $group) {
         $group->get('', [HorarioController::class, 'HandleListar']);
@@ -65,6 +68,11 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->delete('/eliminar/{id:[0-9]+}', [CiudadController::class, 'HandleEliminar']);
     });
 
+    $group->group('/vehiculos', function (RouteCollectorProxy $group) {
+        $group->get('', [VehiculoController::class, 'HandleListar']);
+        $group->get('/libres', [VehiculoController::class, 'HandleListarLibres']);
+        $group->post('/matricula', [VehiculoController::class, 'HandleObtenerPorMatricula']);
+    });
 
 })->add(AddJsonResponseHeader::class)
     ->add(new FilterByRolMiddleware([$adminRol, $conductorRol, $pasajeroRol]))
