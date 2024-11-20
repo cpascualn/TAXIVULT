@@ -67,11 +67,13 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/insertar', [CiudadController::class, 'HandleInsertar']);
         $group->delete('/eliminar/{id:[0-9]+}', [CiudadController::class, 'HandleEliminar']);
     });
-
     $group->group('/vehiculos', function (RouteCollectorProxy $group) {
         $group->get('', [VehiculoController::class, 'HandleListar']);
         $group->get('/libres', [VehiculoController::class, 'HandleListarLibres']);
         $group->post('/matricula', [VehiculoController::class, 'HandleObtenerPorMatricula']);
+        $group->post('/insertar', [VehiculoController::class, 'HandleInsertar']);
+        $group->delete('/eliminar/{id:[0-9]+}', [VehiculoController::class, 'handleBorrarVehiculo']);
+        $group->patch('/actualizar/{id:[0-9]+}', [VehiculoController::class, 'handleActualizar']);
     });
 
 })->add(AddJsonResponseHeader::class)

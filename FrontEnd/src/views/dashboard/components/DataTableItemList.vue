@@ -35,8 +35,6 @@
 
 <script>
 import MaterialButton from "@/components/dashboard/MaterialButton.vue";
-import showSwal from "@/mixins/showSwal";
-import userService from "@/services/user.service";
 
 export default {
   name: "UserItemList",
@@ -71,6 +69,13 @@ export default {
       if (key === "estado") {
         return `<span class="badge badge-sm bg-gradient-${colores[value]}">${value}</span>`;
       }
+
+      if (key === "imagen") {
+        return `<div style="display: flex; align-items: center; justify-content: center;">
+            <img style="max-height: 12vh; border-radius: 5px; width: 10rem; object-fit: cover;" 
+            src="${value ? value : "/img/taxiIcon.jpg"}" alt="" />
+          </div>`;
+      }
       return value;
     },
   },
@@ -78,6 +83,21 @@ export default {
 </script>
 
 <style scoped>
+.image__div {
+  -webkit-box-align: center;
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  -webkit-box-pack: center;
+}
+img {
+  border: 1px solid black;
+  height: 12vh;
+  border-radius: 5px;
+  width: 10rem;
+  object-fit: contain;
+}
+
 .btn-circle.btn-sm {
   width: 30px;
   height: 30px;
@@ -89,5 +109,10 @@ export default {
 
 table tbody tr td {
   padding-left: 1.5rem !important;
+}
+
+.table td,
+.table th {
+  white-space: break-spaces;
 }
 </style>

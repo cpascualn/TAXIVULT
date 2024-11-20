@@ -3,6 +3,7 @@ import regFormCheck from "./regFormCheck";
 import ciudadService from "@/services/ciudad.service";
 import horarioService from "@/services/horario.service";
 import vehiculosService from "@/services/vehiculos.service";
+import encodeImageToBase64 from "@/assets/utils/imageEncoder";
 
 export default {
     methods: {
@@ -106,7 +107,6 @@ export default {
 
             if (formValues) {
                 return formValues;
-                // Puedes manejar los valores aquí
             } else {
                 return null;
             }
@@ -366,9 +366,12 @@ export default {
             // recoger coches 
             const response = await vehiculosService.getVehiculosLibres();
             let coches = [];
-            let cocheActual = await vehiculosService.getVehiculosMatricula(conductor.coche);
+            let cocheActual = { id: '', matricula: '' };
+            if (conductor.coche) {
+                cocheActual = await vehiculosService.getVehiculosMatricula(conductor.coche);
+                cocheActual = { id: cocheActual.vehiculo.id, matricula: cocheActual.vehiculo.matricula }
+            }
 
-            cocheActual = { id: cocheActual.vehiculo.id, matricula: cocheActual.vehiculo.matricula }
             if (response.success) {
                 response.vehiculos.forEach((coche) => {
                     coches.push({ id: coche.id, matricula: coche.matricula });
@@ -449,7 +452,7 @@ export default {
                         return false;
                     }
 
-                    return { id: conductor.id, matricula:coche, horario };
+                    return { id: conductor.id, matricula: coche, horario };
                 },
             });
 
@@ -459,5 +462,166 @@ export default {
                 return null;
             }
         },
+        async showAddVehiculo() {
+            const tipos = ["comun", "van"];
+            const { value: formValues } = await Swal.fire({
+                title: "Crear un Vehiculo",
+                html: `
+             <div>
+                <label for="swal-input-matricula" style="width: 4.5rem;">matricula</label>
+                <input id="swal-input-matricula" class="swal2-input" placeholder="matricula">
+                
+                <label for="swal-input-capacidad" style="width: 4.5rem;">capacidad</label>
+                <input id="swal-input-capacidad" class="swal2-input" type="number" placeholder="capacidad">
+                
+                <label for="swal-input-fabricante" style="width: 4.5rem;">fabricante</label>
+                <input id="swal-input-fabricante" class="swal2-input" placeholder="fabricante">
+                
+                <label for="swal-input-modelo" style="width: 4.5rem;">modelo</label>
+                <input id="swal-input-modelo" class="swal2-input" placeholder="modelo">
+
+                  <label for="swal-select-tipo"style="width: 4.5rem;"> tipo</label>
+                <select
+                  id="swal-select-tipo"
+                  class="swal2-select"
+                  autocomplete="usuario.tipo"
+                  placeholder="tipo"
+                  required
+                >
+                  <option value="" selected disabled style="color: black;"> tipo</option>
+
+                ${tipos.map(tipo =>
+                    `<option
+                    value="${tipo}"
+                    style="color: black;">
+                    ${tipo}
+                    </option>
+                `
+                ).join('')}
+                </select>
+
+               <label for="swal-input-imagen" style="width: 4.5rem;">imagen</label>
+                <input id="swal-input-imagen" type="file" class="swal2-input" placeholder="imagen" accept="image/*">
+            </div>
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: async () => {
+                    const matricula = document.getElementById("swal-input-matricula").value;
+                    const capacidad = document.getElementById("swal-input-capacidad").value;
+                    const fabricante = document.getElementById("swal-input-fabricante").value;
+                    const modelo = document.getElementById("swal-input-modelo").value;
+                    const tipo = document.getElementById("swal-select-tipo").value;
+                    let imagen = document.getElementById("swal-input-imagen");
+                    imagen = imagen && imagen.files.length > 0 ? imagen.files[0] : null;
+
+                    if (!matricula || !capacidad || !fabricante || !modelo | !tipo) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false; // Evita cerrar el modal
+                    }
+                    // validar valores
+
+                    if (!regFormCheck.checkMatricula(matricula)) {
+                        Swal.showValidationMessage('La matricula no es válida.');
+                        return false;
+                    }
+                    if (capacidad < 5) {
+                        Swal.showValidationMessage('La capacidad no es válida.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNomCoche(fabricante)) {
+                        Swal.showValidationMessage('El fabricante no es válida.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNomCoche(modelo)) {
+                        Swal.showValidationMessage('El modelo no es válida.');
+                        return false;
+                    }
+                    if (tipo == "") {
+                        Swal.showValidationMessage('el tipo no es válida.');
+                        return false;
+                    }
+
+
+                    if (imagen && imagen.type.startsWith("image/")) {
+                        const result = await regFormCheck.checkImagenCoche(imagen);
+
+                        if (result) {
+                            imagen = await encodeImageToBase64(imagen);
+                        } else {
+                            imagen = null;
+                            Swal.showValidationMessage('Por favor, selecciona un archivo de imagen válido.');
+                            return false;
+                        }
+                    } else {
+                        Swal.showValidationMessage('Por favor, selecciona un archivo de imagen válido.');
+                        return false;
+                    }
+
+                    return { matricula, capacidad, fabricante, modelo, tipo, imagen };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
+        },
+        async showEditVehiculo(vehiculo) {
+            const { value: formValues } = await Swal.fire({
+                title: "Actualizar imagen vehiculo",
+                html: `
+             <div>
+                <label for="swal-input-matricula" style="width: 4.5rem;">matricula</label>
+                <input id="swal-input-matricula" class="swal2-input" placeholder="matricula" value="${vehiculo.matricula}" disabled>
+                
+                <label for="swal-input-fabricante" style="width: 4.5rem;">fabricante</label>
+                <input id="swal-input-fabricante" class="swal2-input" placeholder="fabricante" value="${vehiculo.fabricante}" disabled>
+                
+                <label for="swal-input-modelo" style="width: 4.5rem;">modelo</label>
+                <input id="swal-input-modelo" class="swal2-input" placeholder="modelo" value="${vehiculo.modelo}" disabled>
+
+               <label for="swal-input-imagen" style="width: 4.5rem;">imagen</label>
+                <input id="swal-input-imagen" type="file" class="swal2-input" placeholder="imagen" accept="image/*">
+            </div>
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: async () => {
+                    const matricula = document.getElementById("swal-input-matricula").value;
+                    let imagen = document.getElementById("swal-input-imagen");
+                    imagen = imagen && imagen.files.length > 0 ? imagen.files[0] : null;
+
+
+                    if (imagen && imagen.type.startsWith("image/")) {
+                        const result = await regFormCheck.checkImagenCoche(imagen);
+
+                        if (result) {
+                            imagen = await encodeImageToBase64(imagen);
+                        } else {
+                            imagen = null;
+                            Swal.showValidationMessage('Por favor, selecciona un archivo de imagen válido.');
+                            return false;
+                        }
+                    } else {
+                        Swal.showValidationMessage('Por favor, selecciona un archivo de imagen válido.');
+                        return false;
+                    }
+
+                    return { id: vehiculo.id, matricula, imagen };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
+        }
     }
 }

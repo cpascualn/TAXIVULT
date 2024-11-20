@@ -215,21 +215,21 @@ class Viaje implements JsonSerializable
     {
         return [
             'id' => $this->getId(),
-            'id_conductor' => $this->getIdConductor(),
-            'id_pasajero' => $this->getIdPasajero(),
+            'conductor' => $this->getIdConductor(),
+            'pasajero' => $this->getIdPasajero(),
             'lati_ini' => $this->getLatiIni(),
             'longi_ini' => $this->getLongiIni(),
             'lati_fin' => $this->getLatiFin(),
             'longi_fin' => $this->getLongiFin(),
-            'fecha_ini' => $this->getFechaIni(),
-            'fecha_fin' => $this->getFechaFin(),
+            'inicio' => $this->getFechaIni(),
+            'fin' => $this->getFechaFin(),
             'metodo_pago' => $this->getMetodoPago(),
             'distancia' => $this->getDistancia(),
-            'duracion_min' => $this->getDuracionMin(),
-            'precio_total' => $this->getPrecioTotal(),
+            'duracion' => $this->getDuracionMin(),
+            'precio' => $this->getPrecioTotal(),
             'ciudad' => $this->getCiudad(),
-            'lugar_salida' => $this->getLugarSalida(),
-            'lugar_llegada' => $this->getLugarLlegada(),
+            'salida' => $this->getLugarSalida(),
+            'llegada' => $this->getLugarLlegada(),
         ];
     }
 }

@@ -19,26 +19,32 @@ export default {
   },
   async getVehiculosMatricula(matricula) {
     try {
-      return await AuthQuery('/api/vehiculos/matricula',{matricula});
+      return await AuthQuery('/api/vehiculos/matricula', { matricula });
     } catch (err) {
       console.log(err);
     }
   },
-
-  async getHorario(horario) {
+  async addVehiculo(vehiculo) {
     try {
-      return await AuthQuery(`/api/horarios/buscarHora`,horario);
+      return await AuthQuery(`/api/vehiculos/insertar`, vehiculo);
     } catch (err) {
       console.log(err);
     }
   },
-  async actualizarHorario(horario) {
+  async eliminarVehiculo(id) {
     try {
-        return await AuthQuery(`/api/horarios/${horario.id}`,horario,'PATCH');
+      return await simpleAuthQuery(`/api/vehiculos/eliminar/${id}`, 'DELETE');
     } catch (err) {
-        console.log(err);
+      console.log(err);
     }
-},
+  },
+  async actualizarVehiculo(vehiculo) {
+    try {
+      return await AuthQuery(`/api/vehiculos/actualizar/${vehiculo.id}`,vehiculo, 'PATCH');
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
 
 

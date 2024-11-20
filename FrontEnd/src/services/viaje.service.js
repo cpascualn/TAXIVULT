@@ -9,4 +9,11 @@ export default {
             console.log(err);
         }
     },
+    async getViajes() {
+        try {
+            return await simpleAuthQuery('/api/viajes');
+        } catch (err) {
+            console.log(err);
+        }
+    },
 }

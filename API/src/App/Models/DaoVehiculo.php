@@ -16,7 +16,7 @@ class DaoVehiculo
 
     public function listar()       //Lista el contenido de la tabla
     {
-        $consulta = "SELECT * FROM Vehiculo";
+        $consulta = "SELECT v.*,u.email as conductor_mail FROM Vehiculo v left join Conductor c on c.coche = v.matricula left join usuario u on c.id = u.id";
         $this->vehiculos = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
         $this->db->ConsultaDatos($consulta);
@@ -31,7 +31,7 @@ class DaoVehiculo
             $vehiculo->setModelo($fila['modelo']);
             $vehiculo->setTipo($fila['tipo']);
             $vehiculo->setImagen($fila['imagen']);
-            $vehiculo->setConductor($fila['conductor']);
+            $vehiculo->setConductor($fila['conductor_mail']);
 
             $this->vehiculos[] = $vehiculo;   //Insertamos el objeto con los valores de esa fila en el array de objetos
         }
@@ -40,7 +40,7 @@ class DaoVehiculo
     }
     public function listarLibres()       //Lista el contenido de la tabla
     {
-        $consulta = "SELECT * FROM Vehiculo where conductor is null";
+        $consulta = "SELECT v.* FROM Vehiculo v left join Conductor c on c.coche = v.matricula where c.coche is null";
         $this->vehiculos = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
         $this->db->ConsultaDatos($consulta);
@@ -55,7 +55,6 @@ class DaoVehiculo
             $vehiculo->setModelo($fila['modelo']);
             $vehiculo->setTipo($fila['tipo']);
             $vehiculo->setImagen($fila['imagen']);
-            $vehiculo->setConductor($fila['conductor']);
 
             $this->vehiculos[] = $vehiculo;   //Insertamos el objeto con los valores de esa fila en el array de objetos
         }
@@ -65,7 +64,7 @@ class DaoVehiculo
 
     public function obtener($id)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "SELECT * FROM Vehiculo where id = :ID";
+        $consulta = "SELECT v.*,u.email as conductor FROM Vehiculo v left join Conductor c on c.coche = v.matricula join usuario u on c.id = u.id where v.id = :ID";
         $this->vehiculos = array();  //Vaciamos el array de las situaciones entre consulta y consulta
         $param = array(":ID" => $id);
         $this->db->ConsultaDatos($consulta, $param);
@@ -74,14 +73,14 @@ class DaoVehiculo
         if (count($this->db->filas) == 1) {
             $fila = $this->db->filas[0];
             $vehiculo = new Vehiculo();
-            $vehiculo->setId($fila[0]['id']);
-            $vehiculo->setMatricula($fila[0]['matricula']);
-            $vehiculo->setCapacidad($fila[0]['capacidad']);
-            $vehiculo->setFabricante($fila[0]['fabricante']);
-            $vehiculo->setModelo($fila[0]['modelo']);
-            $vehiculo->setTipo($fila[0]['tipo']);
-            $vehiculo->setImagen($fila[0]['imagen']);
-            $vehiculo->setConductor($fila[0]['conductor']);
+            $vehiculo->setId($fila['id']);
+            $vehiculo->setMatricula($fila['matricula']);
+            $vehiculo->setCapacidad($fila['capacidad']);
+            $vehiculo->setFabricante($fila['fabricante']);
+            $vehiculo->setModelo($fila['modelo']);
+            $vehiculo->setTipo($fila['tipo']);
+            $vehiculo->setImagen($fila['imagen']);
+            $vehiculo->setConductor($fila['conductor']);
         }
 
 
@@ -90,9 +89,9 @@ class DaoVehiculo
 
     public function obtenerPorMatricula($matricula)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "SELECT * FROM Vehiculo where matricula = :ID";
+        $consulta = "SELECT v.*,u.email as conductor FROM Vehiculo v left join Conductor c on c.coche = v.matricula join usuario u on c.id = u.id where v.matricula = :MATRICULA";
         $this->vehiculos = array();  //Vaciamos el array de las situaciones entre consulta y consulta
-        $param = array(":ID" => $matricula);
+        $param = array(":MATRICULA" => $matricula);
         $this->db->ConsultaDatos($consulta, $param);
 
         $vehiculo = null;
@@ -115,7 +114,7 @@ class DaoVehiculo
 
     public function insertar($vehiculo)
     {
-        $consulta = "INSERT INTO `Vehiculo` (matricula, capacidad, fabricante, modelo, tipo, imagen, conductor) VALUES( :MATRICULA, :CAPACIDAD, :FABRICANTE, :MODELO, :TIPO, :IMAGEN, :CONDUCTOR);";
+        $consulta = "INSERT INTO `Vehiculo` (matricula, capacidad, fabricante, modelo, tipo, imagen) VALUES( :MATRICULA, :CAPACIDAD, :FABRICANTE, :MODELO, :TIPO, :IMAGEN);";
         $param = array();
 
         $param[":MATRICULA"] = $vehiculo->getMatricula();
@@ -124,7 +123,7 @@ class DaoVehiculo
         $param[":MODELO"] = $vehiculo->getModelo();
         $param[":TIPO"] = $vehiculo->getTipo();
         $param[":IMAGEN"] = $vehiculo->getImagen();
-        $param[":CONDUCTOR"] = $vehiculo->getConductor();
+
 
         $this->db->ConsultaSimple($consulta, $param);
     }
@@ -146,20 +145,6 @@ class DaoVehiculo
 
         $this->db->ConsultaSimple($consulta, $param);
 
-    }
-
-    public function actualizarConductor($id = null, $matricula = null, $conductorId = null)          //Obtenemos el elemento a partir de su Id
-    {
-        $consulta = "UPDATE `Vehiculo` SET `conductor`=:CONDUCTOR WHERE id = :ID or matricula =:MATRICULA";
-
-        $param = array();
-
-        $param[":ID"] = $id;
-        $param[":CONDUCTOR"] = $conductorId;
-        $param[":MATRICULA"] = $matricula;
-
-
-        $this->db->ConsultaSimple($consulta, $param);
     }
 
     public function eliminar($id, $matricula = null)          //Obtenemos el elemento a partir de su Id

@@ -83,40 +83,17 @@ class VehiculoController
         return $response->withStatus(200);
     }
 
-    public function handleActualizarConductor(Request $request, Response $response, $id = null, $idConductor = null)
-    {
-        try {
-
-            $body = $request->getParsedBody();
-            $this->daoVeh->actualizarConductor($id, $body['matricula'] ?? null, $idConductor);
-
-        } catch (\Throwable $th) {
-            $body = json_encode([
-                'message' => $th->getMessage(),
-                'success' => false
-            ]);
-            $response->getBody()->write($body);
-
-            return $response->withStatus(400);
-        }
-
-        $body = json_encode([
-            'message' => 'Vehiculo actualizado',
-            'success' => true
-        ]);
-
-        $response->getBody()->write($body);
-
-        return $response->withStatus(200);
-    }
-
     public function handleBorrarVehiculo(Request $request, Response $response, $id = null)
     {
 
         try {
             $body = $request->getParsedBody();
-            if (isset($body["matricula"]))
+            if (isset($body["matricula"])) {
                 $this->daoVeh->eliminar($id, $body["matricula"]);
+            } else {
+                $this->daoVeh->eliminar($id);
+            }
+
         } catch (\Throwable $th) {
             $body = json_encode([
                 'message' => $th->getMessage(),
@@ -134,6 +111,32 @@ class VehiculoController
         $response->getBody()->write($body);
 
         return $response->withStatus(200);
+    }
+
+    public function handleActualizar(Request $request, Response $response, $id = null)
+    {
+        //comprobar que existe
+        $vehiculo = $this->daoVeh->obtener($id);
+        if ($vehiculo === null) {
+            throw new \Slim\Exception\HttpNotFoundException($request, message: 'El vehiculo no existe');
+        }
+
+        $body = $request->getParsedBody();
+
+        //si son validos, crear vehiculo y actualizarlo
+        $nuevo = $this->crearVehiculo($body);
+        $this->daoVeh->actualizar($id, $vehiculo, $nuevo);
+        $nuevo = $this->daoVeh->obtener($id);
+
+        $body = json_encode([
+            'message' => 'vehiculo actualizado ',
+            'success' => true
+        ]);
+
+        $response->getBody()->write($body);
+
+        return $response->withStatus(200);
+
     }
 
 

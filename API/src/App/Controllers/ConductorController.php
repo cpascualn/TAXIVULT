@@ -70,8 +70,6 @@ class ConductorController
             //despues crear el conductor
             $conductor = $this->crearConductor($id, $body);
             $this->daoCon->insertar($conductor);
-            // actualizar el conductor en el vehiculo
-            $this->vehiContr->handleActualizarConductor($request, $response, null, $id);
 
 
         } catch (\Throwable $th) {

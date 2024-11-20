@@ -178,7 +178,11 @@ export default {
       });
     },
     totalPages() {
-      return Math.ceil(this.filteredItems.length / this.usuariosPorPagina); // Total de páginas
+      const totalP = Math.ceil(
+        this.filteredItems.length / this.usuariosPorPagina
+      );
+      if (this.paginaActual > totalP) this.paginaActual = 1;
+      return totalP;
     },
     paginatedData() {
       const start = (this.paginaActual - 1) * this.usuariosPorPagina;

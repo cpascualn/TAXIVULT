@@ -13,9 +13,8 @@
 <script setup>
 import DataTable from "@/views/dashboard/components/DataTable.vue";
 import { onMounted, ref } from "vue";
-// import vehiculoService from "@/services/vehiculo.service";
+import vehiculoService from "@/services/vehiculos.service";
 import showSwal from "@/mixins/showSwal";
-import authService from "@/services/auth.service";
 const columns = [
   "Imagen",
   "Matricula",
@@ -23,7 +22,6 @@ const columns = [
   "Fabricante",
   "Modelo",
   "Tipo",
-  "conductor", // email
 ];
 const vehiculos = ref([]);
 
@@ -35,7 +33,8 @@ onMounted(async () => {
 async function addVehiculo() {
   const datos = await showSwal.methods.showAddVehiculo();
   if (!datos) return;
-  const data = await authService.register(datos);
+
+  const data = await vehiculoService.addVehiculo(datos);
   if (!data.success) {
     let finalMessage = data.error ? `ERROR: ${data.error}` : "ERROR";
     showSwal.methods.showSwal({
@@ -53,31 +52,19 @@ async function addVehiculo() {
 }
 async function editVehiculo(vehiculo) {
   let data;
-  if (vehiculo.rol === "administrador") {
-    const newVehiculo = {
-      id: vehiculo.id,
-      email: vehiculo.email,
-      nombre: vehiculo.nombre,
-      apellidos: vehiculo.apellidos,
-      telefono: vehiculo.telefono,
-    };
-    const datos = await showSwal.methods.showEditAdmin(newVehiculo);
-    if (!datos) return;
-    data = datos;
-  } else {
-    const newVehiculo = {
-      id: vehiculo.id,
-      email: vehiculo.email,
-      nombre: vehiculo.nombre,
-      apellidos: vehiculo.apellidos,
-      telefono: vehiculo.telefono,
-      ciudad: vehiculo.ciudad,
-      rol: vehiculo.rol,
-    };
-    const datos = await showSwal.methods.showEditVehiculo(newVehiculo);
-    if (!datos) return;
-    data = datos;
-  }
+  console.log(vehiculo);
+
+  const newVehiculo = {
+    id: vehiculo.id,
+    matricula: vehiculo.matricula,
+    capacidad: vehiculo.capacidad,
+    fabricante: vehiculo.fabricante,
+    modelo: vehiculo.modelo,
+    tipo: vehiculo.tipo,
+  };
+  const datos = await showSwal.methods.showEditVehiculo(newVehiculo);
+  if (!datos) return;
+  data = datos;
 
   vehiculoService
     .actualizarVehiculo(data)
@@ -105,51 +92,43 @@ async function editVehiculo(vehiculo) {
     });
 }
 async function deleteVehiculo(vehiculo) {
-  if (vehiculo.rol === "administrador") {
-    showSwal.methods.showSwal({
-      type: "error",
-      message: "No puedes borrar a un administrador",
-      width: 500,
-    });
-  } else {
-    showSwal.methods
-      .showSwalConfirmationDelete()
-      .then((result) => {
-        if (result.isConfirmed) {
-          vehiculoService
-            .eliminarVehiculo(vehiculo.id)
-            .then((result) => {
-              if (result.success) {
-                showSwal.methods.showSwal({
-                  type: "success",
-                  message: "Vehiculo eliminado correctamente",
-                  width: 500,
-                });
-              } else {
-                showSwal.methods.showSwal({
-                  type: "error",
-                  message: "Error al eliminar el vehiculo",
-                  width: 500,
-                });
-              }
-            })
-            .catch((err) => {
+  showSwal.methods
+    .showSwalConfirmationDelete()
+    .then((result) => {
+      if (result.isConfirmed) {
+        vehiculoService
+          .eliminarVehiculo(vehiculo.id)
+          .then((result) => {
+            if (result.success) {
               showSwal.methods.showSwal({
-                type: "error",
-                message: err,
+                type: "success",
+                message: "Vehiculo eliminado correctamente",
                 width: 500,
               });
+            } else {
+              showSwal.methods.showSwal({
+                type: "error",
+                message: "Error al eliminar el vehiculo",
+                width: 500,
+              });
+            }
+          })
+          .catch((err) => {
+            showSwal.methods.showSwal({
+              type: "error",
+              message: err,
+              width: 500,
             });
-        }
-      })
-      .catch((err) => {
-        showSwal.methods.showSwal({
-          type: "error",
-          message: err,
-          width: 500,
-        });
+          });
+      }
+    })
+    .catch((err) => {
+      showSwal.methods.showSwal({
+        type: "error",
+        message: err,
+        width: 500,
       });
-  }
+    });
 }
 async function reload() {
   const data = await vehiculoService.getVehiculos();
