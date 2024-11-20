@@ -1,4 +1,5 @@
 <template>
+    <LoadingPage ref="loading"></LoadingPage>
   <DataTable
     :item-type="'Usuarios'"
     :columns="columns"
@@ -16,6 +17,11 @@ import { onMounted, ref } from "vue";
 import userService from "@/services/user.service";
 import showSwal from "@/mixins/showSwal";
 import authService from "@/services/auth.service";
+import LoadingPage from "@/components/index/LoadingPage.vue";
+import { watch } from "vue";
+const loading = ref(null);
+const isReady = ref(false);
+
 const columns = [
   "Email",
   "Nombre",
@@ -30,6 +36,7 @@ const users = ref([]);
 onMounted(async () => {
   const data = await userService.getUsuarios();
   users.value = data.usuarios;
+  isReady.value = true;
 });
 
 async function addUser() {
@@ -155,4 +162,17 @@ async function reload() {
   const data = await userService.getUsuarios();
   users.value = data.usuarios;
 }
+
+const loadFinished = () => {
+  if (loading.value) {
+    loading.value.closeModal();
+  }
+};
+
+// Configuramos un `watch` para observar `isReady`
+watch(isReady, (newVal) => {
+  if (newVal) {
+    loadFinished();
+  }
+});
 </script>

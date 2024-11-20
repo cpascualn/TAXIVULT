@@ -1,4 +1,5 @@
 <template>
+    <LoadingPage ref="loading"></LoadingPage>
   <DataTable
     :item-type="'Ciudades'"
     :columns="columns"
@@ -14,7 +15,11 @@ import DataTable from "@/views/dashboard/components/DataTable.vue";
 import { onMounted, ref } from "vue";
 import ciudadService from "@/services/ciudad.service";
 import showSwal from "@/mixins/showSwal";
-import authService from "@/services/auth.service";
+import LoadingPage from "@/components/index/LoadingPage.vue";
+import { watch } from "vue";
+const loading = ref(null);
+const isReady = ref(false);
+
 const columns = [
   "Nombre",
   "Comunidad",
@@ -29,6 +34,7 @@ const ciudades = ref([]);
 onMounted(async () => {
   const data = await ciudadService.getCiudades();
   ciudades.value = data.ciudades;
+  isReady.value = true;
 });
 
 async function addciudad() {
@@ -186,4 +192,17 @@ async function obtenerDatosCiudad(ciudad) {
     return null;
   }
 }
+
+const loadFinished = () => {
+  if (loading.value) {
+    loading.value.closeModal();
+  }
+};
+
+// Configuramos un `watch` para observar `isReady`
+watch(isReady, (newVal) => {
+  if (newVal) {
+    loadFinished();
+  }
+});
 </script>

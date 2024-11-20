@@ -1,4 +1,5 @@
 <template>
+  <LoadingPage ref="loading"></LoadingPage>
   <DataTable
     :item-type="'Vehiculos'"
     :columns="columns"
@@ -15,6 +16,11 @@ import DataTable from "@/views/dashboard/components/DataTable.vue";
 import { onMounted, ref } from "vue";
 import vehiculoService from "@/services/vehiculos.service";
 import showSwal from "@/mixins/showSwal";
+import LoadingPage from "@/components/index/LoadingPage.vue";
+import { watch } from "vue";
+const loading = ref(null);
+const isReady = ref(false);
+
 const columns = [
   "Imagen",
   "Matricula",
@@ -28,6 +34,7 @@ const vehiculos = ref([]);
 onMounted(async () => {
   const data = await vehiculoService.getVehiculos();
   vehiculos.value = data.vehiculos;
+  isReady.value = true;
 });
 
 async function addVehiculo() {
@@ -134,4 +141,17 @@ async function reload() {
   const data = await vehiculoService.getVehiculos();
   vehiculos.value = data.vehiculos;
 }
+
+const loadFinished = () => {
+  if (loading.value) {
+    loading.value.closeModal();
+  }
+};
+
+// Configuramos un `watch` para observar `isReady`
+watch(isReady, (newVal) => {
+  if (newVal) {
+    loadFinished();
+  }
+});
 </script>
