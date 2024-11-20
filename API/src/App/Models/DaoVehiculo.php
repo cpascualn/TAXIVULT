@@ -16,7 +16,7 @@ class DaoVehiculo
 
     public function listar()       //Lista el contenido de la tabla
     {
-        $consulta = "SELECT v.*,u.email as conductor_mail FROM Vehiculo v left join Conductor c on c.coche = v.matricula left join usuario u on c.id = u.id";
+        $consulta = "SELECT v.*,u.email as conductor_mail FROM Vehiculo v left join Conductor c on c.coche = v.matricula left join Usuario u on c.id = u.id";
         $this->vehiculos = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
         $this->db->ConsultaDatos($consulta);
@@ -64,7 +64,7 @@ class DaoVehiculo
 
     public function obtener($id)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "SELECT v.*,u.email as conductor FROM Vehiculo v left join Conductor c on c.coche = v.matricula join usuario u on c.id = u.id where v.id = :ID";
+        $consulta = "SELECT v.*,u.email as conductor FROM Vehiculo v left join Conductor c on c.coche = v.matricula join Usuario u on c.id = u.id where v.id = :ID";
         $this->vehiculos = array();  //Vaciamos el array de las situaciones entre consulta y consulta
         $param = array(":ID" => $id);
         $this->db->ConsultaDatos($consulta, $param);
@@ -89,7 +89,7 @@ class DaoVehiculo
 
     public function obtenerPorMatricula($matricula)          //Obtenemos el elemento a partir de su Id
     {
-        $consulta = "SELECT v.*,u.email as conductor FROM Vehiculo v left join Conductor c on c.coche = v.matricula join usuario u on c.id = u.id where v.matricula = :MATRICULA";
+        $consulta = "SELECT v.*,u.email as conductor FROM Vehiculo v left join Conductor c on c.coche = v.matricula join Usuario u on c.id = u.id where v.matricula = :MATRICULA";
         $this->vehiculos = array();  //Vaciamos el array de las situaciones entre consulta y consulta
         $param = array(":MATRICULA" => $matricula);
         $this->db->ConsultaDatos($consulta, $param);
