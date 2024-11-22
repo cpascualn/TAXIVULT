@@ -23,8 +23,7 @@ export default {
       labels: Array,
       datasets: {
         type: Object,
-        label: String,
-        data: Array,
+        ciudades: [Array],
       },
     },
   },
@@ -36,36 +35,27 @@ export default {
       chartStatus.destroy();
     }
 
+    console.log(this.chart.datasets.ciudades);
+
     new Chart(ctx, {
       type: "line",
       data: {
         labels: this.chart.labels,
-        datasets: [
-          {
-            label: this.chart.datasets.label,
-            tension: 0,
-            borderWidth: 0,
-            pointRadius: 5,
-            pointBackgroundColor: "rgba(255, 255, 255, .8)",
-            pointBorderColor: "transparent",
-            borderColor: "rgba(255, 255, 255, .8)",
-            // eslint-disable-next-line no-dupe-keys
-            borderColor: "rgba(255, 255, 255, .8)",
-            // eslint-disable-next-line no-dupe-keys
-            borderWidth: 4,
-            backgroundColor: "transparent",
-            fill: true,
-            data: this.chart.datasets.data,
-            maxBarThickness: 6,
-          },
-        ],
+        datasets: this.chart.datasets.ciudades.map((ciudad) => ({
+          label: ciudad.nombre,
+          data: ciudad.data,
+          backgroundColor: getRandomColor(),
+          borderColor: getRandomColor(true),
+          borderWidth: 1,
+          tension: 0.2
+        })),
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false,
+            display: top,
           },
         },
         interaction: {
@@ -121,4 +111,12 @@ export default {
     });
   },
 };
+
+function getRandomColor(isBorder = false) {
+  const opacity = isBorder ? 1 : 0.6;
+  const r = Math.floor(Math.random() * 255);
+  const g = Math.floor(Math.random() * 255);
+  const b = Math.floor(Math.random() * 255);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
 </script>

@@ -23,8 +23,10 @@ export default {
       labels: Array,
       datasets: {
         type: Object,
-        label: String,
-        data: Array,
+        label1: String,
+        label2: String,
+        data1: Array,
+        data2: Array,
       },
     },
   },
@@ -43,14 +45,18 @@ export default {
         labels: this.chart.labels,
         datasets: [
           {
-            label: this.chart.datasets.label,
-            tension: 0.4,
-            borderWidth: 0,
-            borderRadius: 4,
-            borderSkipped: false,
-            backgroundColor: "rgba(255, 255, 255, .8)",
-            data: this.chart.datasets.data,
-            maxBarThickness: 6,
+            label: this.chart.datasets.label1,
+            data: this.chart.datasets.data1,
+            backgroundColor: "rgba(38, 102, 150, 0.8)", // Azul oscuro
+            borderColor: "rgba(38, 102, 150, 1)", // Azul más intenso
+            borderWidth: 1,
+          },
+          {
+            label: this.chart.datasets.label2,
+            data: this.chart.datasets.data2,
+            backgroundColor: "rgba(102, 51, 153, 0.8)", // Morado oscuro
+            borderColor: "rgba(102, 51, 153, 1)", // Morado más intenso
+            borderWidth: 1,
           },
         ],
       },

@@ -83,6 +83,30 @@ class ViajeController
         return $response->withStatus(200);
     }
 
+    public function HandleVerTotales(Request $request, Response $response)
+    {
+        try {
+            $totales = $this->daoViaje->verTotales();
+
+            $body = json_encode([
+                'totales' => [
+                    'viajes' => $totales[0],
+                    'dinero' => $totales[1]
+                ],
+                'success' => true
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'message' => $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        }
+    }
+
 
 
     private function crearViaje($body)

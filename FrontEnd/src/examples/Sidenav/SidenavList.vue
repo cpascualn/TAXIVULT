@@ -166,19 +166,6 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="notifications"
-          navText="Notifications"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">notifications</i>
-          </template>
-        </sidenav-collapse>
-      </li>
 
       <li class="mt-3 nav-item">
         <h6
@@ -267,19 +254,6 @@
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">local_taxi</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="notifications"
-          navText="Notifications"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">notifications</i>
           </template>
         </sidenav-collapse>
       </li>

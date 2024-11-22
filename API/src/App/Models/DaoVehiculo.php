@@ -156,4 +156,19 @@ class DaoVehiculo
         $this->db->ConsultaSimple($consulta, $param);
     }
 
+
+    public function verTotales()
+    {
+        $consulta = "SELECT COUNT(*) as total FROM Vehiculo";
+        $this->db->ConsultaDatos($consulta);
+
+        $total = 0;
+        if (count($this->db->filas) == 1) {
+            $fila = $this->db->filas[0];
+            $total = $fila['total'];
+        }
+
+        return $total;
+    }
+
 }

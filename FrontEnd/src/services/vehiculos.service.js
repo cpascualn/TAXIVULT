@@ -40,11 +40,21 @@ export default {
   },
   async actualizarVehiculo(vehiculo) {
     try {
-      return await AuthQuery(`/api/vehiculos/actualizar/${vehiculo.id}`,vehiculo, 'PATCH');
+      return await AuthQuery(`/api/vehiculos/actualizar/${vehiculo.id}`, vehiculo, 'PATCH');
     } catch (err) {
       console.log(err);
     }
-  }
+  },
+  async getVehiculosTotales() {
+    try {
+      const response = await simpleAuthQuery(`/api/vehiculos/totales`);
+      if (!response || !response.success)
+        return 0;
+      return response.totales;
+    } catch (err) {
+      console.log(err);
+    }
+  },
 
 
 

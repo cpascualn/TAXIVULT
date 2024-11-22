@@ -11,14 +11,24 @@ export default {
     },
     async eliminarUsuario(id) {
         try {
-            return await simpleAuthQuery(`/api/usuarios/${id}`,'DELETE');
+            return await simpleAuthQuery(`/api/usuarios/${id}`, 'DELETE');
         } catch (err) {
             console.log(err);
         }
     },
     async actualizarUsuario(user) {
         try {
-            return await AuthQuery(`/api/usuarios/${user.id}`,user,'PATCH');
+            return await AuthQuery(`/api/usuarios/${user.id}`, user, 'PATCH');
+        } catch (err) {
+            console.log(err);
+        }
+    },
+    async getUsuariosTotales() {
+        try {
+            const response = await simpleAuthQuery(`/api/usuarios/totales`);
+            if (!response || !response.success)
+                return 0;
+            return response.totales;
         } catch (err) {
             console.log(err);
         }

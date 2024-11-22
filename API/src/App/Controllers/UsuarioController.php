@@ -247,6 +247,27 @@ class UsuarioController
         }
     }
 
+    public function HandleVerTotales(Request $request, Response $response)
+    {
+        try {
+            $totales = $this->daoUsu->verTotales();
+
+            $body = json_encode([
+                'totales' => $totales,
+                'success' => true
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'message' => $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        }
+    }
+
 
     private function validarDatos($body)
     {

@@ -162,4 +162,23 @@ class DaoViaje
     }
 
 
+    public function verTotales()
+    {
+        $consulta = "SELECT SUM(precio_total) as dinero,count(*) as viajes FROM Viaje";
+
+
+        $this->db->ConsultaDatos($consulta);
+
+        $viajes = 0;
+        $dinero = 0;
+        if (count($this->db->filas) == 1) {
+            $fila = $this->db->filas[0];
+            $viajes = $fila['viajes'];
+            $dinero = $fila['dinero'];
+        }
+
+        return array($viajes,$dinero);
+    }
+
+
 }

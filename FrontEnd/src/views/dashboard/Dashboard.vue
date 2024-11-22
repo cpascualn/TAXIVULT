@@ -5,32 +5,13 @@
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
-              :title="{ text: 'Today\'s Money', value: '$23k' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+55%</span> than last week"
-              :icon="{
-                name: 'weekend',
-                color: 'text-white',
-                background: 'dark',
+              :title="{
+                text: 'Total de Dinero generado',
+                value: `${dineroTotal}€`,
               }"
-            />
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
-            <mini-statistics-card
-              :title="{ text: 'Today\'s Users', value: '2,300' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+3%</span> than last month"
+              :detail="detailMediaDinero"
               :icon="{
-                name: 'leaderboard',
-                color: 'text-white',
-                background: 'primary',
-              }"
-            />
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
-            <mini-statistics-card
-              :title="{ text: 'New Clients', value: '3,462' }"
-              detail="<span class='text-danger text-sm font-weight-bolder'>-2%</span> than yesterday"
-              :icon="{
-                name: 'person',
+                name: 'payments',
                 color: 'text-white',
                 background: 'success',
               }"
@@ -38,10 +19,32 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Sales', value: '$103,430' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+5%</span> Just updated"
+              :title="{ text: 'Total Viajes', value: viajesTotal }"
+              :detail="detailMediaViajes"
               :icon="{
-                name: 'weekend',
+                name: 'airplane_ticket',
+                color: 'text-white',
+                background: 'dark',
+              }"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            <mini-statistics-card
+              :title="{ text: 'Total de Usuarios', value: usuariosTotal }"
+              :detail="detailMediaUsuarios"
+              :icon="{
+                name: 'person_add',
+                color: 'text-white',
+                background: 'primary',
+              }"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            <mini-statistics-card
+              :title="{ text: 'Total de Vehiculos', value: VehiculosTotal }"
+              :detail="detailMediaVehiculos"
+              :icon="{
+                name: 'commute',
                 color: 'text-white',
                 background: 'info',
               }"
@@ -51,16 +54,19 @@
         <div class="row mt-4">
           <div class="col-lg-4 col-md-6 mt-4">
             <chart-holder-card
-              title="Website Views"
-              subtitle="Last Campaign Performance"
+              title="Usuarios por ciudad"
+              subtitle="Pasajeros y Conductores"
               update="campaign sent 2 days ago"
             >
               <reports-bar-chart
                 :chart="{
-                  labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+                  labels: ['Madrid', 'Barcelona', 'Sevilla', 'Valencia'],
                   datasets: {
-                    label: 'Sales',
-                    data: [50, 20, 10, 22, 50, 10, 40],
+                    label1: 'Conductores',
+                    label2: 'Pasajeros',
+                    backgroundColor: ['#3e95cd', '#8e5ea2'],
+                    data1: [120, 150, 90, 110],
+                    data2: [200, 180, 130, 170],
                   },
                 }"
               />
@@ -68,27 +74,17 @@
           </div>
           <div class="col-lg-4 col-md-6 mt-4">
             <chart-holder-card
-              title="Daily Sales"
-              subtitle="(<span class='font-weight-bolder'>+15%</span>) increase in today sales."
-              update="updated 4 min ago"
-              color="success"
+              title="Viajes por ciudad"
+              subtitle="Viajes totales que se han realizado en total"
+              color="secondary"
             >
-              <reports-line-chart
+              <reports-pie-chart
+                id="tasks-chart"
                 :chart="{
-                  labels: [
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                  ],
+                  labels: ['Madrid', 'Barcelona', 'Ciudad Real'],
                   datasets: {
-                    label: 'Mobile apps',
-                    data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+                    label: 'viajes',
+                    data: [150, 200, 120],
                   },
                 }"
               />
@@ -96,28 +92,43 @@
           </div>
           <div class="col-lg-4 mt-4">
             <chart-holder-card
-              title="Completed Tasks"
-              subtitle="Last Campaign Performance"
-              update="just updated"
+              title="Dinero por Ciudad"
+              subtitle="Evolución mensual"
               color="dark"
             >
               <reports-line-chart
-                id="tasks-chart"
                 :chart="{
                   labels: [
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
+                    'Enero',
+                    'Febrero',
+                    'Marzo',
+                    'Abril',
+                    'Mayo',
+                    'Junio',
+                    'Julio',
+                    'Agosto',
+                    'Septiembre',
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre',
                   ],
                   datasets: {
-                    label: 'Mobile apps',
-                    data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+                    ciudades: [
+                      {
+                        nombre: 'Madrid',
+                        data: [
+                          50, 40, 300, 320, 500, 350, 200, 230, 500, 200, 230,
+                          500,
+                        ],
+                      },
+                      {
+                        nombre: 'Barcelona',
+                        data: [
+                          70, 20, 200, 220, 300, 450, 500, 730, 200, 500, 730,
+                          200,
+                        ],
+                      },
+                    ],
                   },
                 }"
               />
@@ -126,22 +137,21 @@
         </div>
       </div>
     </div>
-
     <div class="row">
       <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
         <project-card
           title="Ciudades"
-          :headers="['Ciudad', 'Usuarios', 'dinero Total','viajes']"
+          :headers="['Ciudad', 'Usuarios', 'dinero Total', 'viajes']"
           :projects="[
             {
               title: 'Material XD Material XD Version',
-              members: [team1, team2, team3, team4],
+              members: [],
               budget: '$14,000',
               progress: { percentage: 100, color: 'info' },
             },
             {
               title: 'Launch our Mobile App',
-              members: [team4, team3, team4, team1],
+              members: [],
               budget: '$20,500',
               progress: { percentage: 100, color: 'success' },
             },
@@ -171,7 +181,6 @@
             title="New order #1832412"
             date-time="21 DEC 11 PM"
           />
-        
         </timeline-list>
       </div>
     </div>
@@ -181,36 +190,18 @@
 import ChartHolderCard from "./components/ChartHolderCard.vue";
 import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
 import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
+import ReportsPieChart from "@/examples/Charts/ReportsPieChart.vue";
 import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
 import ProjectCard from "./components/ProjectCard.vue";
 import TimelineList from "@/examples/Cards/TimelineList.vue";
 import TimelineItem from "@/examples/Cards/TimelineItem.vue";
-import logoXD from "@/assets/img/small-logos/logo-xd.svg";
-import logoAtlassian from "@/assets/img/small-logos/logo-atlassian.svg";
-import logoSlack from "@/assets/img/small-logos/logo-slack.svg";
-import logoSpotify from "@/assets/img/small-logos/logo-spotify.svg";
-import logoJira from "@/assets/img/small-logos/logo-jira.svg";
-import logoInvision from "@/assets/img/small-logos/logo-invision.svg";
-import team1 from "@/assets/img/team-1.jpg";
-import team2 from "@/assets/img/team-2.jpg";
-import team3 from "@/assets/img/team-3.jpg";
-import team4 from "@/assets/img/team-4.jpg";
+
+import userService from "@/services/user.service";
+import viajeService from "@/services/viaje.service";
+import vehiculosService from "@/services/vehiculos.service";
+
 export default {
   name: "dashboard-default",
-  data() {
-    return {
-      logoXD,
-      team1,
-      team2,
-      team3,
-      team4,
-      logoAtlassian,
-      logoSlack,
-      logoSpotify,
-      logoJira,
-      logoInvision,
-    };
-  },
   components: {
     ChartHolderCard,
     ReportsBarChart,
@@ -219,6 +210,44 @@ export default {
     ProjectCard,
     TimelineList,
     TimelineItem,
+    ReportsPieChart,
+  },
+  async mounted() {
+    this.usuariosTotal = await userService.getUsuariosTotales();
+    const viajeTotales = await viajeService.getTotales();
+    this.dineroTotal = viajeTotales.dinero;
+    this.viajesTotal = viajeTotales.viajes;
+    this.VehiculosTotal = await vehiculosService.getVehiculosTotales();
+  },
+  data() {
+    return {
+      dineroTotal: 0,
+      usuariosTotal: 0,
+      viajesTotal: 0,
+      VehiculosTotal: 0,
+    };
+  },
+  computed: {
+    detailMediaDinero() {
+      return `<span class='text-success text-sm font-weight-bolder'>${(
+        this.dineroTotal / 12
+      ).toFixed(2)}€</span> de media al mes`;
+    },
+    detailMediaUsuarios() {
+      return `<span class='text-success text-sm font-weight-bolder'>${(
+        this.usuariosTotal / 12
+      ).toFixed(1)}</span> de media al mes`;
+    },
+    detailMediaViajes() {
+      return `<span class='text-success text-sm font-weight-bolder'>${(
+        this.viajesTotal / 12
+      ).toFixed(2)}</span> de media al mes`;
+    },
+    detailMediaVehiculos() {
+      return `<span class='text-success text-sm font-weight-bolder'>${(
+        this.VehiculosTotal / 12
+      ).toFixed(2)}</span> de media al mes`;
+    },
   },
 };
 </script>

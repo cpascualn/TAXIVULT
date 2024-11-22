@@ -527,7 +527,7 @@ export default {
                         Swal.showValidationMessage('La matricula no es válida.');
                         return false;
                     }
-                    if (capacidad < 5) {
+                    if (capacidad < 5 || capacidad > 10) {
                         Swal.showValidationMessage('La capacidad no es válida.');
                         return false;
                     }

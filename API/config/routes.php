@@ -38,6 +38,7 @@ $app->group('', function (RouteCollectorProxy $group) {
 $app->group('/api', function (RouteCollectorProxy $group) {
     $group->group('/usuarios', function (RouteCollectorProxy $group) {
         $group->get('', [UsuarioController::class, 'HandleListar']);
+        $group->get('/totales', [UsuarioController::class, 'HandleVerTotales']);
         $group->post('', [UsuarioController::class, 'HandleInsertar']);
         $group->patch('/{id:[0-9]+}', [UsuarioController::class, 'HandleActualizar']);
         $group->get('/{id:[0-9]+}', [UsuarioController::class, 'HandleObtener']);
@@ -62,6 +63,7 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/insertar', [ViajeController::class, 'HandleInsertar']);
         $group->post('/activoUsuario', [ViajeController::class, 'HandleObtenerViajesActivosUsuario']);
         $group->post('/usuario', [ViajeController::class, 'HandleObtenerViajesUsuario']);
+        $group->get('/totales', [ViajeController::class, 'HandleVerTotales']);
     });
     $group->group('/ciudades', function (RouteCollectorProxy $group) {
         $group->post('/insertar', [CiudadController::class, 'HandleInsertar']);
@@ -74,6 +76,7 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/insertar', [VehiculoController::class, 'HandleInsertar']);
         $group->delete('/eliminar/{id:[0-9]+}', [VehiculoController::class, 'handleBorrarVehiculo']);
         $group->patch('/actualizar/{id:[0-9]+}', [VehiculoController::class, 'handleActualizar']);
+        $group->get('/totales', [VehiculoController::class, 'HandleVerTotales']);
     });
 
 })->add(AddJsonResponseHeader::class)

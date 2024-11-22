@@ -5,7 +5,6 @@ import { Roles } from './Roles'
 import Billing from "@/views/dashboard/Billing.vue"
 import Dashboard from "@/views/dashboard/Dashboard.vue"
 import UserProfile from "@/views/dashboard/examples-api/profile/UserProfile.vue"
-import Notifications from "@/views/dashboard/Notifications.vue"
 import Profile from "@/views/dashboard/Profile.vue"
 import authService from '@/services/auth.service';
 import Horarios from '@/views/dashboard/Horarios.vue'
@@ -22,19 +21,13 @@ const dashboardRouter = createRouter({
             path: '',
             name: 'Dashboard',
             component: Dashboard,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
+            meta: { authorize: [Roles.Admin] },
         },
         {
             path: "/billing",
             name: "Billing",
             component: Billing,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
-        },
-        {
-            path: "/notifications",
-            name: "Notifications",
-            component: Notifications,
-            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
+            meta: { authorize: [Roles.Conductor, Roles.Pasajero] },
         },
         {
             path: "/profile",

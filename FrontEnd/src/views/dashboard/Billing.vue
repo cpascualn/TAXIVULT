@@ -1,10 +1,5 @@
 <template>
   <div class="container-fluid mt-4">
-    <div class="row align-items-center">
-      <div class="col-lg-4 col-sm-8">
-        <nav-pill />
-      </div>
-    </div>
     <div class="row">
       <div class="col-lg-8">
         <div class="row mt-4">
@@ -52,7 +47,6 @@
 </template>
 
 <script>
-import NavPill from "./components/NavPill.vue";
 import MasterCard from "@/examples/Cards/MasterCard.vue";
 import DefaultInfoCard from "@/examples/Cards/DefaultInfoCard.vue";
 import PaymentCard from "./components/PaymentCard.vue";
@@ -63,7 +57,6 @@ import TransactionCard from "./components/TransactionCard.vue";
 export default {
   name: "Billing",
   components: {
-    NavPill,
     MasterCard,
     DefaultInfoCard,
     PaymentCard,

@@ -832,7 +832,7 @@ const validarStep4 = () => {
     valid = false;
   }
 
-  if (usuario.value.capacidad >= 5) {
+  if (usuario.value.capacidad >= 5 || usuario.value.capacidad <= 10) {
     displayValidCapacidad.value[0] = "block";
     displayValidCapacidad.value[1] = "none";
   } else {

@@ -16,4 +16,14 @@ export default {
             console.log(err);
         }
     },
+    async getTotales() {
+        try {
+            const response = await simpleAuthQuery(`/api/viajes/totales`);
+            if (!response || !response.success)
+                return 0;
+            return response.totales;
+        } catch (err) {
+            console.log(err);
+        }
+    },
 }
