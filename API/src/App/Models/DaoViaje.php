@@ -182,7 +182,7 @@ class DaoViaje
 
     public function verTotalesCiudad()
     {
-        $consulta = "SELECT c.nombre as ciudad,SUM(precio_total) as dinero,count(*) as viajes,(select count(*)from Usuario u where u.ciudad = c.id ) as usuarios  FROM Viaje v join Ciudad c on v.ciudad = c.id group by c.nombre";
+        $consulta = "SELECT c.nombre as ciudad,SUM(precio_total) as dinero,count(v.id) as viajes,(select count(*)from Usuario u where u.ciudad = c.id ) as usuarios  FROM Viaje v right join Ciudad c on v.ciudad = c.id group by c.nombre";
 
         $this->db->ConsultaDatos($consulta);
         $data = [];

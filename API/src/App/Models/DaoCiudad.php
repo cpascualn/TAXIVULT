@@ -104,7 +104,7 @@ class DaoCiudad
     public function obtenerUsuariosPorCiudad()
     {
         $consulta = "SELECT c.nombre AS ciudad, COUNT(CASE WHEN u.rol = 2 THEN 1 END) AS conductores,COUNT(CASE WHEN u.rol = 3 THEN 1 END) AS pasajeros
-                    FROM Ciudad c JOIN Usuario u ON c.id = u.ciudad GROUP BY c.nombre";
+                    FROM Ciudad c left JOIN Usuario u ON c.id = u.ciudad GROUP BY c.nombre";
 
 
         $this->db->ConsultaDatos($consulta);

@@ -56,14 +56,17 @@ export default {
         type: "line",
         data: {
           labels: this.chart.labels,
-          datasets: this.chart.datasets.ciudades.map((ciudad) => ({
-            label: ciudad.nombre,
-            data: ciudad.data,
-            backgroundColor: getRandomColor(),
-            borderColor: getRandomColor(true),
-            borderWidth: 1,
-            tension: 0.2,
-          })),
+          datasets: this.chart.datasets.ciudades.map((ciudad) => {
+            let color = getRandomColor(true);
+            return {
+              label: ciudad.nombre,
+              data: ciudad.data,
+              backgroundColor: color,
+              borderColor: color,
+              borderWidth: 1,
+              tension: 0.2,
+            };
+          }),
         },
         options: {
           responsive: true,

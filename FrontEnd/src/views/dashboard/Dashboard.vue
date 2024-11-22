@@ -181,7 +181,6 @@ export default {
     this.ciudadesMeses = await viajeService.getTotalesCiudadMes();
 
     this.isReady = true;
-    alert("fin");
   },
   data() {
     return {
