@@ -29,7 +29,7 @@
         </div>
 
         <div class="buttons" v-if="token">
-          <div class="viajes"  @click="redirigirViajes">
+          <div class="viajes" @click="redirigirViajes">
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/7d78f584f4528b1b3fa093f16102020cbac643872414eba8da81aab8620f1319?"
@@ -62,7 +62,7 @@
 <script setup>
 const token = localStorage.getItem("authToken");
 const redirigirDash = () => {
-  window.location.href = "/dashboard";
+  window.location.href = "/dashboard/profile";
 };
 const redirigirViajes = () => {
   window.location.href = "/dashboard/viajes";
