@@ -249,4 +249,7 @@ select {
     overflow: auto;
   }
 }
+.card .card-footer{
+  overflow: auto;
+}
 </style>

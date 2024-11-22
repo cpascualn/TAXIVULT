@@ -60,6 +60,26 @@ class CiudadController
         return $response->withStatus(200);
     }
 
+    public function HandleVerUsuariosPorCiudad(Request $request, Response $response)
+    {
+        try {
+            $data = $this->daoCiu->obtenerUsuariosPorCiudad();
+        } catch (\Throwable $th) {
+            $response->getBody()->write(json_encode([
+                'error' => $th->getMessage(),
+                'success' => false
+            ]));
+            return $response->withStatus(400);
+        }
+
+        $body = json_encode([
+            'data' => $data,
+            'success' => true
+        ]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+
     public function handleInsertar(Request $request, Response $response)
     {
         //recibir datos del body y validarlos

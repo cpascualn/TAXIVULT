@@ -27,86 +27,112 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      chartInstance: null,
+    };
+  },
   mounted() {
-    var ctx = document.getElementById(this.id).getContext("2d");
-
-    let chartStatus = Chart.getChart(this.id);
-    if (chartStatus != undefined) {
-      chartStatus.destroy();
-    }
-
-    new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: this.chart.labels,
-        datasets: this.chart.datasets.ciudades.map((ciudad) => ({
-          label: ciudad.nombre,
-          data: ciudad.data,
-          backgroundColor: getRandomColor(),
-          borderColor: getRandomColor(true),
-          borderWidth: 1,
-          tension: 0.2,
-        })),
+    this.renderChart();
+  },
+  watch: {
+    chart: {
+      deep: true, // Observa cambios profundos en el objeto `chart`
+      handler() {
+        this.updateChart();
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: top,
-          },
+    },
+  },
+  methods: {
+    renderChart() {
+      var ctx = document.getElementById(this.id).getContext("2d");
+
+      let chartStatus = Chart.getChart(this.id);
+      if (chartStatus != undefined) {
+        chartStatus.destroy();
+      }
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: this.chart.labels,
+          datasets: this.chart.datasets.ciudades.map((ciudad) => ({
+            label: ciudad.nombre,
+            data: ciudad.data,
+            backgroundColor: getRandomColor(),
+            borderColor: getRandomColor(true),
+            borderWidth: 1,
+            tension: 0.2,
+          })),
         },
-        interaction: {
-          intersect: false,
-          mode: "index",
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: "rgba(255, 255, 255, .2)",
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: top,
+              labels: { color: "white" },
             },
-            ticks: {
-              display: true,
-              color: "#f8f9fa",
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: "normal",
-                lineHeight: 2,
+          },
+          interaction: {
+            intersect: false,
+            mode: "index",
+          },
+          scales: {
+            y: {
+              grid: {
+                drawBorder: false,
+                display: true,
+                drawOnChartArea: true,
+                drawTicks: false,
+                borderDash: [5, 5],
+                color: "rgba(255, 255, 255, .2)",
+              },
+              ticks: {
+                display: true,
+                color: "#f8f9fa",
+                padding: 10,
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: "normal",
+                  lineHeight: 2,
+                },
+              },
+            },
+            x: {
+              grid: {
+                drawBorder: false,
+                display: false,
+                drawOnChartArea: false,
+                drawTicks: false,
+                borderDash: [5, 5],
+              },
+              ticks: {
+                display: true,
+                color: "#f8f9fa",
+                padding: 10,
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: "normal",
+                  lineHeight: 2,
+                },
               },
             },
           },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [5, 5],
-            },
-            ticks: {
-              display: true,
-              color: "#f8f9fa",
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: "normal",
-                lineHeight: 2,
-              },
-            },
-          },
         },
-      },
-    });
+      });
+    },
+    updateChart() {
+      // Si ya hay una instancia, destruye y vuelve a crear el gráfico
+      if (this.chartInstance) {
+        this.chartInstance.destroy();
+      }
+      this.renderChart();
+    },
   },
 };
 

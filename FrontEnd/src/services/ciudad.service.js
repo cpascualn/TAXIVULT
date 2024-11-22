@@ -1,4 +1,4 @@
-import { simpleQuery, simpleAuthQuery, Query,AuthQuery } from "@/assets/utils/fetchHelper";
+import { simpleQuery, simpleAuthQuery, Query, AuthQuery } from "@/assets/utils/fetchHelper";
 import profileService from "./profile.service";
 
 export default {
@@ -32,7 +32,7 @@ export default {
         return null;
 
       let ciuData = await this.getCiudad(data.usuario.ciudad);
-      if(!ciuData.success)
+      if (!ciuData.success)
         return null;
       return ciuData.ciudad;
     } catch (err) {
@@ -41,7 +41,7 @@ export default {
   },
   async addCiudad(ciudad) {
     try {
-      return await AuthQuery(`/api/ciudades/insertar`,ciudad);
+      return await AuthQuery(`/api/ciudades/insertar`, ciudad);
     } catch (err) {
       console.log(err);
     }
@@ -49,8 +49,19 @@ export default {
   async deleteCiudad(id) {
     try {
       console.log(id);
-      
-      return await simpleAuthQuery(`/api/ciudades/eliminar/${id}`,'DELETE');
+
+      return await simpleAuthQuery(`/api/ciudades/eliminar/${id}`, 'DELETE');
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  async getUsuariosPorCiudad() {
+    try {
+      const response = await simpleAuthQuery('/api/ciudades/obtener/UsuariosCiudad');
+      if (!response || !response.success)
+        return null;
+      return response.data;
     } catch (err) {
       console.log(err);
     }

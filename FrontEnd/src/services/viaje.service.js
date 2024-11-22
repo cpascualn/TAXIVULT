@@ -26,4 +26,24 @@ export default {
             console.log(err);
         }
     },
+    async getTotalesCiudad() {
+        try {
+            const response = await simpleAuthQuery(`/api/viajes/totalesCiudad`);
+            if (!response || !response.success)
+                return 0;
+            return response.totales;
+        } catch (err) {
+            console.log(err);
+        }
+    },
+    async getTotalesCiudadMes() {
+        try {
+            const response = await simpleAuthQuery(`/api/viajes/totalesCiudadMes`);
+            if (!response || !response.success)
+                return 0;
+            return response.totales;
+        } catch (err) {
+            console.log(err);
+        }
+    },
 }

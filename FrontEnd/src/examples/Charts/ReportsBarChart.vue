@@ -30,98 +30,123 @@ export default {
       },
     },
   },
-
+  data() {
+    return {
+      chartInstance: null,
+    };
+  },
   mounted() {
-    var ctx = document.getElementById(this.id).getContext("2d");
-
-    let chartStatus = Chart.getChart(this.id);
-    if (chartStatus != undefined) {
-      chartStatus.destroy();
-    }
-
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: this.chart.labels,
-        datasets: [
-          {
-            label: this.chart.datasets.label1,
-            data: this.chart.datasets.data1,
-            backgroundColor: "rgba(38, 102, 150, 0.8)", // Azul oscuro
-            borderColor: "rgba(38, 102, 150, 1)", // Azul más intenso
-            borderWidth: 1,
-          },
-          {
-            label: this.chart.datasets.label2,
-            data: this.chart.datasets.data2,
-            backgroundColor: "rgba(102, 51, 153, 0.8)", // Morado oscuro
-            borderColor: "rgba(102, 51, 153, 1)", // Morado más intenso
-            borderWidth: 1,
-          },
-        ],
+    this.renderChart();
+  },
+  watch: {
+    chart: {
+      deep: true, // Observa cambios profundos en el objeto `chart`
+      handler() {
+        this.updateChart();
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-        interaction: {
-          intersect: false,
-          mode: "index",
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: "rgba(255, 255, 255, .2)",
+    },
+  },
+  methods: {
+    renderChart() {
+      const ctx = document.getElementById(this.id).getContext("2d");
+
+      // Asegúrate de destruir cualquier gráfico existente
+      if (this.chartInstance) {
+        this.chartInstance.destroy();
+      }
+
+      // Crea una nueva instancia del gráfico
+      this.chartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: this.chart.labels,
+          datasets: [
+            {
+              label: this.chart.datasets.label1,
+              data: this.chart.datasets.data1,
+              backgroundColor: "#5DB461",
+              borderColor: "#D7AB23",
+              borderWidth: 1,
             },
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: 500,
-              beginAtZero: true,
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: "normal",
-                lineHeight: 2,
+            {
+              label: this.chart.datasets.label2,
+              data: this.chart.datasets.data2,
+              backgroundColor: "#D7AB23",
+              borderColor: "#5DB461",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          interaction: {
+            intersect: false,
+            mode: "index",
+          },
+          scales: {
+            y: {
+              grid: {
+                drawBorder: false,
+                display: true,
+                drawOnChartArea: true,
+                drawTicks: false,
+                borderDash: [5, 5],
+                color: "rgba(255, 255, 255, .2)",
               },
-              color: "#fff",
-            },
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: "rgba(255, 255, 255, .2)",
-            },
-            ticks: {
-              display: true,
-              color: "#f8f9fa",
-              padding: 10,
-              font: {
-                size: 14,
-                weight: 300,
-                family: "Roboto",
-                style: "normal",
-                lineHeight: 2,
+              ticks: {
+                suggestedMin: 0,
+                suggestedMax: 500,
+                beginAtZero: true,
+                padding: 10,
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: "normal",
+                  lineHeight: 2,
+                },
+                color: "#fff",
               },
             },
+            x: {
+              grid: {
+                drawBorder: false,
+                display: true,
+                drawOnChartArea: true,
+                drawTicks: false,
+                borderDash: [5, 5],
+                color: "rgba(255, 255, 255, .2)",
+              },
+              ticks: {
+                display: true,
+                color: "#f8f9fa",
+                padding: 10,
+                font: {
+                  size: 14,
+                  weight: 300,
+                  family: "Roboto",
+                  style: "normal",
+                  lineHeight: 2,
+                },
+              },
+            },
           },
         },
-      },
-    });
+      });
+    },
+    updateChart() {
+      // Si ya hay una instancia, destruye y vuelve a crear el gráfico
+      if (this.chartInstance) {
+        this.chartInstance.destroy();
+      }
+      this.renderChart();
+    },
   },
 };
 </script>

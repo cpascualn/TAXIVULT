@@ -1,4 +1,5 @@
 <template>
+  <LoadingPage ref="loading"></LoadingPage>
   <div class="py-4 container-fluid">
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
@@ -57,19 +58,9 @@
               title="Usuarios por ciudad"
               subtitle="Pasajeros y Conductores"
               update="campaign sent 2 days ago"
+              color="dark"
             >
-              <reports-bar-chart
-                :chart="{
-                  labels: ['Madrid', 'Barcelona', 'Sevilla', 'Valencia'],
-                  datasets: {
-                    label1: 'Conductores',
-                    label2: 'Pasajeros',
-                    backgroundColor: ['#3e95cd', '#8e5ea2'],
-                    data1: [120, 150, 90, 110],
-                    data2: [200, 180, 130, 170],
-                  },
-                }"
-              />
+              <reports-bar-chart :chart="barChartData" />
             </chart-holder-card>
           </div>
           <div class="col-lg-4 col-md-6 mt-4">
@@ -78,16 +69,7 @@
               subtitle="Viajes totales que se han realizado en total"
               color="secondary"
             >
-              <reports-pie-chart
-                id="tasks-chart"
-                :chart="{
-                  labels: ['Madrid', 'Barcelona', 'Ciudad Real'],
-                  datasets: {
-                    label: 'viajes',
-                    data: [150, 200, 120],
-                  },
-                }"
-              />
+              <reports-pie-chart id="tasks-chart" :chart="PieChartData" />
             </chart-holder-card>
           </div>
           <div class="col-lg-4 mt-4">
@@ -96,42 +78,7 @@
               subtitle="Evolución mensual"
               color="dark"
             >
-              <reports-line-chart
-                :chart="{
-                  labels: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
-                  ],
-                  datasets: {
-                    ciudades: [
-                      {
-                        nombre: 'Madrid',
-                        data: [
-                          500, 40, 300, 320, 500, 350, 200, 230, 500, 200, 230,
-                          500,
-                        ],
-                      },
-                      {
-                        nombre: 'Barcelona',
-                        data: [
-                          700, 20, 200, 220, 300, 450, 500, 730, 200, 500, 730,
-                          200,
-                        ],
-                      },
-                    ],
-                  },
-                }"
-              />
+              <reports-line-chart :chart="lineChartData" />
             </chart-holder-card>
           </div>
         </div>
@@ -141,21 +88,8 @@
       <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
         <project-card
           title="Ciudades"
-          :headers="['Ciudad', 'Usuarios', 'viajes', 'dinero Total']"
-          :projects="[
-            {
-              title: 'Madrid',
-              members: '15',
-              budget: '200€',
-              viajes: '30',
-            },
-            {
-              title: 'Barcelona',
-              members: '12',
-              budget: '100€',
-              viajes: '25',
-            },
-          ]"
+          :headers="['Ciudad', 'Dinero Total', 'viajes', 'Usuarios']"
+          :projects="ciudades"
         />
       </div>
       <div class="col-lg-4 col-md-6">
@@ -169,7 +103,7 @@
               component: 'light_mode',
               class: 'text-warning',
             }"
-            title="DIURNO"
+            title="Diurno"
             date-time="DE 08:00 A 19:59 (con descansos)"
           />
           <TimelineItem
@@ -194,10 +128,12 @@ import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
 import ProjectCard from "./components/ProjectCard.vue";
 import TimelineList from "@/examples/Cards/TimelineList.vue";
 import TimelineItem from "@/examples/Cards/TimelineItem.vue";
+import LoadingPage from "@/components/index/LoadingPage.vue";
 
 import userService from "@/services/user.service";
 import viajeService from "@/services/viaje.service";
 import vehiculosService from "@/services/vehiculos.service";
+import ciudadService from "@/services/ciudad.service";
 
 export default {
   name: "dashboard-default",
@@ -210,13 +146,42 @@ export default {
     TimelineList,
     TimelineItem,
     ReportsPieChart,
+    LoadingPage,
   },
   async mounted() {
     this.usuariosTotal = await userService.getUsuariosTotales();
+
     const viajeTotales = await viajeService.getTotales();
     this.dineroTotal = viajeTotales.dinero;
     this.viajesTotal = viajeTotales.viajes;
+
     this.VehiculosTotal = await vehiculosService.getVehiculosTotales();
+
+    const ciusers = await ciudadService.getUsuariosPorCiudad();
+    this.usuarioCiudad = ciusers.reduce(
+      (acumulador, item) => {
+        acumulador.ciudades.push(item.ciudad);
+        acumulador.conductores.push(item.conductores);
+        acumulador.pasajeros.push(item.pasajeros);
+        return acumulador;
+      },
+      { ciudades: [], conductores: [], pasajeros: [] }
+    );
+
+    const viajesCiu = await viajeService.getTotalesCiudad();
+    this.ciudades = viajesCiu;
+    this.viajesCiudad = viajesCiu.reduce(
+      (acumulador, item) => {
+        acumulador.ciudades.push(item.ciudad);
+        acumulador.viajes.push(item.viajes);
+        return acumulador;
+      },
+      { ciudades: [], viajes: [] }
+    );
+    this.ciudadesMeses = await viajeService.getTotalesCiudadMes();
+
+    this.isReady = true;
+    alert("fin");
   },
   data() {
     return {
@@ -224,7 +189,19 @@ export default {
       usuariosTotal: 0,
       viajesTotal: 0,
       VehiculosTotal: 0,
+      usuarioCiudad: { ciudades: [], conductores: [], pasajeros: [] },
+      viajesCiudad: { ciudades: [], viajes: [] },
+      ciudades: {},
+      ciudadesMeses: [],
+      isReady: false,
     };
+  },
+  watch: {
+    isReady(newVal) {
+      if (newVal) {
+        this.loadFinished();
+      }
+    },
   },
   computed: {
     detailMediaDinero() {
@@ -246,6 +223,63 @@ export default {
       return `<span class='text-success text-sm font-weight-bolder'>${(
         this.VehiculosTotal / 12
       ).toFixed(2)}</span> de media al mes`;
+    },
+    barChartData() {
+      return {
+        labels: this.usuarioCiudad.ciudades,
+        datasets: {
+          label1: "Conductores",
+          label2: "Pasajeros",
+          data1: this.usuarioCiudad.conductores,
+          data2: this.usuarioCiudad.pasajeros,
+        },
+      };
+    },
+    PieChartData() {
+      return {
+        labels: this.viajesCiudad.ciudades,
+        datasets: {
+          label: "viajes",
+          data: this.viajesCiudad.viajes,
+        },
+      };
+    },
+    lineChartData() {
+      const meses = [...new Set(this.ciudadesMeses.map((item) => item.mes))];
+
+      // Agrupar los datos por ciudad
+      const ciudadesData = this.ciudadesMeses.reduce((acc, item) => {
+        const mesIndex = meses.indexOf(item.mes); // Encontrar el índice del mes
+        const ciudadIndex = acc.findIndex((c) => c.nombre === item.ciudad);
+
+        if (ciudadIndex === -1) {
+          // Si la ciudad no está en el array de ciudades, agregarla
+          acc.push({
+            nombre: item.ciudad,
+            data: Array(meses.length).fill(0), // Crear un array de la longitud de meses con 0
+          });
+        }
+
+        // Asignar el valor de 'dinero' en el índice correspondiente
+        acc[ciudadIndex === -1 ? acc.length - 1 : ciudadIndex].data[mesIndex] =
+          parseFloat(item.dinero);
+
+        return acc;
+      }, []);
+
+      return {
+        labels: meses,
+        datasets: {
+          ciudades: ciudadesData,
+        },
+      };
+    },
+  },
+  methods: {
+    loadFinished() {
+      if (this.$refs.loading) {
+        this.$refs.loading.closeModal();
+      }
     },
   },
 };

@@ -177,7 +177,41 @@ class DaoViaje
             $dinero = $fila['dinero'];
         }
 
-        return array($viajes,$dinero);
+        return array($viajes, $dinero);
+    }
+
+    public function verTotalesCiudad()
+    {
+        $consulta = "SELECT c.nombre as ciudad,SUM(precio_total) as dinero,count(*) as viajes,(select count(*)from Usuario u where u.ciudad = c.id ) as usuarios  FROM Viaje v join Ciudad c on v.ciudad = c.id group by c.nombre";
+
+        $this->db->ConsultaDatos($consulta);
+        $data = [];
+
+        foreach ($this->db->filas as $fila) {
+            $data[] = array('ciudad' => $fila['ciudad'], 'dinero' => $fila['dinero'], 'viajes' => $fila['viajes'], 'usuarios' => $fila['usuarios']);
+        }
+
+
+        return $data;
+    }
+
+    public function verTotalesCiudadPorMes()
+    {
+        $consulta = "SELECT c.nombre AS ciudad, DATE_FORMAT(FROM_UNIXTIME(v.fecha_ini), '%Y-%m') AS mes, SUM(v.precio_total) AS dinero
+                    FROM Ciudad c JOIN  Viaje v ON  c.id = v.ciudad
+                    WHERE YEAR(FROM_UNIXTIME(v.fecha_ini)) = YEAR(CURDATE())
+                    GROUP BY c.nombre,DATE_FORMAT(FROM_UNIXTIME(v.fecha_ini), '%Y-%m')
+                    ORDER BY  mes ASC";
+
+        $this->db->ConsultaDatos($consulta);
+        $data = [];
+
+        foreach ($this->db->filas as $fila) {
+            $data[] = array('ciudad' => $fila['ciudad'], 'mes' => $fila['mes'], 'dinero' => $fila['dinero']);
+        }
+
+
+        return $data;
     }
 
 

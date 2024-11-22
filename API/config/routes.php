@@ -64,10 +64,13 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/activoUsuario', [ViajeController::class, 'HandleObtenerViajesActivosUsuario']);
         $group->post('/usuario', [ViajeController::class, 'HandleObtenerViajesUsuario']);
         $group->get('/totales', [ViajeController::class, 'HandleVerTotales']);
+        $group->get('/totalesCiudad', [ViajeController::class, 'HandleVerTotalesCiudad']);
+        $group->get('/totalesCiudadMes', [ViajeController::class, 'HandleVerTotalesCiudadPorMes']);
     });
     $group->group('/ciudades', function (RouteCollectorProxy $group) {
         $group->post('/insertar', [CiudadController::class, 'HandleInsertar']);
         $group->delete('/eliminar/{id:[0-9]+}', [CiudadController::class, 'HandleEliminar']);
+        $group->get('/obtener/UsuariosCiudad', [CiudadController::class, 'HandleVerUsuariosPorCiudad']);
     });
     $group->group('/vehiculos', function (RouteCollectorProxy $group) {
         $group->get('', [VehiculoController::class, 'HandleListar']);

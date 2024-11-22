@@ -101,6 +101,29 @@ class DaoCiudad
         return $ciu;
     }
 
+    public function obtenerUsuariosPorCiudad()
+    {
+        $consulta = "SELECT c.nombre AS ciudad, COUNT(CASE WHEN u.rol = 2 THEN 1 END) AS conductores,COUNT(CASE WHEN u.rol = 3 THEN 1 END) AS pasajeros
+                    FROM Ciudad c JOIN Usuario u ON c.id = u.ciudad GROUP BY c.nombre";
+
+
+        $this->db->ConsultaDatos($consulta);
+        $data = [];
+        $ciudad = "";
+        $conductores = "";
+        $pasajeros = "";
+
+        foreach ($this->db->filas as $fila) {
+            $ciudad = $fila['ciudad'];
+            $conductores = $fila['conductores'];
+            $pasajeros = $fila['pasajeros'];
+
+            $data[] = array('ciudad' => $ciudad, 'conductores' => $conductores, 'pasajeros' => $pasajeros);
+        }
+
+        return $data;
+    }
+
     public function insertar($ciudad)
     {
         $consulta = 'INSERT INTO Ciudad (`nombre`, `comunidad`, `pais`, `lat_min`, `lat_max`, `long_min`, `long_max`, `lat`, `long`)

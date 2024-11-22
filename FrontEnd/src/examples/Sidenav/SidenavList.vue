@@ -337,9 +337,6 @@ export default {
   },
   data() {
     return {
-      title: "Soft UI Dashboard PRO",
-      controls: "dashboardsExamples",
-      isActive: "active",
       rol: profileService.getRol(),
     };
   },

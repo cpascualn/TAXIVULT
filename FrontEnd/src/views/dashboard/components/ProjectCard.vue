@@ -3,7 +3,7 @@
     <div class="card-header pb-0">
       <div class="row">
         <div class="col-lg-6 col-7">
-          <h6>{{ title }}</h6>
+          <h6>{{ ciudad }}</h6>
           <p class="text-sm mb-0" v-html="description"></p>
         </div>
         <div class="col-lg-6 col-5 my-auto text-end">
@@ -61,26 +61,26 @@
           </thead>
           <tbody>
             <tr
-              v-for="({ title, members, budget, viajes }, index) of projects"
+              v-for="({ ciudad, dinero, viajes, usuarios }, index) of projects"
               :key="index"
             >
               <td>
                 <div class="d-flex px-2 py-1">
                   <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm">{{ title }}</h6>
+                    <h6 class="mb-0 text-sm">{{ ciudad }}</h6>
                   </div>
                 </div>
               </td>
               <td>
                 <div class="avatar-group mt-2">
-                  <span>{{ members }}</span>
+                  <span>{{ dinero }}€</span>
                 </div>
               </td>
               <td class="align-middle text-center text-sm">
                 <span class="text-xs font-weight-bold"> {{ viajes }} </span>
               </td>
               <td class="align-middle text-center text-sm">
-                <span class="text-xs font-weight-bold"> {{ budget }} </span>
+                <span class="text-xs font-weight-bold"> {{ usuarios }} </span>
               </td>
             </tr>
           </tbody>
@@ -109,10 +109,10 @@ export default {
     projects: {
       type: Array,
       required: true,
-      title: String,
-      members: String,
-      budget: String,
+      ciudad: String,
+      dinero: String,
       viajes: String,
+      usuarios: String,
     },
   },
 };

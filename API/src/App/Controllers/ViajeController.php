@@ -106,6 +106,47 @@ class ViajeController
             return $response->withStatus(200);
         }
     }
+    public function HandleVerTotalesCiudad(Request $request, Response $response)
+    {
+        try {
+            $data = $this->daoViaje->verTotalesCiudad();
+
+            $body = json_encode([
+                'totales' => $data,
+                'success' => true
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'message' => $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        }
+    }
+
+    public function HandleVerTotalesCiudadPorMes(Request $request, Response $response)
+    {
+        try {
+            $data = $this->daoViaje->verTotalesCiudadPorMes();
+
+            $body = json_encode([
+                'totales' => $data,
+                'success' => true
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'message' => $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(200);
+        }
+    }
 
 
 
