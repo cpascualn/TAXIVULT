@@ -117,14 +117,14 @@
                       {
                         nombre: 'Madrid',
                         data: [
-                          50, 40, 300, 320, 500, 350, 200, 230, 500, 200, 230,
+                          500, 40, 300, 320, 500, 350, 200, 230, 500, 200, 230,
                           500,
                         ],
                       },
                       {
                         nombre: 'Barcelona',
                         data: [
-                          70, 20, 200, 220, 300, 450, 500, 730, 200, 500, 730,
+                          700, 20, 200, 220, 300, 450, 500, 730, 200, 500, 730,
                           200,
                         ],
                       },
@@ -141,19 +141,19 @@
       <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
         <project-card
           title="Ciudades"
-          :headers="['Ciudad', 'Usuarios', 'dinero Total', 'viajes']"
+          :headers="['Ciudad', 'Usuarios', 'viajes', 'dinero Total']"
           :projects="[
             {
-              title: 'Material XD Material XD Version',
-              members: [],
-              budget: '$14,000',
-              progress: { percentage: 100, color: 'info' },
+              title: 'Madrid',
+              members: '15',
+              budget: '200€',
+              viajes: '30',
             },
             {
-              title: 'Launch our Mobile App',
-              members: [],
-              budget: '$20,500',
-              progress: { percentage: 100, color: 'success' },
+              title: 'Barcelona',
+              members: '12',
+              budget: '100€',
+              viajes: '25',
             },
           ]"
         />
@@ -162,24 +162,23 @@
         <timeline-list
           class="h-100"
           title="Horarios"
-          description="<i class='fa fa-arrow-up text-success' aria-hidden='true'></i>
-        <span class='font-weight-bold'>24%</span> this month"
+          description="Conductores y beneficios"
         >
           <timeline-item
             :icon="{
               component: 'light_mode',
               class: 'text-warning',
             }"
-            title="$2400 nombre horario y dinero generado"
-            date-time="22 DEC 7:20 PM"
+            title="DIURNO"
+            date-time="DE 08:00 A 19:59 (con descansos)"
           />
           <TimelineItem
             :icon="{
               component: 'dark_mode',
               class: 'text-dark',
             }"
-            title="New order #1832412"
-            date-time="21 DEC 11 PM"
+            title="Nocturno"
+            date-time="DE 20:00 A 7:59 (con descansos)"
           />
         </timeline-list>
       </div>

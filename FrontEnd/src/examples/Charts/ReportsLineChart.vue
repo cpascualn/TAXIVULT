@@ -35,8 +35,6 @@ export default {
       chartStatus.destroy();
     }
 
-    console.log(this.chart.datasets.ciudades);
-
     new Chart(ctx, {
       type: "line",
       data: {
@@ -47,7 +45,7 @@ export default {
           backgroundColor: getRandomColor(),
           borderColor: getRandomColor(true),
           borderWidth: 1,
-          tension: 0.2
+          tension: 0.2,
         })),
       },
       options: {
