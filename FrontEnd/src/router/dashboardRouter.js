@@ -4,7 +4,7 @@ import { Roles } from './Roles'
 
 import Billing from "@/views/dashboard/Billing.vue"
 import Dashboard from "@/views/dashboard/Dashboard.vue"
-import UserProfile from "@/views/dashboard/examples-api/profile/UserProfile.vue"
+import UserProfile from '@/views/dashboard/components/profile/UserProfile.vue'
 import Profile from "@/views/dashboard/Profile.vue"
 import authService from '@/services/auth.service';
 import Horarios from '@/views/dashboard/Horarios.vue'

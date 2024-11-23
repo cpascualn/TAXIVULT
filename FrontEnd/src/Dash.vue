@@ -1,7 +1,6 @@
 <script>
-import Sidenav from "@/examples/Sidenav/index.vue";
-import Navbar from "@/examples/Navbars/Navbar.vue";
-import AppFooter from "@/examples/Footer.vue";
+import Sidenav from "@/components/dashboard/Sidenav/index.vue";
+import Navbar from "@/components/dashboard/Navbars/Navbar.vue";
 import { mapMutations, mapState } from "vuex";
 
 export default {
@@ -9,7 +8,6 @@ export default {
   components: {
     Sidenav,
     Navbar,
-    AppFooter,
   },
   methods: {
     ...mapMutations(["navbarMinimize"]),

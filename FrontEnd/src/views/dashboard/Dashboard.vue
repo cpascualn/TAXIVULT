@@ -121,13 +121,13 @@
 </template>
 <script>
 import ChartHolderCard from "./components/ChartHolderCard.vue";
-import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
-import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
-import ReportsPieChart from "@/examples/Charts/ReportsPieChart.vue";
+import ReportsBarChart from "@/components/dashboard/Charts/ReportsBarChart.vue";
+import ReportsLineChart from "@/components/dashboard/Charts/ReportsLineChart.vue";
+import ReportsPieChart from "@/components/dashboard/Charts/ReportsPieChart.vue";
 import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
 import ProjectCard from "./components/ProjectCard.vue";
-import TimelineList from "@/examples/Cards/TimelineList.vue";
-import TimelineItem from "@/examples/Cards/TimelineItem.vue";
+import TimelineList from "@/components/dashboard/Cards/TimelineList.vue";
+import TimelineItem from "@/components/dashboard/Cards/TimelineItem.vue";
 import LoadingPage from "@/components/index/LoadingPage.vue";
 
 import userService from "@/services/user.service";

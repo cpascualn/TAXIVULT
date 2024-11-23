@@ -192,86 +192,6 @@
       </div>
       <div class="row">
         <div class="mt-3 row">
-          <div class="col-12 col-md-6 col-xl-4 position-relative">
-            <div class="card card-plain h-100">
-              <div class="p-3 pb-0 card-header">
-                <h6 class="mb-0">Platform Settings</h6>
-              </div>
-              <div class="p-3 card-body">
-                <h6 class="text-xs text-uppercase text-body font-weight-bolder">
-                  Account
-                </h6>
-                <ul class="list-group">
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch
-                      id="flexSwitchCheckDefault"
-                      class="ps-0 ms-0"
-                      name="flexSwitchCheckDefault"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      checked
-                      >Email me when someone follows me</material-switch
-                    >
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch
-                      id="flexSwitchCheckDefault1"
-                      class="ps-0 ms-0"
-                      name="flexSwitchCheckDefault1"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      >Email me when someone answers on my post</material-switch
-                    >
-                  </li>
-
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch
-                      id="flexSwitchCheckDefault2"
-                      class="ps-0 ms-0"
-                      name="flexSwitchCheckDefault2"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      checked
-                      >Email me when someone mentions me</material-switch
-                    >
-                  </li>
-                </ul>
-                <h6
-                  class="mt-4 text-xs text-uppercase text-body font-weight-bolder"
-                >
-                  Application
-                </h6>
-                <ul class="list-group">
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch
-                      id="flexSwitchCheckDefault3"
-                      class="ps-0 ms-0"
-                      name="flexSwitchCheckDefault3"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      >New launches and projects</material-switch
-                    >
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-                    <material-switch
-                      id="flexSwitchCheckDefault4"
-                      class="ps-0 ms-0"
-                      name="flexSwitchCheckDefault4"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      checked
-                      >Monthly product updates</material-switch
-                    >
-                  </li>
-                  <li class="px-0 pb-0 border-0 list-group-item">
-                    <material-switch
-                      id="flexSwitchCheckDefault5"
-                      class="ps-0 ms-0"
-                      name="flexSwitchCheckDefault5"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      >Subscribe to newsletter</material-switch
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div>
           <div class="col-12 col-md-6 col-xl-4 mt-md-0 mt-4 position-relative">
             <profile-info-card
               title="Profile Information"
@@ -425,134 +345,6 @@
             </div>
           </div>
         </div>
-        <div class="row mt-4">
-          <div class="col-12">
-            <div class="mb-5 ps-3">
-              <h6 class="mb-1">Projects</h6>
-              <p class="text-sm">Architects design houses</p>
-            </div>
-            <div class="row">
-              <default-project-card
-                title="Modern"
-                :image="img1"
-                label="Project #2"
-                description="As Uber works through a huge amount of internal
-                management turmoil."
-                :authors="[
-                  {
-                    image: team1,
-                    name: 'Elena Morison',
-                  },
-                  {
-                    image: team2,
-                    name: 'Ryan Milly',
-                  },
-                  {
-                    image: team3,
-                    name: 'Nick Daniel',
-                  },
-                  {
-                    image: team4,
-                    name: 'Peterson',
-                  },
-                ]"
-                :action="{
-                  color: 'success',
-                  label: 'View Project',
-                }"
-              />
-
-              <default-project-card
-                title="Scandinavian"
-                :image="img2"
-                label="Project #1"
-                description="Music is something that every person has his or her own
-                      specific opinion about."
-                :authors="[
-                  {
-                    image: team3,
-                    name: 'Nick Daniel',
-                  },
-                  {
-                    image: team4,
-                    name: 'Peterson',
-                  },
-                  {
-                    image: team1,
-                    name: 'Elena Morison',
-                  },
-                  {
-                    image: team2,
-                    name: 'Ryan Milly',
-                  },
-                ]"
-                :action="{
-                  color: 'success',
-                  label: 'View Project',
-                }"
-              />
-
-              <default-project-card
-                title="Minimalist"
-                :image="img3"
-                label="Project #3"
-                description="Different people have different taste, and various types
-                      of music."
-                :authors="[
-                  {
-                    image: team4,
-                    name: 'Peterson',
-                  },
-                  {
-                    image: team3,
-                    name: 'Nick Daniel',
-                  },
-                  {
-                    image: team1,
-                    name: 'Elena Morison',
-                  },
-                  {
-                    image: team2,
-                    name: 'Ryan Milly',
-                  },
-                ]"
-                :action="{
-                  color: 'success',
-                  label: 'View Project',
-                }"
-              />
-              <default-project-card
-                title="Gothic"
-                image="https://images.unsplash.com/photo-1606744824163-985d376605aa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                label="Project #4"
-                description="Why would anyone pick blue over pink? Pink is obviously a
-                      better color."
-                :authors="[
-                  {
-                    image: team4,
-                    name: 'Peterson',
-                  },
-                  {
-                    image: team3,
-                    name: 'Nick Daniel',
-                  },
-                  {
-                    image: team2,
-                    name: 'Ryan Milly',
-                  },
-                  {
-                    image: team1,
-                    name: 'Elena Morison',
-                  },
-                ]"
-                :action="{
-                  color: 'success',
-                  label: 'View Project',
-                }"
-              />
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -561,19 +353,12 @@
 <script>
 import ProfileInfoCard from "./components/ProfileInfoCard.vue";
 import DefaultProjectCard from "./components/DefaultProjectCard.vue";
-import MaterialSwitch from "@/components/dashboard/MaterialSwitch.vue";
 import MaterialAvatar from "@/components/dashboard/MaterialAvatar.vue";
-import sophie from "@/assets/img/kal-visuals-square.jpg";
-import marie from "@/assets/img/marie.jpg";
-import ivana from "@/assets/img/ivana-square.jpg";
+import sophie from "@/assets/img/team-4.jpg";
+import marie from "@/assets/img/team-4.jpg";
+import ivana from "@/assets/img/team-4.jpg";
 import peterson from "@/assets/img/team-4.jpg";
-import nick from "@/assets/img/team-3.jpg";
-import img1 from "@/assets/img/home-decor-1.jpg";
-import img2 from "@/assets/img/home-decor-2.jpg";
-import img3 from "@/assets/img/home-decor-3.jpg";
-import team1 from "@/assets/img/team-1.jpg";
-import team2 from "@/assets/img/team-2.jpg";
-import team3 from "@/assets/img/team-3.jpg";
+import nick from "@/assets/img/team-4.jpg";
 import team4 from "@/assets/img/team-4.jpg";
 
 import setNavPills from "@/assets/js/nav-pills.js";
@@ -589,19 +374,12 @@ export default {
       ivana,
       peterson,
       nick,
-      img1,
-      team1,
-      team2,
-      team3,
       team4,
-      img2,
-      img3,
     };
   },
   components: {
     ProfileInfoCard,
     DefaultProjectCard,
-    MaterialSwitch,
     MaterialAvatar,
   },
 

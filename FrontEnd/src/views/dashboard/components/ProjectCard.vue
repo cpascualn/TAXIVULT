@@ -107,7 +107,7 @@ export default {
       required: true,
     },
     projects: {
-      type: Array,
+      type: [Array, Object],
       required: true,
       ciudad: String,
       dinero: String,

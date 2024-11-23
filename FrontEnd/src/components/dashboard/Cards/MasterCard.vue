@@ -40,7 +40,7 @@
 <script>
 import MaterialAvatar from "@/components/dashboard/MaterialAvatar.vue";
 import { mapState } from "vuex";
-import img1 from "../../assets/img/logos/mastercard.png";
+import img1 from "@/assets/img/logos/mastercard.png";
 import curvedImage from "@/assets/img/curved14.jpg";
 
 export default {

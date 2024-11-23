@@ -107,7 +107,7 @@
   </nav>
 </template>
 <script>
-import Breadcrumbs from "../Breadcrumbs.vue";
+import Breadcrumbs from "@/components/dashboard/Breadcrumbs.vue";
 import { mapMutations, mapState } from "vuex";
 import MaterialInput from "@/components/dashboard/MaterialInput.vue";
 

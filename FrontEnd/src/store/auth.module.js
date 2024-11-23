@@ -1,4 +1,4 @@
-import AuthService from '../services/auth.service';
+import AuthService from '@/services/auth.service';
 
 const user = JSON.parse(localStorage.getItem('authToken'));
 const initialState = user ? { loggedIn: true } : { loggedIn: false };
@@ -13,14 +13,14 @@ export const auth = {
         commit('isLoggedIn', true);
       } catch (error) {
         commit('isLoggedIn', false);
-        throw(error)
+        throw (error)
       }
     },
     async logout({ commit }) {
       try {
         await AuthService.logout();
         commit('isLoggedIn', false);
-      }catch(error){
+      } catch (error) {
         commit('isLoggedIn', true);
       }
     },
@@ -30,15 +30,15 @@ export const auth = {
         commit('isLoggedIn', true);
       } catch (error) {
         commit('isLoggedIn', false);
-        throw(error)
+        throw (error)
       }
     },
     // eslint-disable-next-line no-unused-vars
-    async passwordForgot({commit}, userEmail){
+    async passwordForgot({ commit }, userEmail) {
       await AuthService.passwordForgot(userEmail);
     },
     // eslint-disable-next-line no-unused-vars
-    async passwordReset({commit}, passwordDTO){
+    async passwordReset({ commit }, passwordDTO) {
       await AuthService.passwordReset(passwordDTO);
     },
   },
@@ -48,7 +48,7 @@ export const auth = {
     }
   },
   getters: {
-    isLoggedIn(state){
+    isLoggedIn(state) {
       return state.loggedIn;
     }
   }
