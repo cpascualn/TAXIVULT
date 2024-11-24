@@ -3,69 +3,25 @@
     class="multisteps-form__panel border-radius-xl bg-white"
     data-animation="FadeIn"
   >
-    <h5 class="font-weight-bolder mb-0">About me</h5>
+    <h5 class="font-weight-bolder mb-0">Mis Datos</h5>
     <div class="multisteps-form__content">
-      <div class="row mt-4 overflow-hidden">
-        <div>
-          <material-avatar
-            :img="getImage"
-            shadow="regular"
-            class="img-fluid w-20 mt-7"
-            :fixedSize="true"
-          >
-          </material-avatar>
-        </div>
-        <div class="mt-1 mb-2">
-          <material-button v-show="!file" size="sm" type="button">
-            <label for="imageInput" class="mb-0 text-white small cursor-pointer"
-              >Select Image</label
-            >
-            <input
-              id="imageInput"
-              type="file"
-              style="display: none"
-              accept="image/*"
-              @change.prevent="onFileChange"
-            />
-          </material-button>
-
-          <div v-show="file">
-            <material-button
-              class="mx-2"
-              size="sm"
-              type="button"
-              color="danger"
-              @click.prevent="onFileRemove"
-            >
-              <label class="mb-0 text-white small cursor-pointer">
-                &#10005; Remove</label
-              >
-            </material-button>
-            <material-button size="sm" type="button">
-              <label
-                for="imageInput"
-                class="mb-0 text-white small cursor-pointer"
-                >Change</label
-              >
-              <input
-                id="imageInput"
-                type="file"
-                style="display: none"
-                accept="image/*"
-                @change.prevent="onFileChange"
-              />
-            </material-button>
-          </div>
-        </div>
-      </div>
-
       <div class="row mt-5">
         <material-input
           id="name"
           label="Name"
           variant="static"
-          :value="user.name"
+          :value="user.nombre"
           name="name"
+        />
+        <validation-error :errors="apiValidationErrors.name" />
+      </div>
+      <div class="row mt-5">
+        <material-input
+          id="apellidos"
+          label="apellidos"
+          variant="static"
+          :value="user.apellidos"
+          name="apellidos"
         />
         <validation-error :errors="apiValidationErrors.name" />
       </div>
@@ -81,6 +37,28 @@
         />
 
         <validation-error :errors="apiValidationErrors.email" />
+      </div>
+
+      <div class="row mt-5">
+        <material-input
+          id="telefono"
+          label="teléfono"
+          variant="static"
+          :value="user.telefono"
+          name="telefono"
+        />
+        <validation-error :errors="apiValidationErrors.name" />
+      </div>
+
+      <div class="row mt-5" v-if="user.rol != 1">
+        <material-input
+          id="ciudad"
+          label="ciudad"
+          variant="static"
+          :value="user.ciudad"
+          name="ciudad"
+        />
+        <validation-error :errors="apiValidationErrors.name" />
       </div>
 
       <div class="button-row d-flex mt-4">
@@ -105,7 +83,8 @@ import ValidationError from "@/components/dashboard/ValidationError.vue";
 import formMixin from "@/mixins/formMixin.js";
 import showSwal from "@/mixins/showSwal.js";
 import _ from "lodash";
-import placeHolderImg from "@/assets/img/placeholder.jpg";
+import profileService from "@/services/profile.service";
+import ciudadService from "@/services/ciudad.service";
 
 export default {
   name: "Info",
@@ -119,28 +98,20 @@ export default {
     return {
       user: {},
       file: null,
-      imgSource:
-        "https://vue-material-dashboard-laravel-pro.creative-tim.com/img/placeholder.jpg",
       loading: null,
     };
   },
   mixins: [formMixin],
-  computed: {
-    getImage() {
-      if (!this.user.profile_image || this.loading) return placeHolderImg;
-      else {
-        return this.user.profile_image;
-      }
-    },
-  },
   async mounted() {
     this.loading = true;
     try {
-      await this.$store.dispatch("profile/getProfile");
-      this.user = _.omit(
-        this.$store.getters["profile/getUserProfile"],
-        "links"
-      );
+      const usuario = await profileService.getProfile();
+      if (usuario.rol !== 1) {
+        const ciudad = await ciudadService.getCiudadUsuario();
+        usuario.ciudad = ciudad ? ciudad.nombre : "";
+      }
+      this.user = usuario;
+      console.log(this.user);
     } catch (error) {
       showSwal.methods.showSwal({
         type: "error",
@@ -149,21 +120,12 @@ export default {
       });
     } finally {
       this.loading = false;
-      this.initialImageUrl = this.getImage;
     }
     this.loading = false;
   },
   methods: {
-    onFileChange(event) {
-      this.file = event.target.files[0];
-      this.user.profile_image = URL.createObjectURL(this.file);
-    },
-    onFileRemove() {
-      this.file = null;
-      this.user.profile_image = this.initialImageUrl;
-    },
     async handleSubmit() {
-      if (this.user.id <= 3 && (process.env.VUE_APP_IS_DEMO ?? 1) == 1) {
+      if (false) {
         showSwal.methods.showSwal({
           type: "error",
           message: "You are not allowed to change data of default users.",
@@ -173,13 +135,6 @@ export default {
         this.resetApiValidation();
 
         try {
-          if (this.file !== null) {
-            await this.$store.dispatch("profile/uploadPic", this.file);
-            this.user.profile_image =
-              this.$store.getters["profile/getUserProfileImage"];
-            this.file = null;
-          }
-
           await this.$store.dispatch("profile/editProfile", this.user);
           this.user = _.omit(
             this.$store.getters["profile/getUserProfile"],

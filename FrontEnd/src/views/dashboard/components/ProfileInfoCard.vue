@@ -11,21 +11,21 @@
       <hr class="my-1 horizontal gray-light" />
       <ul class="list-group">
         <li class="pt-0 text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">Nombre Completo:</strong> &nbsp;
+          <strong class="text-white">Nombre Completo:</strong> &nbsp;
           {{ info.fullName }}
         </li>
         <li class="text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">Teléfono:</strong> &nbsp; {{ info.mobile }}
+          <strong class="text-white">Teléfono:</strong> &nbsp; {{ info.mobile }}
         </li>
         <li class="text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">Email:</strong> &nbsp; {{ info.email }}
+          <strong class="text-white">Email:</strong> &nbsp; {{ info.email }}
         </li>
         <li class="text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">Ciudad:</strong> &nbsp;
+          <strong class="text-white">Ciudad:</strong> &nbsp;
           {{ info.location }}
         </li>
         <li class="text-sm border-0 list-group-item ps-0">
-          <strong class="text-dark">En Taxivult Desde:</strong> &nbsp;
+          <strong class="text-white">En Taxivult Desde:</strong> &nbsp;
           {{ info.desde }}
         </li>
       </ul>

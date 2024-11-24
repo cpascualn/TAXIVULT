@@ -129,7 +129,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="user-profile"
+          collapseRef="profile"
           navText="Mi Perfil"
         >
           <template v-slot:icon>
@@ -142,11 +142,11 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="profile"
-          navText="Profile"
+          collapseRef="user-profile"
+          navText="Informacion Personal"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">person</i>
+            <i class="material-icons-round opacity-10 fs-5">badge</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -158,11 +158,11 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="/"
-          navText="Dashboard"
+          collapseRef="billing"
+          navText="Finanzas"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">dashboard</i>
+            <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -171,11 +171,11 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="billing"
-          navText="Billing"
+          collapseRef="user-profile"
+          navText="Mi Vehiculo"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
+            <i class="material-icons-round opacity-10 fs-5">local_taxi</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -194,7 +194,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="user-profile"
+          collapseRef="profile"
           navText="Mi Perfil"
         >
           <template v-slot:icon>
@@ -202,29 +202,17 @@
           </template>
         </sidenav-collapse>
       </li>
+
       <li class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
           collapseRef="user-profile"
-          navText="Mi Vehiculo"
+          navText="Informacion Personal"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">local_taxi</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="profile"
-          navText="Profile"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">person</i>
+            <i class="material-icons-round opacity-10 fs-5">badge</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -236,37 +224,11 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="/"
-          navText="Dashboard"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">dashboard</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
           collapseRef="billing"
-          navText="Billing"
+          navText="Finanzas"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="user-profile"
-          navText="Mi Vehiculo"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">local_taxi</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -285,7 +247,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="user-profile"
+          collapseRef="profile"
           navText="Mi Perfil"
         >
           <template v-slot:icon>
@@ -298,24 +260,11 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="users"
-          navText="Users"
+          collapseRef="user-profile"
+          navText="Informacion Personal"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">people</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="profile"
-          navText="Profile"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">person</i>
+            <i class="material-icons-round opacity-10 fs-5">badge</i>
           </template>
         </sidenav-collapse>
       </li>

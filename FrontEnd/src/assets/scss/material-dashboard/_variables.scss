@@ -495,7 +495,7 @@ $aspect-ratios: (
 // Typography
 //
 // Font, line-height, and color for body text, headings, and more.
-@import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=K2D:wght@400;700&display=swap");
 
 // stylelint-disable value-keyword-case
 $font-family-sans-serif: "K2D", Helvetica, Arial, sans-serif !default;
@@ -915,7 +915,7 @@ $input-bg: transparent !default;
 $input-disabled-bg: $gray-200 !default;
 $input-disabled-border-color: null !default;
 
-$input-color: $gray-700 !default;
+$input-color: $white !default;
 $input-border-color: #d2d6da !default;
 $input-border-width: $input-btn-border-width !default;
 $input-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !default;

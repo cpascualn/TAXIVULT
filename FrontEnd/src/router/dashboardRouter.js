@@ -31,13 +31,13 @@ const dashboardRouter = createRouter({
         },
         {
             path: "/profile",
-            name: "Profile",
+            name: "perfil",
             component: Profile,
             meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },
         {
             path: "/user-profile",
-            name: "User Profile",
+            name: "Informacion Personal",
             component: UserProfile,
             meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },

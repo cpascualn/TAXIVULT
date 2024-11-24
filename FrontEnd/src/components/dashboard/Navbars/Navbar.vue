@@ -17,7 +17,6 @@
           class="pe-md-3 d-flex align-items-center"
           :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
-          <!-- <material-input id="search" label="Search" color="light" /> -->
         </div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item dropdown">
@@ -38,7 +37,7 @@
               <!--Profile-->
               <li class="nav-item d-flex align-items-center">
                 <router-link
-                  :to="{ name: 'User Profile' }"
+                  :to="{ name: 'perfil' }"
                   class="px-0 nav-link font-weight-bold lh-1 d-flex align-items-center"
                 >
                   <i
@@ -109,7 +108,6 @@
 <script>
 import Breadcrumbs from "@/components/dashboard/Breadcrumbs.vue";
 import { mapMutations, mapState } from "vuex";
-import MaterialInput from "@/components/dashboard/MaterialInput.vue";
 
 export default {
   name: "navbar",
@@ -136,7 +134,6 @@ export default {
   },
   components: {
     Breadcrumbs,
-    MaterialInput,
   },
   computed: {
     ...mapState(["isRTL", "isAbsolute"]),
