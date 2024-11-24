@@ -21,7 +21,7 @@ const dashboardRouter = createRouter({
             path: '',
             name: 'Dashboard',
             component: Dashboard,
-            meta: { authorize: [Roles.Admin] },
+            meta: { authorize: [Roles.Admin, Roles.Conductor, Roles.Pasajero] },
         },
         {
             path: "/billing",

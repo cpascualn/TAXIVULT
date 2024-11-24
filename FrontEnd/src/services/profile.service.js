@@ -12,10 +12,14 @@ export default {
       id = decoded.data.userId;
 
       let url = `/api/usuarios/${id}`;
-      return await simpleAuthQuery(url);
-
+      const response = await simpleAuthQuery(url);
+      if (!response || !response.success)
+        return null;
+      return response.usuario;
     } catch (err) {
       console.log(err);
+      return null;
+
     }
   },
 

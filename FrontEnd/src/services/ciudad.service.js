@@ -30,8 +30,9 @@ export default {
       let data = await profileService.getProfile();
       if (!data)
         return null;
-
-      let ciuData = await this.getCiudad(data.usuario.ciudad);
+      if (data.rol == 1) //los administradores no tienen ciudad
+        return null;
+      let ciuData = await this.getCiudad(data.ciudad);
       if (!ciuData.success)
         return null;
       return ciuData.ciudad;
