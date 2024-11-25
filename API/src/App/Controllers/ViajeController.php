@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-
+use App\models\DaoUsuario;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Valitron\Validator;
@@ -11,7 +11,8 @@ use App\Entities\Viaje;
 class ViajeController
 {
     public function __construct(
-        private DaoViaje $daoViaje
+        private DaoViaje $daoViaje,
+        private DaoUsuario $daoUsu
     ) {
     }
 
@@ -39,7 +40,16 @@ class ViajeController
     public function HandleObtenerViajesUsuario(Request $request, Response $response)
     {
         $body = $request->getParsedBody();
-        $this->daoViaje->obtenerViajesUsuario($body['id']);
+        $usuario = $this->daoUsu->obtener($body['id']);
+        if ($usuario == null) {
+            $response->getBody()->write(json_encode([
+                'message' => "No existe",
+                'success' => false
+            ]));
+            return $response->withStatus(200);
+        }
+
+        $this->daoViaje->obtenerViajesUsuario($usuario->getId(), $usuario->getRol());
 
         $body = json_encode(['viajes' => $this->daoViaje->viajes, 'success' => true]);
         $response->getBody()->write($body);

@@ -7,58 +7,81 @@
     <div class="multisteps-form__content">
       <div class="row mt-5">
         <material-input
-          id="name"
-          label="Name"
-          variant="static"
-          :value="user.nombre"
-          name="name"
-        />
-        <validation-error :errors="apiValidationErrors.name" />
-      </div>
-      <div class="row mt-5">
-        <material-input
-          id="apellidos"
-          label="apellidos"
-          variant="static"
-          :value="user.apellidos"
-          name="apellidos"
-        />
-        <validation-error :errors="apiValidationErrors.name" />
-      </div>
-
-      <div class="row mt-5">
-        <material-input
           id="email"
           type="email"
           label="Email Address"
           variant="static"
           :value="user.email"
           name="email"
+          @update:value="(e) => upval(e, 'email')"
         />
+        <div class="validFeedback" v-if="validacion.email === true">
+          Correcto
+        </div>
+        <div class="invalidFeedback" v-if="validacion.email === false">
+          El mail debe tener formato usuario@dominio.**
+        </div>
+      </div>
 
-        <validation-error :errors="apiValidationErrors.email" />
+      <div class="row mt-5">
+        <material-input
+          id="name"
+          label="Nombre"
+          variant="static"
+          :value="user.nombre"
+          name="name"
+          @update:value="(e) => upval(e, 'nombre')"
+        />
+        <div class="validFeedback" v-if="validacion.nombre === true">
+          Correcto
+        </div>
+        <div class="invalidFeedback" v-if="validacion.nombre === false">
+          El nombre no es valido
+        </div>
+      </div>
+      <div class="row mt-5">
+        <material-input
+          id="apellidos"
+          label="Apellidos"
+          variant="static"
+          :value="user.apellidos"
+          name="apellidos"
+          @update:value="(e) => upval(e, 'apellidos')"
+        />
+        <div class="validFeedback" v-if="validacion.apellidos === true">
+          Correcto
+        </div>
+        <div class="invalidFeedback" v-if="validacion.apellidos === false">
+          Los Apellidos no son validos
+        </div>
       </div>
 
       <div class="row mt-5">
         <material-input
           id="telefono"
-          label="teléfono"
+          label="Teléfono"
           variant="static"
           :value="user.telefono"
           name="telefono"
+          @update:value="(e) => upval(e, 'telefono')"
         />
-        <validation-error :errors="apiValidationErrors.name" />
+        <div class="validFeedback" v-if="validacion.telefono === true">
+          Correcto
+        </div>
+        <div class="invalidFeedback" v-if="validacion.telefono === false">
+          El telefono no es correcto
+        </div>
       </div>
 
-      <div class="row mt-5" v-if="user.rol != 1">
+      <div class="row mt-5" v-if="user.ciudad">
         <material-input
           id="ciudad"
-          label="ciudad"
+          label="Ciudad"
           variant="static"
-          :value="user.ciudad"
+          value="Solicite el cambio de Ciudad a un administrador: admin@taxivult.app"
           name="ciudad"
+          disabled="true"
         />
-        <validation-error :errors="apiValidationErrors.name" />
       </div>
 
       <div class="button-row d-flex mt-4">
@@ -79,12 +102,12 @@
 import MaterialInput from "@/components/dashboard/MaterialInput.vue";
 import MaterialButton from "@/components/dashboard/MaterialButton.vue";
 import MaterialAvatar from "@/components/dashboard/MaterialAvatar.vue";
-import ValidationError from "@/components/dashboard/ValidationError.vue";
-import formMixin from "@/mixins/formMixin.js";
 import showSwal from "@/mixins/showSwal.js";
-import _ from "lodash";
+import regFormCheck from "@/mixins/regFormCheck.js";
+
 import profileService from "@/services/profile.service";
 import ciudadService from "@/services/ciudad.service";
+import userService from "@/services/user.service";
 
 export default {
   name: "Info",
@@ -92,16 +115,18 @@ export default {
     MaterialInput,
     MaterialButton,
     MaterialAvatar,
-    ValidationError,
   },
   data() {
     return {
       user: {},
-      file: null,
-      loading: null,
+      validacion: {
+        email: null,
+        nombre: null,
+        apellidos: null,
+        telefono: null,
+      },
     };
   },
-  mixins: [formMixin],
   async mounted() {
     this.loading = true;
     try {
@@ -111,7 +136,6 @@ export default {
         usuario.ciudad = ciudad ? ciudad.nombre : "";
       }
       this.user = usuario;
-      console.log(this.user);
     } catch (error) {
       showSwal.methods.showSwal({
         type: "error",
@@ -125,36 +149,103 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      if (false) {
+      // validar valores
+      if (!regFormCheck.checkMail(this.user.email))
+        this.validacion.email = false;
+      else this.validacion.email = true;
+      if (!regFormCheck.checkNombre(this.user.nombre))
+        this.validacion.nombre = false;
+      else this.validacion.nombre = true;
+      if (!regFormCheck.checkTelefono(this.user.telefono))
+        this.validacion.telefono = false;
+      else this.validacion.telefono = true;
+      if (!regFormCheck.checkNombre(this.user.apellidos))
+        this.validacion.apellidos = false;
+      else this.validacion.apellidos = true;
+
+      if (
+        !this.user.email ||
+        !this.user.nombre ||
+        !this.user.apellidos ||
+        !this.user.telefono
+      ) {
         showSwal.methods.showSwal({
           type: "error",
-          message: "You are not allowed to change data of default users.",
+          message: "Todos los campos son obligatorios.",
           width: 500,
         });
-      } else {
-        this.resetApiValidation();
-
-        try {
-          await this.$store.dispatch("profile/editProfile", this.user);
-          this.user = _.omit(
-            this.$store.getters["profile/getUserProfile"],
-            "links"
-          );
-          showSwal.methods.showSwal({
-            type: "success",
-            message: "Profile updated successfully!",
-            width: 500,
-          });
-        } catch (error) {
-          this.setApiValidation(error.response.data.errors);
-          showSwal.methods.showSwal({
-            type: "error",
-            message: "Oops, something went wrong!",
-            width: 500,
-          });
-        }
+        return false;
       }
+
+      const algunaInvalida = Object.values(this.validacion).some(
+        (valor) => valor === null || valor === false
+      );
+      if (algunaInvalida) return;
+      const newUser = {
+        id: this.user.id,
+        email: this.user.email,
+        nombre: this.user.nombre,
+        apellidos: this.user.apellidos,
+        telefono: this.user.telefono,
+      };
+      try {
+        userService
+          .actualizarUsuario(newUser)
+          .then((result) => {
+            if (result.success) {
+              showSwal.methods.showSwal({
+                type: "success",
+                message: "Usuario actualizado correctamente",
+                width: 500,
+              });
+            } else {
+              showSwal.methods.showSwal({
+                type: "error",
+                message: "Error al editar el usuario",
+                width: 500,
+              });
+            }
+          })
+          .catch((err) => {
+            showSwal.methods.showSwal({
+              type: "error",
+              message: err,
+              width: 500,
+            });
+          });
+      } catch (error) {
+        showSwal.methods.showSwal({
+          type: "error",
+          message: "Error al editar el usuario",
+          width: 500,
+        });
+      }
+    },
+    upval(e, propiedad = " ") {
+      this.user[propiedad] = e;
     },
   },
 };
 </script>
+
+<style scoped>
+.validFeedback {
+  color: green;
+  display: block;
+  text-align: center;
+  width: 100%;
+  max-width: 12rem;
+  margin: 0.5rem;
+  overflow-wrap: break-word;
+}
+
+.invalidFeedback {
+  color: red;
+  display: block;
+  text-align: center;
+  width: 100%;
+  max-width: 12rem;
+  margin: 0.5rem;
+  overflow-wrap: break-word;
+}
+</style>

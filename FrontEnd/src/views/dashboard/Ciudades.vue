@@ -49,8 +49,6 @@ async function addciudad() {
     });
     return;
   }
-  console.log(ciudad);
-
   const response = await ciudadService.addCiudad(ciudad);
   if (!response.success) {
     let finalMessage = response.error ? `ERROR: ${response.error}` : "ERROR";
@@ -68,7 +66,6 @@ async function addciudad() {
   }
 }
 async function deleteciudad(ciudad) {
-  console.log(ciudad);
   // si la ciudad tiene algun usuario no se puede borrar
   if (ciudad.usuarios > 0) {
     showSwal.methods.showSwal({

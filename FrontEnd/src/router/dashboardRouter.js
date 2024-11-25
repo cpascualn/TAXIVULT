@@ -69,7 +69,7 @@ const dashboardRouter = createRouter({
             path: '/vehiculos',
             name: "Vehiculos",
             component: Vehiculos,
-            meta: { authorize: [Roles.Admin] },
+            meta: { authorize: [Roles.Admin, Roles.Conductor] },
         },
         {
             path: '/viajes',

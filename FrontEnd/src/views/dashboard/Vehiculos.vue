@@ -59,8 +59,6 @@ async function addVehiculo() {
 }
 async function editVehiculo(vehiculo) {
   let data;
-  console.log(vehiculo);
-
   const newVehiculo = {
     id: vehiculo.id,
     matricula: vehiculo.matricula,

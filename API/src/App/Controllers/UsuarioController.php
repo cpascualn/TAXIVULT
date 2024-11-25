@@ -205,12 +205,10 @@ class UsuarioController
         $nuevo = $this->crearUsuario($body);
         $this->daoUsu->actualizar($id, $usu, $nuevo);
         $nuevo = $this->daoUsu->obtener($id);
-        $valores = ': ';
-        foreach ($body as $key => $value) {
-            $valores .= $key . ', ';
-        }
+
+
         $body = json_encode([
-            'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
+            'message' => 'valores actualizados en el usuario ' . $id,
             'success' => true
         ]);
 
@@ -266,6 +264,26 @@ class UsuarioController
             $response->getBody()->write($body);
             return $response->withStatus(200);
         }
+    }
+
+    public function HandleComprobarContrasena(Request $request, Response $response)
+    {
+        $input = $request->getParsedBody();
+        $email = $input['email'] ?? '';
+        $password = $input['password'] ?? '';
+        $usu = $this->daoUsu->obtenerPorEmail($email);
+
+        // si encuentra usuario y la contrasena coincide devolver token
+        if ($usu == null || !password_verify(trim($password), trim($usu->getContrasena()))) {
+            $response->getBody()->write(json_encode(['error' => 'Credenciales no validas', 'success' => false]));
+            return $response->withStatus(200);
+        }
+
+        $token = $this->generarJwtToken($usu);
+
+        $response->getBody()->write(json_encode(['message' => 'Contraseña correcta', 'success' => true]));
+        return $response->withStatus(200);
+
     }
 
 

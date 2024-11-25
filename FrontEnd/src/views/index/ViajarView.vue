@@ -205,7 +205,6 @@ async function verConductores() {
     viaje.value.fecha_fin,
     ciudad.id
   );
-  console.log(conductores);
 
   if (!conductores) return null;
   if (!conductores.conductores) return null;
@@ -238,9 +237,7 @@ function generarViaje() {
 
 async function reservarViaje() {
   // mandar a la api el post del viaje con los datos
-  console.log(viaje.value);
   const respuesta = await viajeService.InsertarViaje(viaje.value);
-  console.log(respuesta);
   if (respuesta && respuesta.success) {
     showSwal.methods.showSwal({
       type: "success",

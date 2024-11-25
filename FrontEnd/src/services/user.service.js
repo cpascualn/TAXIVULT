@@ -33,4 +33,14 @@ export default {
             console.log(err);
         }
     },
+    async comprobarContrasena(user) {
+        try {
+            const response = await AuthQuery(`/api/usuarios/comprobarContrasena`, user);
+            if (!response || response.success == null) return false;
+            return response.success;
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+    },
 }

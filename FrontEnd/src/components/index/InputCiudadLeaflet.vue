@@ -55,7 +55,6 @@ const searchCity = () => {
 
 // Función para seleccionar una ciudad
 const selectCity = (suggestion) => {
-  console.log("Ciudad seleccionada:", suggestion.name, suggestion.latlng);
   city.value = suggestion.name;
   emit("city-selected", suggestion);
   suggestions.value = []; // Limpia las sugerencias después de seleccionar

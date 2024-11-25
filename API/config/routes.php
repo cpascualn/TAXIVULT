@@ -40,6 +40,7 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->get('', [UsuarioController::class, 'HandleListar']);
         $group->get('/totales', [UsuarioController::class, 'HandleVerTotales']);
         $group->post('', [UsuarioController::class, 'HandleInsertar']);
+        $group->post('/comprobarContrasena', [UsuarioController::class, 'HandleComprobarContrasena']);
         $group->patch('/{id:[0-9]+}', [UsuarioController::class, 'HandleActualizar']);
         $group->get('/{id:[0-9]+}', [UsuarioController::class, 'HandleObtener']);
         $group->post('/buscar', [UsuarioController::class, 'HandleBuscar']);

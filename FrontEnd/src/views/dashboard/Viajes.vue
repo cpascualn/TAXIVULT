@@ -1,5 +1,5 @@
 <template>
-    <LoadingPage ref="loading"></LoadingPage>
+  <LoadingPage ref="loading"></LoadingPage>
   <DataTable
     :item-type="'Viajes'"
     :columns="columns"
@@ -12,6 +12,7 @@
 import DataTable from "@/views/dashboard/components/DataTable.vue";
 import { onMounted, ref } from "vue";
 import viajeService from "@/services/viaje.service";
+import profileService from "@/services/profile.service";
 import LoadingPage from "@/components/index/LoadingPage.vue";
 import { watch } from "vue";
 const loading = ref(null);
@@ -34,10 +35,20 @@ const columns = [
 const viajes = ref([]);
 
 onMounted(async () => {
-  const data = await viajeService.getViajes();
-  viajes.value = data.viajes;
+  let data;
+  // get profile rol
+  const profile = await profileService.getProfile();
+  if (!profile) return;
+  //si es admin, mostrar todos los viajes , si no, mostrar solo los suyos
+  if (profile.rol === 1) {
+    data = await viajeService.getViajes();
+    viajes.value = data.viajes;
+  } else {
+    data = await viajeService.getViajesUsuario(profile);
+    viajes.value = data;
+  }
+
   isReady.value = true;
-  
 });
 
 async function reload() {

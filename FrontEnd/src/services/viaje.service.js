@@ -46,4 +46,14 @@ export default {
             console.log(err);
         }
     },
+    async getViajesUsuario(user) {
+        try {
+            const response = await AuthQuery(`/api/viajes/usuario`, { id: user.id });
+            if (!response || !response.success)
+                return 0;
+            return response.viajes;
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }

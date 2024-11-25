@@ -880,8 +880,6 @@ const validaciones = [
 ];
 
 const register = async () => {
-  console.log(usuario.value);
-
   if (validarStep4()) {
     hasSeenCongrats.value = true;
     const data = await authService.register(usuario.value);

@@ -66,9 +66,12 @@ class DaoViaje
         return $cantidad;
     }
 
-    public function obtenerViajesUsuario($id)
+    public function obtenerViajesUsuario($id, $rol)
     {
-        $consulta = 'SELECT * FROM Viaje where id_pasajero = :ID';
+        if ($rol == 2)
+            $consulta = 'SELECT v.*,(select u.email from Usuario u where u.id = v.id_conductor) as conductor_mail,(select u.email from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v where id_conductor = :ID';
+        if ($rol == 3)
+            $consulta = 'SELECT v.*,(select u.email from Usuario u where u.id = v.id_conductor) as conductor_mail,(select u.email from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v  where id_pasajero  = :ID';
         $param = array(":ID" => $id);
         $this->viajes = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
@@ -77,8 +80,8 @@ class DaoViaje
         foreach ($this->db->filas as $fila) {
             $viaje = new Viaje();
             $viaje->setId($fila['id']);
-            $viaje->setIdConductor($fila['id_conductor']);
-            $viaje->setIdPasajero($fila['id_pasajero']);
+            $viaje->setIdConductor($fila['conductor_mail']);
+            $viaje->setIdPasajero($fila['pasajero_mail']);
             $viaje->setLatiIni($fila['lati_ini']);
             $viaje->setLongiIni($fila['longi_ini']);
             $viaje->setLatiFin($fila['lati_fin']);
@@ -89,7 +92,7 @@ class DaoViaje
             $viaje->setDistancia($fila['distancia']);
             $viaje->setDuracionMin($fila['duracion_min']);
             $viaje->setPrecioTotal($fila['precio_total']);
-            $viaje->setCiudad($fila['ciudad']);
+            $viaje->setCiudad($fila['ciudad_nombre']);
             $viaje->setLugarSalida($fila['lugar_salida']);
             $viaje->setLugarLlegada($fila['lugar_llegada']);
 
