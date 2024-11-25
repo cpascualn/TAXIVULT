@@ -81,6 +81,7 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->delete('/eliminar/{id:[0-9]+}', [VehiculoController::class, 'handleBorrarVehiculo']);
         $group->patch('/actualizar/{id:[0-9]+}', [VehiculoController::class, 'handleActualizar']);
         $group->get('/totales', [VehiculoController::class, 'HandleVerTotales']);
+        $group->get('/usuario/{id:[0-9]+}', [VehiculoController::class, 'HandleObtenerVehiculoUsuario']);
     });
 
 })->add(AddJsonResponseHeader::class)

@@ -8,6 +8,16 @@
     v-on:edit="editVehiculo"
     v-on:delete="deleteVehiculo"
     v-on:reload="reload"
+    v-if="profile.rol == 1"
+  />
+
+  <DataTable
+    :item-type="'Vehiculos'"
+    :columns="columns"
+    :items="vehiculos"
+    v-on:edit="editVehiculo"
+    v-on:reload="reload"
+    v-if="profile.rol == 2"
   />
 </template>
 
@@ -18,9 +28,10 @@ import vehiculoService from "@/services/vehiculos.service";
 import showSwal from "@/mixins/showSwal";
 import LoadingPage from "@/components/index/LoadingPage.vue";
 import { watch } from "vue";
+import profileService from "@/services/profile.service";
 const loading = ref(null);
 const isReady = ref(false);
-
+const profile = ref({});
 const columns = [
   "Imagen",
   "Matricula",
@@ -32,8 +43,20 @@ const columns = [
 const vehiculos = ref([]);
 
 onMounted(async () => {
-  const data = await vehiculoService.getVehiculos();
-  vehiculos.value = data.vehiculos;
+  let data;
+  // get profile rol
+  profile.value = await profileService.getProfile();
+  if (!profile.value) return;
+  //si es admin, mostrar todos los viajes , si no, mostrar solo los suyos
+  if (profile.value.rol === 1) {
+    data = await vehiculoService.getVehiculos();
+    vehiculos.value = data.vehiculos;
+  } else {
+    data = await vehiculoService.getVehiculoUsuario(profile.value);
+
+    vehiculos.value.push(data.vehiculos);
+  }
+
   isReady.value = true;
 });
 

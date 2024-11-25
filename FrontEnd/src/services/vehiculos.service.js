@@ -55,6 +55,17 @@ export default {
       console.log(err);
     }
   },
+  async getVehiculoUsuario(user) {
+    try {
+      const response = await simpleAuthQuery(`/api/vehiculos/usuario/${user.id}`);
+      if (!response || !response.success)
+        return 0;
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
 
 
 

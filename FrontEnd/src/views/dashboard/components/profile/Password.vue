@@ -124,8 +124,6 @@ export default {
       this.user[propiedad] = e;
     },
     async handleChange() {
-      console.log(this.usuario);
-      console.log(this.user.current_password);
 
       const esCorrecta = await userService.comprobarContrasena({
         email: this.usuario.email,

@@ -171,4 +171,27 @@ class DaoVehiculo
         return $total;
     }
 
+    public function obtenerPorUsuario($id)
+    {
+        $consulta = "SELECT v.*  FROM Vehiculo v join Conductor c on c.coche = v.matricula where c.id = :ID";
+        $param = array(":ID" => $id);
+        $this->db->ConsultaDatos($consulta, $param);
+
+        $vehiculo = null;
+        if (count($this->db->filas) == 1) {
+            $fila = $this->db->filas[0];
+            $vehiculo = new Vehiculo();
+            $vehiculo->setId($fila['id']);
+            $vehiculo->setMatricula($fila['matricula']);
+            $vehiculo->setCapacidad($fila['capacidad']);
+            $vehiculo->setFabricante($fila['fabricante']);
+            $vehiculo->setModelo($fila['modelo']);
+            $vehiculo->setTipo($fila['tipo']);
+            $vehiculo->setImagen($fila['imagen']);
+        }
+
+
+        return $vehiculo;
+    }
+
 }

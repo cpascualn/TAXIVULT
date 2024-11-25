@@ -161,6 +161,21 @@ class VehiculoController
         }
     }
 
+    public function HandleObtenerVehiculoUsuario(Request $request, Response $response, $id = null)
+    {
+        $vehiculo = $this->daoVeh->obtenerPorUsuario($id);
+
+        $body = json_encode([
+            'vehiculos' => $vehiculo,
+            'success' => true
+        ]);
+
+        $response->getBody()->write($body);
+
+        return $response->withStatus(200);
+
+    }
+
 
 
     public function crearVehiculo($body, $id = null)
