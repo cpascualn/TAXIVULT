@@ -1,5 +1,5 @@
 <template>
-    <LoadingPage ref="loading"></LoadingPage>
+  <LoadingPage ref="loading"></LoadingPage>
   <DataTable
     :item-type="'Conductores'"
     :columns="columns"
@@ -25,11 +25,12 @@ const columns = [
   "Nombre",
   "Apellidos",
   "Licencia_taxista",
+  "Ubi_Espera",
   "Coche",
   "Ciudad",
   "Horario",
   "Estado",
-  "Viajes"
+  "Viajes",
 ];
 const conductores = ref([]);
 

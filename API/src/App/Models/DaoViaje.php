@@ -69,9 +69,9 @@ class DaoViaje
     public function obtenerViajesUsuario($id, $rol)
     {
         if ($rol == 2)
-            $consulta = 'SELECT v.*,(select u.email from Usuario u where u.id = v.id_conductor) as conductor_mail,(select u.email from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v where id_conductor = :ID';
+            $consulta = 'SELECT v.*,(select CONCAT(u.nombre," " , u.apellidos) from Usuario u where u.id = v.id_conductor) as conductor_mail,(select CONCAT(u.nombre," " , u.apellidos) from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v where id_conductor = :ID ORDER BY v.fecha_ini DESC';
         if ($rol == 3)
-            $consulta = 'SELECT v.*,(select u.email from Usuario u where u.id = v.id_conductor) as conductor_mail,(select u.email from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v  where id_pasajero  = :ID';
+            $consulta = 'SELECT v.*,(select CONCAT(u.nombre," " , u.apellidos) from Usuario u where u.id = v.id_conductor) as conductor_mail,(select CONCAT(u.nombre," " , u.apellidos) from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v  where id_pasajero  = :ID ORDER BY v.fecha_ini DESC';
         $param = array(":ID" => $id);
         $this->viajes = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
@@ -86,8 +86,8 @@ class DaoViaje
             $viaje->setLongiIni($fila['longi_ini']);
             $viaje->setLatiFin($fila['lati_fin']);
             $viaje->setLongiFin($fila['longi_fin']);
-            $viaje->setFechaIni($fila['fecha_ini']);
-            $viaje->setFechaFin($fila['fecha_fin']);
+            $viaje->setFechaIni(date('H:i:s d/m/Y ', $fila['fecha_ini']));
+            $viaje->setFechaFin(date('H:i:s d/m/Y ', $fila['fecha_fin']));
             $viaje->setMetodoPago($fila['metodo_pago']);
             $viaje->setDistancia($fila['distancia']);
             $viaje->setDuracionMin($fila['duracion_min']);

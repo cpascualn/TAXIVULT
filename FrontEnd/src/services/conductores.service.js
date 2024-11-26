@@ -30,5 +30,15 @@ export default {
         } catch (err) {
             console.log(err);
         }
+    },
+    async obtenerConductor(conductor) {
+        try {
+            const response = await simpleAuthQuery(`/api/conductores/obtener/${conductor.id}`);
+            if (!response || !response.success || !response.conductor) return null;
+            return response.conductor;
+        } catch (err) {
+            console.log(err);
+            return null
+        }
     }
 }

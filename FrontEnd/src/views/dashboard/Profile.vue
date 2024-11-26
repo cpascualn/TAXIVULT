@@ -37,16 +37,7 @@
       <div class="row">
         <div class="mt-3 row">
           <div class="col-12 col-md-6 col-xl-4 mt-md-0 mt-4 position-relative">
-            <profile-info-card
-              title="Sobre mi"
-              :info="{
-                fullName: profile.nombre + ' ' + profile.apellidos,
-                mobile: profile.telefono,
-                email: profile.email,
-                location: profile.ciudad,
-                desde: profile.fecha_creacion,
-              }"
-            />
+            <profile-info-card title="Sobre mi" :info="infoUser" />
             <hr class="vertical dark" />
           </div>
           <div class="mt-4 col-12 col-xl-4 mt-xl-0" v-if="profile.rol == 2">
@@ -101,6 +92,8 @@ import passengerImg from "@/assets/img/passengerImg.jpg";
 
 import profileService from "@/services/profile.service";
 import ciudadService from "@/services/ciudad.service";
+import conductoresService from "@/services/conductores.service";
+
 import setNavPills from "@/assets/js/nav-pills.js";
 import setTooltip from "@/assets/js/tooltip.js";
 
@@ -144,6 +137,31 @@ export default {
       }
     },
   },
+  computed: {
+    infoUser() {
+      let info = {};
+      if (this.profile.rol == 2) {
+        info = {
+          fullName: this.profile.nombre + " " + this.profile.apellidos,
+          mobile: this.profile.telefono,
+          email: this.profile.email,
+          location: this.profile.ciudad,
+          desde: this.profile.fecha_creacion,
+          horario: this.profile.horario,
+          ubi_espera: this.profile.ubi_espera,
+        };
+      } else {
+        info = {
+          fullName: this.profile.nombre + " " + this.profile.apellidos,
+          mobile: this.profile.telefono,
+          email: this.profile.email,
+          location: this.profile.ciudad,
+          desde: this.profile.fecha_creacion,
+        };
+      }
+      return info;
+    },
+  },
 
   async mounted() {
     this.$store.state.isAbsolute = true;
@@ -154,7 +172,11 @@ export default {
     const date = new Date(this.profile.fecha_creacion);
     this.profile.fecha_creacion = new Intl.DateTimeFormat("es-ES").format(date);
     this.profile.ciudad = ciudad ? ciudad.nombre : "";
-
+    if (this.profile.rol == 2) {
+      const conductor = await conductoresService.obtenerConductor(this.profile);
+      this.profile.horario = conductor.horario;
+      this.profile.ubi_espera = conductor.ubi_espera;
+    }
     this.isReady = true;
   },
   beforeUnmount() {

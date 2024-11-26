@@ -24,6 +24,17 @@
           <strong class="text-white">Ciudad:</strong> &nbsp;
           {{ info.location }}
         </li>
+        <li
+          class="text-sm border-0 list-group-item ps-0"
+          v-if="info.ubi_espera"
+        >
+          <strong class="text-white">Ubicacion de Espera:</strong> &nbsp;
+          {{ info.ubi_espera }}
+        </li>
+        <li class="text-sm border-0 list-group-item ps-0" v-if="info.horario">
+          <strong class="text-white">Horario:</strong> &nbsp;
+          {{ info.horario }}
+        </li>
         <li class="text-sm border-0 list-group-item ps-0">
           <strong class="text-white">En Taxivult Desde:</strong> &nbsp;
           {{ info.desde }}
@@ -48,6 +59,8 @@ export default {
       email: String,
       location: String,
       desde: String,
+      horario: String,
+      ubi_espera: String,
       default: () => {},
     },
   },

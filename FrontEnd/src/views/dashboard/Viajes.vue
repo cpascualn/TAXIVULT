@@ -52,8 +52,18 @@ onMounted(async () => {
 });
 
 async function reload() {
-  const data = await viajeService.getViajes();
-  viajes.value = data.viajes;
+  let data;
+  // get profile rol
+  const profile = await profileService.getProfile();
+  if (!profile) return;
+  //si es admin, mostrar todos los viajes , si no, mostrar solo los suyos
+  if (profile.rol === 1) {
+    data = await viajeService.getViajes();
+    viajes.value = data.viajes;
+  } else {
+    data = await viajeService.getViajesUsuario(profile);
+    viajes.value = data;
+  }
 }
 
 const loadFinished = () => {

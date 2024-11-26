@@ -57,7 +57,7 @@ class DaoConductor extends Database
     // Obtener un conductor por su ID
     public function obtener($id)
     {
-        $consulta = "SELECT * FROM Conductor WHERE id = :ID";
+        $consulta = "SELECT *  FROM Conductor c WHERE id = :ID";
         $param = array(":ID" => $id);
         $this->db->ConsultaDatos($consulta, $param);
 
@@ -77,6 +77,33 @@ class DaoConductor extends Database
             $conductor->setEstado($fila['estado']);
             $conductor->setCoche($fila['coche']);
             $conductor->setHorario($fila['horario']);
+        }
+
+        return $conductor;
+    }
+
+    public function obtenerFormated($id)
+    {
+        $consulta = "SELECT *,(select h.nombre from Horario h where h.id=c.horario) as horario_nombre  FROM Conductor c WHERE id = :ID";
+        $param = array(":ID" => $id);
+        $this->db->ConsultaDatos($consulta, $param);
+
+        $conductor = null;
+
+        if (count($this->db->filas) == 1) {
+            $fila = $this->db->filas[0];  //Recuperamos la fila devuelta
+            $conductor = new Conductor();
+            $conductor->setId($fila['id']);
+            $conductor->setDni($fila['dni']);
+            $conductor->setLicenciaTaxista($fila['licencia_taxista']);
+            $conductor->setTitularTarjeta($fila['titular_tarjeta']);
+            $conductor->setIbanTarjeta($fila['iban_tarjeta']);
+            $conductor->setUbiEspera($fila['ubi_espera']);
+            $conductor->setLongEspera($fila['long_espera']);
+            $conductor->setLatiEspera($fila['lati_espera']);
+            $conductor->setEstado($fila['estado']);
+            $conductor->setCoche($fila['coche']);
+            $conductor->setHorario($fila['horario_nombre']);
         }
 
         return $conductor;
@@ -118,7 +145,7 @@ class DaoConductor extends Database
             ":LICENCIA_TAXISTA" => $nuevo->getDni() ?? $conductor->getDni(),
             ":TITULAR_TARJETA" => $nuevo->getTitularTarjeta() ?? $conductor->getTitularTarjeta(),
             ":IBAN_TARJETA" => $nuevo->getIbanTarjeta() ?? $conductor->getIbanTarjeta(),
-            ":UBI_ESPERA" => $conductor->getUbiEspera(),
+            ":UBI_ESPERA" => $nuevo->getUbiEspera() ?? $conductor->getUbiEspera(),
             ":long_espera" => $nuevo->getLongEspera() ?? $conductor->getLongEspera(),
             ":LATI_ESPERA" => $nuevo->getLatiEspera() ?? $conductor->getLatiEspera(),
             ":ESTADO" => $nuevo->getEstado() ?? $conductor->getEstado(),

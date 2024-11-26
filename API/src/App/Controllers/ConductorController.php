@@ -20,22 +20,51 @@ class ConductorController
 
     public function HandleListar(Request $request, Response $response)
     {
+        $conductores = null;
+        try {
+            //refrescar estados de conductores
+            $app = AppFactory::create();
+            $auxResponse = $app->getResponseFactory()->createResponse();
+            $this->HandleReload($request, $auxResponse);
 
-        $this->daoCon->listar();
 
-        $body = json_encode(['conductores' => $this->daoCon->conductores, 'success' => true]);
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'error' => 'error al buscar: ' . $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
+        $conductores = $this->daoCon->listar();
+
+        $body = json_encode(['conductores' => $conductores, 'success' => true]);
         $response->getBody()->write($body);
         return $response->withStatus(200);
     }
 
 
-    public function HandleObtener(Request $request, Response $response, array $args)
+    public function HandleObtener(Request $request, Response $response, $id)
     {
-
-        $id = $args['id'];
 
 
         $conductor = $this->daoCon->obtener($id);
+
+        if ($conductor === null) {
+            $body = json_encode(['message' => 'El conductor no existe', 'success' => false]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
+
+        $body = json_encode(['conductor' => $conductor, 'success' => true]);
+        $response->getBody()->write($body);
+        return $response->withStatus(200);
+    }
+    public function HandleObtenerFormated(Request $request, Response $response, $id)
+    {
+
+
+        $conductor = $this->daoCon->obtenerFormated($id);
 
         if ($conductor === null) {
             $body = json_encode(['message' => 'El conductor no existe', 'success' => false]);
@@ -337,16 +366,16 @@ class ConductorController
     {
         $v = new Validator($body);
         $v->mapFieldsRules([
-            'dni' => [ ['lengthMax', 15]],  // Campo obligatorio, longitud máxima de 15
+            'dni' => [['lengthMax', 15]],  // Campo obligatorio, longitud máxima de 15
             'licencia_taxista' => [['lengthMax', 15]],  // Opcional, longitud máxima de 15
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
             'ubiEspera' => [['lengthMax', 1000]],
-            'lonEspera' => [ 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
-            'latEspera' => [ 'numeric', ['regex', '/^-?\d{1,12}\.\d{1,6}$/']],
-            'estado' => [ ['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
+            'lonEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
+            'latEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
+            'estado' => [['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
-            'horario' => [ 'integer']
+            'horario' => ['integer']
         ]);
 
         if (!$v->validate()) {

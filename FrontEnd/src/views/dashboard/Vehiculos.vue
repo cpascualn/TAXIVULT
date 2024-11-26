@@ -159,8 +159,18 @@ async function deleteVehiculo(vehiculo) {
     });
 }
 async function reload() {
-  const data = await vehiculoService.getVehiculos();
-  vehiculos.value = data.vehiculos;
+  let data;
+  vehiculos.value = [];
+  if (!profile.value) return;
+  //si es admin, mostrar todos los viajes , si no, mostrar solo los suyos
+  if (profile.value.rol === 1) {
+    data = await vehiculoService.getVehiculos();
+    vehiculos.value = data.vehiculos;
+  } else {
+    data = await vehiculoService.getVehiculoUsuario(profile.value);
+
+    vehiculos.value.push(data.vehiculos);
+  }
 }
 
 const loadFinished = () => {

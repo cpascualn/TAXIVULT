@@ -1,4 +1,5 @@
 <template>
+  <LoadingPage ref="loading"></LoadingPage>
   <div
     class="multisteps-form__panel border-radius-xl bg-white"
     data-animation="FadeIn"
@@ -80,8 +81,34 @@
           variant="static"
           value="Solicite el cambio de Ciudad a un administrador: admin@taxivult.app"
           name="ciudad"
-          disabled="true"
+          :disabled="true"
         />
+      </div>
+      <div class="row mt-5" v-if="user.ciudad">
+        <material-input
+          id="barrio"
+          label="Barrio"
+          variant="static"
+          :value="user.ubi_espera"
+          name="barrio"
+          placeholder="Barrio habitual"
+          @update:value="(e) => upval(e, 'ubi_espera')"
+        />
+        <div class="buscador">
+          <p v-if="validacion.errorMessage" style="color: red">
+            {{ validacion.errorMessage }}
+          </p>
+          <ul v-if="locations.length > 0" class="desplegable">
+            <li
+              v-if="locations"
+              v-for="location in locations"
+              :key="location.place_id"
+              @click="selectLocation(location)"
+            >
+              {{ location.display_name }}
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div class="button-row d-flex mt-4">
@@ -106,8 +133,10 @@ import showSwal from "@/mixins/showSwal.js";
 import regFormCheck from "@/mixins/regFormCheck.js";
 
 import profileService from "@/services/profile.service";
-import ciudadService from "@/services/ciudad.service";
 import userService from "@/services/user.service";
+import conductoresService from "@/services/conductores.service";
+import ciudadService from "@/services/ciudad.service";
+import LoadingPage from "@/components/index/LoadingPage.vue";
 
 export default {
   name: "Info",
@@ -115,6 +144,7 @@ export default {
     MaterialInput,
     MaterialButton,
     MaterialAvatar,
+    LoadingPage,
   },
   data() {
     return {
@@ -125,15 +155,20 @@ export default {
         apellidos: null,
         telefono: null,
       },
+      locations: [],
+      isReady: false,
     };
   },
   async mounted() {
     this.loading = true;
     try {
       const usuario = await profileService.getProfile();
-      if (usuario.rol !== 1) {
+
+      if (usuario.rol == 2) {
         const ciudad = await ciudadService.getCiudadUsuario();
         usuario.ciudad = ciudad ? ciudad.nombre : "";
+        const conductor = await conductoresService.obtenerConductor(usuario);
+        usuario.ubi_espera = conductor.ubi_espera;
       }
       this.user = usuario;
     } catch (error) {
@@ -146,6 +181,7 @@ export default {
       this.loading = false;
     }
     this.loading = false;
+    this.isReady = true;
   },
   methods: {
     async handleSubmit() {
@@ -188,6 +224,33 @@ export default {
         apellidos: this.user.apellidos,
         telefono: this.user.telefono,
       };
+      //actualizar la ubicacion de espera
+      if (this.user.rol == 2) {
+        const newConductor = {
+          id: this.user.id,
+          ubiEspera: this.user.ubiEspera,
+          lonEspera: this.user.lonEspera,
+          latEspera: this.user.latEspera,
+        };
+        conductoresService
+          .actualizarConductor(newConductor)
+          .then((result) => {
+            if (!result.success) {
+              showSwal.methods.showSwal({
+                type: "error",
+                message: "Error al editar el usuario",
+                width: 500,
+              });
+            }
+          })
+          .catch((err) => {
+            showSwal.methods.showSwal({
+              type: "error",
+              message: err,
+              width: 500,
+            });
+          });
+      }
       try {
         userService
           .actualizarUsuario(newUser)
@@ -221,8 +284,51 @@ export default {
         });
       }
     },
+    async searchLocations() {
+      try {
+        if (!this.user.ubi_espera || !this.user.ciudad) return;
+        const url = `https://nominatim.openstreetmap.org/search.php?street=${this.user.ubi_espera}&city=${this.user.ciudad}&countrycodes=ES&format=jsonv2`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        this.locations = data;
+        this.validacion.errorMessage = "";
+      } catch (error) {
+        console.error("Error al buscar ubicaciones:", error);
+        this.validacion.errorMessage =
+          "Hubo un error al buscar las ubicaciones.";
+      }
+    },
+    selectLocation(location) {
+      this.user.ubi_espera = location.display_name;
+
+      this.locations = [];
+
+      // limitar la cadena a 12 digitos
+      this.user.latEspera =
+        location.lat.length > 12 ? location.lat.slice(0, 12) : location.lat;
+      this.user.lonEspera =
+        location.lon.length > 12 ? location.lon.slice(0, 12) : location.lon;
+      this.user.ubiEspera = location.display_name;
+    },
     upval(e, propiedad = " ") {
       this.user[propiedad] = e;
+    },
+    loadFinished() {
+      if (this.$refs.loading) {
+        this.$refs.loading.closeModal();
+      }
+    },
+  },
+  watch: {
+    "user.ubi_espera"(newValue, oldValue) {
+      this.searchLocations();
+    },
+    isReady(newVal) {
+      if (newVal) {
+        this.loadFinished();
+      }
     },
   },
 };
@@ -247,5 +353,40 @@ export default {
   max-width: 12rem;
   margin: 0.5rem;
   overflow-wrap: break-word;
+}
+
+.buscador {
+  border: 0;
+  padding: 0;
+  width: 100%;
+  margin: 0;
+}
+
+.desplegable {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  list-style: none;
+  max-height: 100px;
+  padding: 0;
+  position: absolute;
+  background-color: #d4d4d4;
+  min-width: 160px;
+  max-height: 200px; /* Altura máxima del desplegable */
+  overflow-y: auto; /* Habilitar desplazamiento vertical */
+  border: 1px solid #ccc;
+  z-index: 1;
+}
+.desplegable li {
+  color: black;
+  background: white;
+  border: 0;
+  border-radius: 5px;
+  padding: 0.4rem;
+  width: 200px;
+  margin: 0.2rem 0.5rem;
+}
+.desplegable li:hover {
+  background: #ffc000;
 }
 </style>
