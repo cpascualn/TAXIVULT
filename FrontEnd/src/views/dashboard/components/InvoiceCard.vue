@@ -3,12 +3,16 @@
     <div class="card-header pb-0 p-3">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
-          <h6 class="mb-0">Invoices</h6>
+          <h6 class="mb-0">Viajes</h6>
         </div>
         <div class="col-6 text-end">
-          <material-button color="primary" size="sm" variant="outline"
-            >View All</material-button
-          >
+          <material-button
+            color="primary"
+            size="sm"
+            variant="outline"
+            @click="redirigir"
+            >Ver Todos
+          </material-button>
         </div>
       </div>
     </div>
@@ -19,16 +23,14 @@
         >
           <div class="d-flex flex-column">
             <h6 class="mb-1 text-dark font-weight-bold text-sm">
-              March, 01, 2020
+              27/11/2024 01:48:00
             </h6>
-            <span class="text-xs">#MS-415646</span>
+            <span class="text-xs">Madrid</span>
           </div>
           <div class="d-flex align-items-center text-sm">
-            $180
-            <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4">
-              <i class="fas fa-file-pdf text-lg me-1" aria-hidden="true"></i>
-              PDF
-            </button>
+            <i class="fa fa-credit-card text-lg me-1" aria-hidden="true"></i>
+            <i class="fa fa-coins text-lg me-1" aria-hidden="true"></i>
+            20€
           </div>
         </li>
         <li
@@ -112,5 +114,11 @@ export default {
   components: {
     MaterialButton,
   },
+  methods: {
+    redirigir() {
+      window.location.href = "/dashboard/viajes";
+    },
+  },
+
 };
 </script>

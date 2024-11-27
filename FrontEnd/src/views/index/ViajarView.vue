@@ -253,7 +253,7 @@ async function reservarViaje() {
   if (respuesta && respuesta.success) {
     showSwal.methods.showSwal({
       type: "success",
-      message: respuesta.message + " Redirigiendo a viajes",
+      message: respuesta.message + " ,Redirigiendo a viajes",
       width: 1000,
     });
     setTimeout(() => {

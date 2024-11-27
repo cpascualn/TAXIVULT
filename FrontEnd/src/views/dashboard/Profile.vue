@@ -28,6 +28,15 @@
             <p class="mb-0 font-weight-normal text-sm">
               {{ roles[profile.rol] }}
             </p>
+            <span
+              :class="[
+                'badge',
+                'badge-sm',
+                `bg-gradient-${colores[profile.estado]}`,
+              ]"
+              v-if="profile.rol == 2"
+              >{{ profile.estado }}</span
+            >
           </div>
         </div>
         <div
@@ -70,7 +79,7 @@
                     >
                   </li>
                 </ul>
-                <p v-if="viajes.length == 0" style="color: red  !important">
+                <p v-if="viajes.length == 0" style="color: red !important">
                   No hay pasajeros recientes
                 </p>
               </div>
@@ -125,6 +134,11 @@ export default {
         3: passengerImg,
       },
       viajes: [],
+      colores: {
+        libre: "success",
+        "fuera de servicio": "secondary",
+        ocupado: "danger",
+      },
       isReady: false,
     };
   },
@@ -181,6 +195,7 @@ export default {
       const conductor = await conductoresService.obtenerConductor(this.profile);
       this.profile.horario = conductor.horario;
       this.profile.ubi_espera = conductor.ubi_espera;
+      this.profile.estado = conductor.estado;
       this.viajes = await viajeService.getViajesUsuario(conductor);
     }
     this.isReady = true;

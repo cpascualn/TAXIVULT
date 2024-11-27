@@ -36,11 +36,27 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-2">
         <billing-card />
       </div>
       <div class="col-md-5">
-        <transaction-card />
+        <chart-holder-card
+          title="Viajes por dias"
+          subtitle="Viajes que se han realizado cada dia"
+          color="secondary"
+        >
+          <reports-pie-chart id="tasks-chart" :chart="PieChartData" />
+        </chart-holder-card>
+      </div>
+      <div class="col-md-5">
+        <chart-holder-card
+              title="Dinero ganado cada dia"
+              subtitle="diario"
+              update="ultima semana"
+              color="dark"
+            >
+              <reports-bar-chart :chart="barChartData" />
+            </chart-holder-card>
       </div>
     </div>
   </div>
@@ -52,7 +68,10 @@ import DefaultInfoCard from "@/components/dashboard/Cards/DefaultInfoCard.vue";
 import PaymentCard from "./components/PaymentCard.vue";
 import InvoiceCard from "./components/InvoiceCard.vue";
 import BillingCard from "./components/BillingCard.vue";
-import TransactionCard from "./components/TransactionCard.vue";
+
+import ChartHolderCard from "./components/ChartHolderCard.vue";
+import ReportsBarChart from "@/components/dashboard/Charts/ReportsBarChart.vue";
+import ReportsPieChart from "@/components/dashboard/Charts/ReportsPieChart.vue";
 
 export default {
   name: "Billing",
@@ -62,7 +81,32 @@ export default {
     PaymentCard,
     InvoiceCard,
     BillingCard,
-    TransactionCard,
+    ReportsBarChart,
+    ReportsPieChart,
+    ChartHolderCard,
   },
+  computed: {
+    PieChartData() {
+      return {
+        labels: ["ayer", "hoy", "mañana"],
+        datasets: {
+          label: "viajes",
+          data: [20, 10, 30],
+        },
+      };
+    },
+    barChartData() {
+    return {
+      labels: ["ayer", "hoy", "mañana"],
+      datasets: {
+        label1: "dineros",
+
+        data1: [10,20,15],
+
+      },
+    };
+  },
+  },
+
 };
 </script>

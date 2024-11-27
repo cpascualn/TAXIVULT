@@ -192,12 +192,13 @@ class ConductorController
     public function HandleReload(Request $request, Response $response)
     {
         try {
-            //actualizar conductores que tengan un viaje en curso
-            $this->daoCon->ocuparConductores();
             //actualizar conductores ocupados que hayan acabado el viaje
             $this->daoCon->actualizarEstadosOcupados();
             //actualizar todos los estados por el horario menos los ocupados
             $this->daoCon->actualizarEstados();
+
+            //actualizar conductores que tengan un viaje en curso
+            $this->daoCon->ocuparConductores();
 
         } catch (\Throwable $th) {
             $body = json_encode([

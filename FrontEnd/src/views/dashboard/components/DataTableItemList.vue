@@ -61,9 +61,9 @@ export default {
   methods: {
     renderColumn(value, key) {
       const colores = {
-        libre: "success",
+        "libre": "success",
         "fuera de servicio": "secondary",
-        ocupado: "danger",
+        "ocupado": "danger",
       };
 
       if (key === "estado") {
