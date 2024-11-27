@@ -20,7 +20,7 @@
         <li class="text-sm border-0 list-group-item ps-0">
           <strong class="text-white">Email:</strong> &nbsp; {{ info.email }}
         </li>
-        <li class="text-sm border-0 list-group-item ps-0">
+        <li class="text-sm border-0 list-group-item ps-0" v-if="info.location">
           <strong class="text-white">Ciudad:</strong> &nbsp;
           {{ info.location }}
         </li>

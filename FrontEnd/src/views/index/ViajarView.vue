@@ -38,6 +38,7 @@ import horarioService from "@/services/horario.service";
 import ciudadService from "@/services/ciudad.service";
 import conductoresService from "@/services/conductores.service";
 import viajeService from "@/services/viaje.service";
+import profileService from "@/services/profile.service";
 
 const entradas = ref();
 const stepData = ref();
@@ -236,12 +237,33 @@ function generarViaje() {
 }
 
 async function reservarViaje() {
+  const viajesActivos = await profileService.verViajes();
+
+  if (viajesActivos && viajesActivos.activos > 0) {
+    showSwal.methods.showSwal({
+      type: "error",
+      message: "Ya tienes un viaje programado",
+      width: 1000,
+    });
+    return;
+  }
+
   // mandar a la api el post del viaje con los datos
   const respuesta = await viajeService.InsertarViaje(viaje.value);
   if (respuesta && respuesta.success) {
     showSwal.methods.showSwal({
       type: "success",
-      message: respuesta.message,
+      message: respuesta.message + " Redirigiendo a viajes",
+      width: 1000,
+    });
+    setTimeout(() => {
+      window.location.href = "/dashboard/viajes";
+    }, 5500);
+    // redireccionar a la pagina de viajes
+  } else {
+    showSwal.methods.showSwal({
+      type: "danger",
+      message: "no se pudo reservar el viaje,intentalo de nuevo",
       width: 1000,
     });
   }

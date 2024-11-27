@@ -20,7 +20,7 @@ class DaoViaje
 
     public function listar()
     {
-        $consulta = 'SELECT v.*, (select u.email from Usuario u where u.id = v.id_conductor) as conductor_mail,(select u.email from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v';
+        $consulta = 'SELECT v.*, (select u.email from Usuario u where u.id = v.id_conductor) as conductor_mail,(select u.email from Usuario u where u.id = v.id_pasajero) as pasajero_mail, (select c.nombre from Ciudad c  where c.id = v.ciudad) as ciudad_nombre FROM Viaje v ORDER BY v.fecha_ini DESC';
 
         $this->viajes = array();  //Vaciamos el array de las situaciones entre consulta y consulta
 
@@ -35,8 +35,8 @@ class DaoViaje
             $viaje->setLongiIni($fila['longi_ini']);
             $viaje->setLatiFin($fila['lati_fin']);
             $viaje->setLongiFin($fila['longi_fin']);
-            $viaje->setFechaIni(date('H:i:s d/m/Y ', $fila['fecha_ini']));
-            $viaje->setFechaFin(date('H:i:s d/m/Y', $fila['fecha_fin']));
+            $viaje->setFechaIni(date(' d/m/Y H:i:s', $fila['fecha_ini']));
+            $viaje->setFechaFin(date(' d/m/Y H:i:s', $fila['fecha_fin']));
             $viaje->setMetodoPago($fila['metodo_pago']);
             $viaje->setDistancia($fila['distancia']);
             $viaje->setDuracionMin($fila['duracion_min']);
@@ -86,8 +86,8 @@ class DaoViaje
             $viaje->setLongiIni($fila['longi_ini']);
             $viaje->setLatiFin($fila['lati_fin']);
             $viaje->setLongiFin($fila['longi_fin']);
-            $viaje->setFechaIni(date('H:i:s d/m/Y ', $fila['fecha_ini']));
-            $viaje->setFechaFin(date('H:i:s d/m/Y ', $fila['fecha_fin']));
+            $viaje->setFechaIni(date(' d/m/Y H:i:s ', $fila['fecha_ini']));
+            $viaje->setFechaFin(date(' d/m/Y H:i:s', $fila['fecha_fin']));
             $viaje->setMetodoPago($fila['metodo_pago']);
             $viaje->setDistancia($fila['distancia']);
             $viaje->setDuracionMin($fila['duracion_min']);

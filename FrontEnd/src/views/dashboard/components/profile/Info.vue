@@ -79,8 +79,18 @@
           id="ciudad"
           label="Ciudad"
           variant="static"
-          value="Solicite el cambio de Ciudad a un administrador: admin@taxivult.app"
+          value="Solicite el traslado de Ciudad a un administrador: admin@taxivult.app"
           name="ciudad"
+          :disabled="true"
+        />
+      </div>
+      <div class="row mt-5" v-if="user.rol == 2">
+        <material-input
+          id="horario"
+          label="Horario"
+          variant="static"
+          value="Solicite el cambio de Horario a un administrador: admin@taxivult.app"
+          name="horario"
           :disabled="true"
         />
       </div>
@@ -169,6 +179,7 @@ export default {
         usuario.ciudad = ciudad ? ciudad.nombre : "";
         const conductor = await conductoresService.obtenerConductor(usuario);
         usuario.ubi_espera = conductor.ubi_espera;
+        console.log(conductor);
       }
       this.user = usuario;
     } catch (error) {
@@ -181,6 +192,8 @@ export default {
       this.loading = false;
     }
     this.loading = false;
+    console.log(this.user);
+
     this.isReady = true;
   },
   methods: {

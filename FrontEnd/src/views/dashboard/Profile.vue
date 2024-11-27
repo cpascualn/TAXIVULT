@@ -41,7 +41,7 @@
             <hr class="vertical dark" />
           </div>
           <div class="mt-4 col-12 col-xl-4 mt-xl-0" v-if="profile.rol == 2">
-            <div class="card card-plain h-100">
+            <div class="card card-plain h-100 list__users">
               <div class="p-3 pb-0 card-header">
                 <h6 class="mb-0">Pasajeros Recientes</h6>
               </div>
@@ -49,6 +49,8 @@
                 <ul class="list-group">
                   <li
                     class="px-0 mb-2 border-0 list-group-item d-flex align-items-center"
+                    v-for="viaje in viajes"
+                    :key="viaje.pasajero"
                   >
                     <material-avatar
                       class="me-3"
@@ -60,16 +62,17 @@
                     <div
                       class="d-flex align-items-start flex-column justify-content-center"
                     >
-                      <h6 class="mb-0 text-sm">Pasajero</h6>
-                      <p class="mb-0 text-xs">El ultimo viaje fue fecha</p>
+                      <h6 class="mb-0 text-sm">{{ viaje.pasajero }}</h6>
+                      <p class="mb-0 text-xs">{{ viaje.fin }}</p>
                     </div>
-                    <a
-                      class="mb-0 btn btn-link pe-3 ps-0 ms-auto"
-                      href="javascript:;"
-                      >Bloquear</a
+                    <span class="mb-0 btn btn-link pe-3 ps-0 ms-auto"
+                      >{{ viaje.precio }}€</span
                     >
                   </li>
                 </ul>
+                <p v-if="viajes.length == 0" style="color: red  !important">
+                  No hay pasajeros recientes
+                </p>
               </div>
             </div>
           </div>
@@ -93,6 +96,7 @@ import passengerImg from "@/assets/img/passengerImg.jpg";
 import profileService from "@/services/profile.service";
 import ciudadService from "@/services/ciudad.service";
 import conductoresService from "@/services/conductores.service";
+import viajeService from "@/services/viaje.service";
 
 import setNavPills from "@/assets/js/nav-pills.js";
 import setTooltip from "@/assets/js/tooltip.js";
@@ -120,6 +124,7 @@ export default {
         2: driverImg,
         3: passengerImg,
       },
+      viajes: [],
       isReady: false,
     };
   },
@@ -176,6 +181,7 @@ export default {
       const conductor = await conductoresService.obtenerConductor(this.profile);
       this.profile.horario = conductor.horario;
       this.profile.ubi_espera = conductor.ubi_espera;
+      this.viajes = await viajeService.getViajesUsuario(conductor);
     }
     this.isReady = true;
   },
@@ -184,3 +190,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.list__users {
+  max-height: 60vh;
+  overflow: auto;
+}
+</style>
