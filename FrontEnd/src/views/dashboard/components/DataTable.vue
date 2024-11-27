@@ -150,9 +150,6 @@ export default {
       searchQuery: "",
     };
   },
-  async mounted() {
-    await this.$store.dispatch("profile/getProfile");
-  },
   computed: {
     // Filtra los datos según la búsqueda
     filteredItems() {

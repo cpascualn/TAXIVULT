@@ -12,13 +12,13 @@
           >{{ icon.name }}</i
         >
       </div>
-      <div class="pt-1" :class="isRTL ? 'text-start' : 'text-end'">
+      <div class="pt-1 text-end">
         <p class="text-sm mb-0 text-capitalize">{{ title.text }}</p>
         <h4 class="mb-0">{{ title.value }}</h4>
       </div>
     </div>
     <hr class="dark horizontal my-0" />
-    <div class="card-footer p-3" :class="isRTL ? 'text-start' : 'text-end'">
+    <div class="card-footer p-3 text-end">
       <!--  eslint-disable-next-line vue/no-v-html -->
       <p class="mb-0" v-html="detail"></p>
     </div>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   name: "MiniStatisticsCard",
   data() {
@@ -60,9 +59,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  computed: {
-    ...mapState(["isRTL"]),
   },
 };
 </script>

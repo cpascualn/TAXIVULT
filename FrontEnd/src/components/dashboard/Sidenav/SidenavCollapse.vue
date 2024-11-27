@@ -6,19 +6,16 @@
       :aria-controls="collapseRef"
       :aria-expanded="isExpanded"
       class="nav-link"
-      :class="getRoute() === collapseRef ? `active bg-gradient-${color}` : ''"
+      :class="getRoute() === collapseRef ? `active bg-gradient-primary` : ''"
       v-bind="$attrs"
       @click="isExpanded = !isExpanded"
     >
       <div
-        class="text-center d-flex align-items-center justify-content-center"
-        :class="isRTL ? ' ms-2' : 'me-2'"
+        class="text-center d-flex align-items-center justify-content-center me-2"
       >
         <slot name="icon"></slot>
       </div>
-      <span class="nav-link-text" :class="isRTL ? ' me-1' : 'ms-1'">{{
-        navText
-      }}</span>
+      <span class="nav-link-text ms-1">{{ navText }}</span>
     </router-link>
     <div :class="isExpanded ? 'collapse show' : 'collapse'">
       <slot name="list"></slot>
@@ -26,7 +23,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+
 
 export default {
   name: "SidenavCollapse",
@@ -55,8 +52,6 @@ export default {
       return routeArr[1];
     },
   },
-  computed: {
-    ...mapState(["isRTL", "color"]),
-  },
+ 
 };
 </script>

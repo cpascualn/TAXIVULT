@@ -1,10 +1,7 @@
 <template>
   <aside
     id="sidenav-main"
-    class="sidenav navbar navbar-vertical navbar-expand-xs border-0"
-    :class="`${
-      isRTL ? ' rotate-caret fixed-end' : 'fixed-start '
-    } ${sidebarType}`"
+    class="sidenav navbar navbar-vertical navbar-expand-xs border-0 fixed-start bg-gradient-dark"
   >
     <div
       class="sidenav-header d-flex justify-content-center align-items-center"
@@ -17,12 +14,7 @@
       ></i>
       <a class="m-0 navbar-brand" href="/">
         <img
-          :src="
-            sidebarType === 'bg-white' ||
-            (sidebarType === 'bg-transparent' && !isDarkMode)
-              ? logoDark
-              : logo
-          "
+          :src="logo"
           class="navbar-brand-img"
           style="max-height: 5rem"
           alt="main_logo"
@@ -36,8 +28,6 @@
 <script>
 import SidenavList from "./SidenavList.vue";
 import logo from "@/assets/img/logo-ct.jpg";
-import logoDark from "@/assets/img/logo-ct-dark.jpg";
-import { mapState } from "vuex";
 
 export default {
   name: "index",
@@ -47,11 +37,7 @@ export default {
   data() {
     return {
       logo,
-      logoDark,
     };
-  },
-  computed: {
-    ...mapState(["isRTL", "sidebarType", "isDarkMode"]),
   },
 };
 </script>

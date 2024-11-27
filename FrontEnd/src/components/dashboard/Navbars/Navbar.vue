@@ -10,14 +10,9 @@
       <breadcrumbs :currentPage="currentRouteName" :color="color" />
       <div
         class="mt-2 collapse navbar-collapse mt-sm-0 me-md-0 me-sm-4"
-        :class="isRTL ? 'px-0' : 'me-sm-4'"
         id="navbar"
       >
-        <div
-          class="pe-md-3 d-flex align-items-center"
-          :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
-        >
-        </div>
+        <div class="pe-md-3 d-flex align-items-center ms-md-auto"></div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item dropdown">
             <a
@@ -28,9 +23,7 @@
               aria-expanded="false"
               :class="color ? color : 'text-body'"
             >
-              <i class="material-icons" :class="isRTL ? 'ms-sm-2' : 'me-sm-1'"
-                >account_circle</i
-              >
+              <i class="material-icons me-sm-1">account_circle</i>
             </a>
 
             <ul class="dropdown-menu">
@@ -40,12 +33,7 @@
                   :to="{ name: 'perfil' }"
                   class="px-0 nav-link font-weight-bold lh-1 d-flex align-items-center"
                 >
-                  <i
-                    class="material-icons ms-2"
-                    :class="isRTL ? 'ms-sm-2' : 'me-sm-1'"
-                  >
-                    account_circle
-                  </i>
+                  <i class="material-icons ms-2 me-sm-1"> account_circle </i>
                   My Profile
                 </router-link>
               </li>
@@ -58,12 +46,7 @@
                   @click="logout"
                   class="px-0 nav-link font-weight-bold lh-1 d-flex align-items-center"
                 >
-                  <i
-                    class="material-icons ms-2"
-                    :class="isRTL ? 'ms-sm-2' : 'me-sm-1'"
-                  >
-                    logout
-                  </i>
+                  <i class="material-icons ms-2 me-sm-1"> logout </i>
                   Logout
                 </div>
               </li>
@@ -84,22 +67,7 @@
             </a>
           </li>
 
-          <li
-            class="nav-item dropdown d-flex align-items-center"
-            :class="isRTL ? 'ps-2' : 'pe-2'"
-          >
-            <a
-              href="#"
-              class="p-0 nav-link lh-1"
-              :class="[color ? color : 'text-body', showMenu ? 'show' : '']"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              @click="showMenu = !showMenu"
-            >
-              <i class="material-icons cursor-pointer"> notifications </i>
-            </a>
-          </li>
+          <li class="nav-item dropdown d-flex align-items-center pe-5"></li>
         </ul>
       </div>
     </div>
@@ -107,7 +75,8 @@
 </template>
 <script>
 import Breadcrumbs from "@/components/dashboard/Breadcrumbs.vue";
-import { mapMutations, mapState } from "vuex";
+import AuthService from '@/services/auth.service';
+import { mapMutations } from "vuex";
 
 export default {
   name: "navbar",
@@ -128,7 +97,7 @@ export default {
     },
 
     logout() {
-      this.$store.dispatch("auth/logout");
+      AuthService.logout();
       location.reload();
     },
   },
@@ -136,7 +105,6 @@ export default {
     Breadcrumbs,
   },
   computed: {
-    ...mapState(["isRTL", "isAbsolute"]),
 
     currentRouteName() {
       return this.$route.name;

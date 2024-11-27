@@ -14,21 +14,14 @@ export default {
   },
   computed: {
     ...mapState([
-      "isRTL",
-      "color",
       "isAbsolute",
       "isNavFixed",
       "navbarFixed",
       "absolute",
-      "showSidenav",
       "showNavbar",
-      "showFooter",
-      "showConfig",
-      "hideConfigButton",
     ]),
   },
   beforeMount() {
-    this.$store.state.isTransparent = "bg-transparent";
 
     const sidenav = document.getElementsByClassName("g-sidenav-show")[0];
     if (sidenav) {
@@ -42,11 +35,7 @@ export default {
 
 <template>
   <div>
-    <sidenav
-      :custom_class="color"
-      :class="[isRTL ? 'fixed-end' : 'fixed-start']"
-      v-if="true"
-    />
+    <sidenav :custom_class="color" class="fixed-start" />
     <main
       class="main-content position-relative max-height-vh-100 h-100 overflow-x-hidden"
     >
@@ -57,7 +46,7 @@ export default {
         :minNav="navbarMinimize"
         v-if="showNavbar"
       />
-    
+
       <router-view />
     </main>
   </div>

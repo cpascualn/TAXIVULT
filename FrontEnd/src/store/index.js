@@ -1,27 +1,12 @@
 import { createStore } from "vuex";
-import { auth } from "./auth.module";
-import { profile } from "./profile.module";
+
 
 export default createStore({
-  modules: {
-    auth,
-    profile
-  },
   state: {
-    hideConfigButton: false,
     isPinned: true,
-    showConfig: false,
-    sidebarType: "bg-gradient-dark",
-    isRTL: false,
-    color: "primary",
     isNavFixed: false,
     isAbsolute: false,
-    showNavs: true,
-    showSidenav: true,
     showNavbar: true,
-    showFooter: true,
-    showMain: true,
-    isDarkMode: true,
     navbarFixed:
       "position-sticky blur shadow-blur left-auto top-1 z-index-sticky px-0 mx-4",
     absolute: "position-absolute px-4 mx-0 w-100 z-index-2",
@@ -45,22 +30,8 @@ export default createStore({
         state.isNavFixed = false;
       }
     },
-    toggleEveryDisplay(state) {
-      state.showNavbar = !state.showNavbar;
-      state.showSidenav = !state.showSidenav;
-      state.showFooter = !state.showFooter;
-    },
-    toggleHideConfig(state) {
-      state.hideConfigButton = !state.hideConfigButton;
-    },
     color(state, payload) {
       state.color = payload;
     },
   },
-  actions: {
-    setColor({ commit }, payload) {
-      commit("color", payload);
-    },
-  },
-  getters: {},
 });

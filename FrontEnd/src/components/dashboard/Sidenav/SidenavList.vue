@@ -20,8 +20,7 @@
       </li>
       <li class="mt-3 nav-item">
         <h6
-          class="text-xs ps-4 text-uppercase font-weight-bolder text-white"
-          :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
+          class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"
         >
           ADMINISTRACIÓN
         </h6>
@@ -117,8 +116,7 @@
 
       <li class="mt-3 nav-item">
         <h6
-          class="text-xs ps-4 text-uppercase font-weight-bolder text-white"
-          :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
+          class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"
         >
           MI CUENTA
         </h6>
@@ -194,8 +192,7 @@
       </li>
       <li class="mt-3 nav-item">
         <h6
-          class="text-xs ps-4 text-uppercase font-weight-bolder text-white"
-          :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
+          class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"
         >
           MI CUENTA
         </h6>
@@ -260,8 +257,7 @@
 
       <li class="mt-3 nav-item">
         <h6
-          class="text-xs ps-4 text-uppercase font-weight-bolder text-white"
-          :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
+          class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"
         >
           MI CUENTA
         </h6>
@@ -298,17 +294,12 @@
       <div class="mx-3">
         <a
           class="btn mt-4 w-100"
-          :class="`bg-gradient-${this.$store.state.color}`"
+          :class="`bg-gradient-primary`"
           @click="logout"
           href="/home"
           style="text-shadow: 3px 3px 6px rgba(1, 1, 2, 1)"
         >
-          <i
-            class="material-icons ms-2"
-            :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-1'"
-          >
-            logout </i
-          >Logout
+          <i class="material-icons ms-2 me-sm-1"> logout </i>Logout
         </a>
       </div>
     </div>
@@ -317,6 +308,7 @@
 <script>
 import SidenavCollapse from "./SidenavCollapse.vue";
 import profileService from "@/services/profile.service";
+import AuthService from "@/services/auth.service";
 export default {
   name: "SidenavList",
   props: {
@@ -336,7 +328,7 @@ export default {
       return routeArr[1];
     },
     logout() {
-      this.$store.dispatch("auth/logout");
+      AuthService.logout();
     },
   },
 };
