@@ -79,19 +79,6 @@
                       {{ invalidPassMessage }}
                     </div>
                   </div>
-                  <!-- <div class="form-options">
-                    <div class="remember-me">
-                      <div class="checkbox-wrapper">
-                        <input
-                          type="checkbox"
-                          id="rememberMe"
-                          class="checkbox-input"
-                        />
-                        <label for="rememberMe" class="checkbox-label"></label>
-                      </div>
-                      <span class="remember-text">Remember me</span>
-                    </div>
-                  </div> -->
                   <button type="submit" class="login-button">Sign in</button>
                 </form>
                 <div class="form-divider"></div>
@@ -152,7 +139,7 @@ const submitForm = async (event) => {
     event.preventDefault();
   } else {
     const user = {
-      email: mail.value,
+      email: mail.value.trim(),
       password: password.value,
     };
 

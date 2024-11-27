@@ -226,12 +226,22 @@ export default {
     barChartData() {
       return {
         labels: this.usuarioCiudad.ciudades,
-        datasets: {
-          label1: "Conductores",
-          label2: "Pasajeros",
-          data1: this.usuarioCiudad.conductores,
-          data2: this.usuarioCiudad.pasajeros,
-        },
+        datasets: [
+          {
+            label: "Conductores",
+            data: this.usuarioCiudad.conductores,
+            backgroundColor: "#5DB461",
+            borderColor: "#D7AB23",
+            borderWidth: 1,
+          },
+          {
+            label: "Pasajeros",
+            data: this.usuarioCiudad.pasajeros,
+            backgroundColor: "#D7AB23",
+            borderColor: "#5DB461",
+            borderWidth: 1,
+          },
+        ],
       };
     },
     PieChartData() {

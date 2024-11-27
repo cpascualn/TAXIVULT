@@ -8,6 +8,7 @@ use App\Controllers\UsuarioController;
 use App\Controllers\CiudadController;
 use App\Controllers\ConductorController;
 use App\Controllers\HorarioController;
+use App\Controllers\PasajeroController;
 use App\Controllers\VehiculoController;
 use App\Controllers\ViajeController;
 use App\Middleware\AllowCorsMiddleware;
@@ -54,6 +55,11 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/disponibles', [ConductorController::class, 'HandleBuscarDisponiblesEnciudad']);
         $group->patch('/actualizar/{id:[0-9]+}', [ConductorController::class, 'HandleActualizar']);
         $group->get('/obtener/{id:[0-9]+}', [ConductorController::class, 'HandleObtenerFormated']);
+    });
+    $group->group('/pasajeros', function (RouteCollectorProxy $group) {
+        $group->get('', [PasajeroController::class, 'HandleListar']);
+        $group->patch('/{accion:(?:ocupar|liberar)}/{id:[0-9]+}', [PasajeroController::class, 'HandleEstado']);
+        $group->get('/obtener/{id:[0-9]+}', [PasajeroController::class, 'HandleObtener']);
     });
     $group->group('/horarios', function (RouteCollectorProxy $group) {
         $group->get('', [HorarioController::class, 'HandleListar']);

@@ -142,7 +142,7 @@ class DaoConductor extends Database
         $param = array(
             ":ID" => $id,
             ":DNI" => $nuevo->getDni() ?? $conductor->getDni(),
-            ":LICENCIA_TAXISTA" => $nuevo->getDni() ?? $conductor->getDni(),
+            ":LICENCIA_TAXISTA" => $nuevo->getLicenciaTaxista() ?? $conductor->getLicenciaTaxista(),
             ":TITULAR_TARJETA" => $nuevo->getTitularTarjeta() ?? $conductor->getTitularTarjeta(),
             ":IBAN_TARJETA" => $nuevo->getIbanTarjeta() ?? $conductor->getIbanTarjeta(),
             ":UBI_ESPERA" => $nuevo->getUbiEspera() ?? $conductor->getUbiEspera(),

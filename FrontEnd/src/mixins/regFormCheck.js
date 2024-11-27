@@ -81,7 +81,7 @@ export default {
             );
             return isVehicle;
         } catch (error) {
-            console.log('Error al verificar la imagen:', error);
+            console.error('Error al verificar la imagen:', error);
             return false;
         }
     }

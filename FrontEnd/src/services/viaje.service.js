@@ -2,20 +2,18 @@ import { AuthQuery, simpleAuthQuery } from "@/assets/utils/fetchHelper";
 
 export default {
     async InsertarViaje(data) {
-        console.log(data);
-        
         try {
             return await AuthQuery('/api/viajes/insertar', data);
 
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getViajes() {
         try {
             return await simpleAuthQuery('/api/viajes');
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getTotales() {
@@ -25,7 +23,7 @@ export default {
                 return 0;
             return response.totales;
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getTotalesCiudad() {
@@ -35,7 +33,7 @@ export default {
                 return 0;
             return response.totales;
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getTotalesCiudadMes() {
@@ -45,7 +43,7 @@ export default {
                 return 0;
             return response.totales;
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getViajesUsuario(user) {
@@ -55,7 +53,7 @@ export default {
                 return 0;
             return response.viajes;
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }
 }

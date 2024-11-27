@@ -7,7 +7,7 @@ export default {
     try {
       return await simpleQuery('/api/ciudades');
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
 
@@ -15,14 +15,14 @@ export default {
     try {
       return await simpleQuery(`/api/ciudades/${id}`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async getCiudadNombre() {
     try {
       return await simpleQuery(`/api/ciudades/${nombre}`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async getCiudadUsuario() {
@@ -37,23 +37,21 @@ export default {
         return null;
       return ciuData.ciudad;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async addCiudad(ciudad) {
     try {
       return await AuthQuery(`/api/ciudades/insertar`, ciudad);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async deleteCiudad(id) {
     try {
-      console.log(id);
-
       return await simpleAuthQuery(`/api/ciudades/eliminar/${id}`, 'DELETE');
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
 
@@ -64,7 +62,7 @@ export default {
         return null;
       return response.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
 

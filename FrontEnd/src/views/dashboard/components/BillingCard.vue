@@ -3,7 +3,7 @@
     <div class="card-header pb-0 px-3">
       <h6 class="mb-0">Billing Information</h6>
     </div>
-    <div class="card-body pt-4 p-3">
+    <div class="card-body pt-1 p-3">
       <ul class="list-group">
         <li
           class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg"

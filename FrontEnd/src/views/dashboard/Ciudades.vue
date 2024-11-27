@@ -1,5 +1,5 @@
 <template>
-    <LoadingPage ref="loading"></LoadingPage>
+  <LoadingPage ref="loading"></LoadingPage>
   <DataTable
     :item-type="'Ciudades'"
     :columns="columns"
@@ -17,6 +17,8 @@ import ciudadService from "@/services/ciudad.service";
 import showSwal from "@/mixins/showSwal";
 import LoadingPage from "@/components/index/LoadingPage.vue";
 import { watch } from "vue";
+
+import formatCoords from "@/assets/utils/formatCoords";
 const loading = ref(null);
 const isReady = ref(false);
 
@@ -123,7 +125,9 @@ async function reload() {
 //recoger de esa api los datos:nombre,comunidad, lat,long y boundingbox con valores ["latMin","latMax","LongMin","LongMax"]
 async function obtenerDatosCiudad(ciudad) {
   // Lista de comunidades autónomas
-  const url = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(ciudad)}&country=es&format=json&limit=1`;
+  const url = `https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(
+    ciudad
+  )}&country=es&format=json&limit=1`;
 
   try {
     const respuesta = await fetch(url);
@@ -167,12 +171,12 @@ async function obtenerDatosCiudad(ciudad) {
     let long_max = datos[0].boundingbox[3];
 
     // limitar la cadena a 12 digitos
-    lat = lat.length > 12 ? lat.slice(0, 12) : lat;
-    long = long.length > 12 ? long.slice(0, 12) : long;
-    lat_min = lat_min.length > 12 ? lat_min.slice(0, 12) : lat_min;
-    lat_max = lat_max.length > 12 ? lat_max.slice(0, 12) : lat_max;
-    long_min = long_min.length > 12 ? long_min.slice(0, 12) : long_min;
-    long_max = long_max.length > 12 ? long_max.slice(0, 12) : long_max;
+    lat = formatCoords(lat);
+    long = formatCoords(long);
+    lat_min = formatCoords(lat_min);
+    lat_max = formatCoords(lat_max);
+    long_min = formatCoords(long_min);
+    long_max = formatCoords(long_max);
 
     return {
       nombre,

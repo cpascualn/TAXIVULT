@@ -1,19 +1,19 @@
 import { simpleQuery, simpleAuthQuery, Query, AuthQuery } from "@/assets/utils/fetchHelper";
-import profileService from "./profile.service";
+
 
 export default {
     async getConductores() {
         try {
             return await simpleAuthQuery(`/api/conductores`);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getConductoresLibresCiudad(ciudad) {
         try {
             return await simpleAuthQuery(`/api/conductores/libres/${ciudad.id}`);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getConductoresDisponiblesCiudad(hora_ini, hora_fin, ciudad) {
@@ -21,14 +21,14 @@ export default {
             const datos = { hora_ini, hora_fin, ciudad };
             return await AuthQuery(`/api/conductores/disponibles`, datos);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async actualizarConductor(conductor) {
         try {
             return await AuthQuery(`/api/conductores/actualizar/${conductor.id}`, conductor, 'PATCH');
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async obtenerConductor(conductor) {
@@ -37,7 +37,7 @@ export default {
             if (!response || !response.success || !response.conductor) return null;
             return response.conductor;
         } catch (err) {
-            console.log(err);
+            console.error(err);
             return null
         }
     }

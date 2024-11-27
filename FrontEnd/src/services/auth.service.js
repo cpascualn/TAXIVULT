@@ -10,7 +10,7 @@ export default {
       }
       return data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
 
@@ -21,9 +21,9 @@ export default {
   async register(user) {
     try {
       return await Query('/register', user);
-    } catch (error) {
-      console.log(error);
-      return { "error": error, "success": false };
+    } catch (err) {
+      console.error(err);
+      return { "error": err, "success": false };
     }
   },
   isTokenExpired(token) {

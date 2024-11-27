@@ -23,10 +23,8 @@ export default {
       labels: Array,
       datasets: {
         type: Object,
-        label1: String,
-        label2: String,
-        data1: Array,
-        data2: Array,
+        labels: String,
+        data: Array,
       },
     },
   },
@@ -54,28 +52,20 @@ export default {
       if (this.chartInstance) {
         this.chartInstance.destroy();
       }
+      const chartDatasets = this.chart.datasets.map((dataset) => ({
+        label: dataset.label,
+        data: dataset.data,
+        backgroundColor: dataset.backgroundColor || "#FFFFFF",
+        borderColor: dataset.borderColor || "#000000",
+        borderWidth: 1,
+      }));
 
       // Crea una nueva instancia del gráfico
       this.chartInstance = new Chart(ctx, {
         type: "bar",
         data: {
           labels: this.chart.labels,
-          datasets: [
-            {
-              label: this.chart.datasets.label1,
-              data: this.chart.datasets.data1,
-              backgroundColor: "#5DB461",
-              borderColor: "#D7AB23",
-              borderWidth: 1,
-            },
-            {
-              label: this.chart.datasets.label2,
-              data: this.chart.datasets.data2,
-              backgroundColor: "#D7AB23",
-              borderColor: "#5DB461",
-              borderWidth: 1,
-            },
-          ],
+          datasets: chartDatasets,
         },
         options: {
           responsive: true,

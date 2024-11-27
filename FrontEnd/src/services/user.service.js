@@ -6,21 +6,21 @@ export default {
         try {
             return await simpleAuthQuery('/api/usuarios');
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async eliminarUsuario(id) {
         try {
             return await simpleAuthQuery(`/api/usuarios/${id}`, 'DELETE');
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async actualizarUsuario(user) {
         try {
             return await AuthQuery(`/api/usuarios/${user.id}`, user, 'PATCH');
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async getUsuariosTotales() {
@@ -30,7 +30,7 @@ export default {
                 return 0;
             return response.totales;
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     },
     async comprobarContrasena(user) {
@@ -39,7 +39,7 @@ export default {
             if (!response || response.success == null) return false;
             return response.success;
         } catch (err) {
-            console.log(err);
+            console.error(err);
             return false;
         }
     },

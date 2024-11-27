@@ -17,7 +17,7 @@ export default {
         return null;
       return response.usuario;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return null;
 
     }
@@ -35,7 +35,7 @@ export default {
       return await AuthQuery('/api/viajes/activoUsuario', { id });
 
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   getRol() {

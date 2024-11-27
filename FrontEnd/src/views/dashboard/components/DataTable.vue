@@ -249,7 +249,14 @@ select {
     overflow: auto;
   }
 }
-.card .card-footer{
+.card .card-footer {
   overflow: auto;
+}
+.row {
+  margin: 0 !important;
+  gap: 0.5rem;
+}
+.row > * {
+  padding-right: 0
 }
 </style>

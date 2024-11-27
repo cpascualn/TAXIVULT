@@ -27,10 +27,10 @@ class PasajeroController
         return $response->withStatus(200);
     }
 
-    public function HandleObtener(Request $request, Response $response, array $args)
+    public function HandleObtener(Request $request, Response $response, $id)
     {
 
-        $id = $args['id'];
+
 
 
         $pasajero = $this->daoPas->obtener($id);
@@ -69,10 +69,10 @@ class PasajeroController
         return $response->withStatus(200);
     }
 
-    public function HandleActualizar(Request $request, Response $response, array $args)
+    public function HandleActualizar(Request $request, Response $response, $id)
     {
 
-        $id = $args['id'];
+
 
         //comprobar que existe
         $pasajero = $this->daoPas->obtener($id);
@@ -112,11 +112,8 @@ class PasajeroController
         return $response->withStatus(200);
     }
 
-    public function HandleEliminar(Request $request, Response $response, array $args)
+    public function HandleEliminar(Request $request, Response $response, $id)
     {
-
-        $id = $args['id'];
-
 
         $pasajero = $this->daoPas->obtener($id);
 

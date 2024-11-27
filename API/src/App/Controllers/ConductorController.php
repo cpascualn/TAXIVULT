@@ -164,10 +164,10 @@ class ConductorController
         return $response->withStatus(200);
     }
 
-    public function HandleEliminar(Request $request, Response $response, array $args)
+    public function HandleEliminar(Request $request, Response $response, $id)
     {
 
-        $id = $args['id'];
+        
 
 
         $conductor = $this->daoCon->obtener($id);
@@ -250,6 +250,12 @@ class ConductorController
     public function HandleBuscarLibresEnciudad(Request $request, Response $response, $idCiudad)
     {
         try {
+            // actualizar 
+            $app = AppFactory::create();
+            $auxResponse = $app->getResponseFactory()->createResponse();
+            $this->HandleReload($request, $auxResponse);
+
+
             //actualizar conductores que tengan un viaje en curso
             $conductores = $this->daoCon->buscarConductoreslibresCiudad($idCiudad);
 
@@ -344,8 +350,8 @@ class ConductorController
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'n_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
             'ubiEspera' => [['lengthMax', 1000]],
-            'lonEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
-            'latEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
+            'lonEspera' => ['numeric', ['regex', '/^-?\d{1,3}(\.\d{1,9})?$/']],
+            'latEspera' => ['numeric', ['regex', '/^-?\d{1,3}(\.\d{1,9})?$/']],
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
             'horario' => ['required', 'integer']
         ]);
@@ -372,8 +378,8 @@ class ConductorController
             'titular_tarjeta' => [['lengthMax', 30]],   // Opcional, longitud máxima de 30
             'iban_tarjeta' => [['lengthMax', 30]],      // Opcional, longitud máxima de 30
             'ubiEspera' => [['lengthMax', 1000]],
-            'lonEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
-            'latEspera' => ['numeric', ['regex', '/^-?\d{1,12}\.\d{1,9}$/']],
+            'lonEspera' => ['numeric', ['regex', '/^-?\d{1,3}(\.\d{1,9})?$/']],
+            'latEspera' => ['numeric', ['regex', '/^-?\d{1,3}(\.\d{1,9})?$/']],
             'estado' => [['in', ['libre', 'ocupado', 'fuera de servicio']]],  // Campo obligatorio, con 3 posibles valores
             'coche' => [['lengthMax', 12]],  // Opcional, longitud máxima de 12
             'horario' => ['integer']

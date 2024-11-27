@@ -94,7 +94,7 @@
           :disabled="true"
         />
       </div>
-      <div class="row mt-5" v-if="user.ciudad">
+      <div class="row mt-5" v-if="user.rol == 2">
         <material-input
           id="barrio"
           label="Barrio"
@@ -104,7 +104,7 @@
           placeholder="Barrio habitual"
           @update:value="(e) => upval(e, 'ubi_espera')"
         />
-        <div class="buscador">
+        <div class="buscador" >
           <p v-if="validacion.errorMessage" style="color: red">
             {{ validacion.errorMessage }}
           </p>
@@ -147,6 +147,7 @@ import userService from "@/services/user.service";
 import conductoresService from "@/services/conductores.service";
 import ciudadService from "@/services/ciudad.service";
 import LoadingPage from "@/components/index/LoadingPage.vue";
+import formatCoords from "@/assets/utils/formatCoords";
 
 export default {
   name: "Info",
@@ -181,6 +182,7 @@ export default {
         usuario.ubi_espera = conductor.ubi_espera;
       }
       this.user = usuario;
+      
     } catch (error) {
       showSwal.methods.showSwal({
         type: "error",
@@ -190,7 +192,6 @@ export default {
     } finally {
       this.loading = false;
     }
-    this.loading = false;
 
     this.isReady = true;
   },
@@ -316,11 +317,9 @@ export default {
 
       this.locations = [];
 
-      // limitar la cadena a 12 digitos
-      this.user.latEspera =
-        location.lat.length > 12 ? location.lat.slice(0, 12) : location.lat;
-      this.user.lonEspera =
-        location.lon.length > 12 ? location.lon.slice(0, 12) : location.lon;
+      // limitar la cadena a 12 digitos max 3 digitos en la parte entera y max 9 decimales
+      this.user.latEspera = formatCoords(location.lat);
+      this.user.lonEspera =formatCoords(location.lon);
       this.user.ubiEspera = location.display_name;
     },
     upval(e, propiedad = " ") {

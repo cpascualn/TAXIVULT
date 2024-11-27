@@ -197,6 +197,7 @@ export default {
       this.profile.ubi_espera = conductor.ubi_espera;
       this.profile.estado = conductor.estado;
       this.viajes = await viajeService.getViajesUsuario(conductor);
+      this.viajes= this.viajes.slice(0,5);
     }
     this.isReady = true;
   },

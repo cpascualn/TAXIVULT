@@ -335,7 +335,7 @@
           <div class="modal-footer">
             <button class="btn" @click="back" v-if="step > 1">ATRAS</button>
             <button :class="['btn', nextButtonClass]" @click="next">
-              {{ step == titulos.length-1 ? "RESERVAR" : "CONTINUAR" }}
+              {{ step == titulos.length - 1 ? "RESERVAR" : "CONTINUAR" }}
             </button>
           </div>
         </div>
@@ -359,7 +359,7 @@ const titulos = [
   "Precio del viaje",
   "Conductores disponibles",
   "Confirmar Viaje",
-  "Viaje Reservado"
+  "Viaje Reservado",
 ];
 
 const step = ref(1);
@@ -395,18 +395,18 @@ const next = () => {
   if (step.value < titulos.length) {
     if (step.value == 1 && metodoPago.value == "") {
       showSwal.methods.showSwal({
-      type: "error",
-      message: "selecciona un metodo de pago",
-      width: 500,
-    });
+        type: "error",
+        message: "selecciona un metodo de pago",
+        width: 500,
+      });
       return;
     }
     if (step.value == 2 && conductorSeleccionado.value == 0) {
       showSwal.methods.showSwal({
-      type: "error",
-      message: "selecciona un conductor",
-      width: 500,
-    });
+        type: "error",
+        message: "selecciona un conductor",
+        width: 500,
+      });
       return;
     }
     step.value++;
@@ -594,10 +594,8 @@ defineExpose({
   width: 10rem;
   object-fit: contain;
 }
-.car-type {
-  text-align: left;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+.car_type {
+  max-width: 30rem;
 }
 .car-nombre {
   font-size: 1.7rem;

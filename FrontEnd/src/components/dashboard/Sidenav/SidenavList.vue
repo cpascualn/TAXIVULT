@@ -158,7 +158,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="billing"
+          collapseRef="finanzas"
           navText="Finanzas"
         >
           <template v-slot:icon>
@@ -236,7 +236,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="billing"
+          collapseRef="finanzas"
           navText="Finanzas"
         >
           <template v-slot:icon>

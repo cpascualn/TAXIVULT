@@ -7,42 +7,42 @@ export default {
     try {
       return await simpleAuthQuery('/api/vehiculos');
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async getVehiculosLibres() {
     try {
       return await simpleAuthQuery('/api/vehiculos/libres');
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async getVehiculosMatricula(matricula) {
     try {
       return await AuthQuery('/api/vehiculos/matricula', { matricula });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async addVehiculo(vehiculo) {
     try {
       return await AuthQuery(`/api/vehiculos/insertar`, vehiculo);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async eliminarVehiculo(id) {
     try {
       return await simpleAuthQuery(`/api/vehiculos/eliminar/${id}`, 'DELETE');
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async actualizarVehiculo(vehiculo) {
     try {
       return await AuthQuery(`/api/vehiculos/actualizar/${vehiculo.id}`, vehiculo, 'PATCH');
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async getVehiculosTotales() {
@@ -52,7 +52,7 @@ export default {
         return 0;
       return response.totales;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async getVehiculoUsuario(user) {
@@ -62,7 +62,7 @@ export default {
         return 0;
       return response;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
 

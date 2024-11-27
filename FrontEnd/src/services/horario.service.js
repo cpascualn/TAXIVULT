@@ -7,7 +7,7 @@ export default {
     try {
       return await simpleAuthQuery('/api/horarios');
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
 
@@ -15,14 +15,14 @@ export default {
     try {
       return await AuthQuery(`/api/horarios/buscarHora`,horario);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   async actualizarHorario(horario) {
     try {
         return await AuthQuery(`/api/horarios/${horario.id}`,horario,'PATCH');
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 },
 

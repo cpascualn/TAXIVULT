@@ -566,6 +566,8 @@ import ciudadService from "@/services/ciudad.service";
 import regFormCheck from "@/mixins/regFormCheck";
 import authService from "@/services/auth.service";
 import encodeImageToBase64 from "@/assets/utils/imageEncoder";
+import formatCoords from "@/assets/utils/formatCoords";
+
 
 const step = ref(1);
 const titulos = [
@@ -663,10 +665,8 @@ function selectLocation(location) {
   locations.value = [];
 
   // limitar la cadena a 12 digitos
-  usuario.value.latEspera =
-    location.lat.length > 12 ? location.lat.slice(0, 12) : location.lat;
-  usuario.value.lonEspera =
-    location.lon.length > 12 ? location.lon.slice(0, 12) : location.lon;
+  usuario.value.latEspera = formatCoords(location.lat);
+  usuario.value.lonEspera = formatCoords(location.lon);
   usuario.value.ubiEspera = location.display_name;
 }
 

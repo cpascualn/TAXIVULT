@@ -22,7 +22,7 @@ class DaoPasajero extends Database
         $consulta = "SELECT * FROM Pasajero";
         $this->db->ConsultaDatos($consulta);
         $this->pasajeros = [];
-        foreach ($this->filas as $fila) {
+        foreach ($this->db->filas as $fila) {
             $pasajero = new Pasajero();
             $pasajero->setId($fila['id']);
             $pasajero->setNTarjeta($fila['n_tarjeta']);
@@ -42,10 +42,10 @@ class DaoPasajero extends Database
         $this->db->ConsultaDatos($consulta, $param);
 
         $pasajero = null;
-        if (count($this->filas) == 1) {
+        if (count($this->db->filas) == 1) {
 
             $pasajero = new Pasajero();
-            $fila = $this->filas[0];  //Recuperamos la fila devuelta
+            $fila = $this->db->filas[0];  //Recuperamos la fila devuelta
             $pasajero = new Pasajero();
             $pasajero->setId($fila['id']);
             $pasajero->setNTarjeta($fila['n_tarjeta']);

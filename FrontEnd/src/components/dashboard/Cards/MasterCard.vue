@@ -12,24 +12,21 @@
         </h5>
         <div class="d-flex">
           <div class="d-flex">
-            <div :class="isRTL ? 'ms-4' : 'me-4'">
-              <p class="text-white text-sm opacity-8 mb-0">
-                {{ card.holderText }}
-              </p>
+            <div class="me-4">
+              <p class="text-white text-sm opacity-8 mb-0">Titular</p>
               <h6 class="text-white mb-0">{{ card.holderName }}</h6>
             </div>
-            <div>
-              <p class="text-white text-sm opacity-8 mb-0">
-                {{ card.expiryText }}
-              </p>
+            <div class="me-4">
+              <p class="text-white text-sm opacity-8 mb-0">Caduca</p>
               <h6 class="text-white mb-0">{{ card.expiryDate }}</h6>
             </div>
+            <div class="me-4">
+              <p class="text-white text-sm opacity-8 mb-0">CVV</p>
+              <h6 class="text-white mb-0">{{ card.cvv }}</h6>
+            </div>
           </div>
-          <div
-            class="w-20 d-flex align-items-end justify-content-end"
-            :class="isRTL ? 'me-auto' : 'ms-auto'"
-          >
-            <!-- <material-avatar class="w-60 mt-2" :img="img1" alt="logo" /> -->
+          <div class="w-20 d-flex align-items-end justify-content-end ms-auto">
+            <material-avatar class="w-60 mt-2" :img="img1" alt="logo" />
           </div>
         </div>
       </div>
@@ -39,7 +36,6 @@
 
 <script>
 import MaterialAvatar from "@/components/dashboard/MaterialAvatar.vue";
-import { mapState } from "vuex";
 import img1 from "@/assets/img/logos/mastercard.png";
 import curvedImage from "@/assets/img/curved14.jpg";
 
@@ -54,17 +50,9 @@ export default {
       number: String,
       holderName: String,
       expiryDate: String,
-      holderText: String,
-      expiryText: String,
+      cvv: String,
       background: String,
-      default: () => ({
-        number: "4562   1122   4594   7852",
-        holderName: "Jack Peterson",
-        expiryDate: "11/22",
-        holderText: "Card Holder",
-        expiryText: "Expires",
-        background: "dark",
-      }),
+      default: () => ({}),
     },
   },
   data() {
@@ -73,8 +61,12 @@ export default {
       curvedImage,
     };
   },
-  computed: {
-    ...mapState(["isRTL"]),
-  },
+  computed: {},
 };
 </script>
+
+<style scoped>
+.dark-version .bg-gradient-dark {
+  background-image: linear-gradient(195deg, #323a5459, #1a20358a);
+}
+</style>
