@@ -1,6 +1,15 @@
 <template>
-  <LoadingPage ref="loading"></LoadingPage>
-  <div class="py-4 container-fluid">
+  <LoadingPage ref="loading" v-if="usrRol == 1"></LoadingPage>
+  <div class="modal fade show" v-if="usrRol != 1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div style="color: #c00000">Acceso Denegado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-4 container-fluid" v-if="usrRol == 1">
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
         <div class="row">
@@ -134,6 +143,7 @@ import userService from "@/services/user.service";
 import viajeService from "@/services/viaje.service";
 import vehiculosService from "@/services/vehiculos.service";
 import ciudadService from "@/services/ciudad.service";
+import profileService from "@/services/profile.service";
 
 export default {
   name: "dashboard-default",
@@ -149,6 +159,9 @@ export default {
     LoadingPage,
   },
   async mounted() {
+    this.usrRol = await profileService.getRol();
+    if (this.usrRol != 1) return;
+
     this.usuariosTotal = await userService.getUsuariosTotales();
 
     const viajeTotales = await viajeService.getTotales();
@@ -192,6 +205,7 @@ export default {
       viajesCiudad: { ciudades: [], viajes: [] },
       ciudades: {},
       ciudadesMeses: [],
+      usrRol: 0,
       isReady: false,
     };
   },
@@ -293,3 +307,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.modal-content {
+  background-color: #0b151c;
+  color: white;
+  border: none;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.btn {
+  background-color: #ffc000;
+  color: #0b151c;
+}
+
+.show {
+  display: block;
+  background-color: #0b151c;
+}
+</style>

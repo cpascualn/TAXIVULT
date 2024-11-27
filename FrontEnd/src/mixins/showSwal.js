@@ -622,6 +622,122 @@ export default {
             } else {
                 return null;
             }
+        },
+        async showEditCreditCard(data) {
+            const { value: formValues } = await Swal.fire({
+                title: "Actualizar tarjeta de credito",
+                html: `
+             <div>
+                <label for="swal-input-number" style="width: 4.5rem;">Numero Tarjeta</label>
+                <input id="swal-input-number" class="swal2-input" placeholder="Numero Tarjeta" value="${data.number}" >
+                
+                <label for="swal-input-holderName" style="width: 4.5rem;">Titular Tarjeta</label>
+                <input id="swal-input-holderName" class="swal2-input" placeholder="Titular Tarjeta" value="${data.holderName}" >
+                
+                <label for="swal-input-expiryDate" style="width: 4.5rem;">Expira</label>
+                <input id="swal-input-expiryDate" class="swal2-input" placeholder="Expira" value="${data.expiryDate}" >
+
+                <label for="swal-input-cvv" style="width: 4.5rem;">CVV</label>
+                <input id="swal-input-cvv" class="swal2-input" placeholder="CVV" value="${data.cvv}" >
+            </div>
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: async () => {
+                    const n_tarjeta = document.getElementById("swal-input-number").value;
+                    const titular_tarjeta = document.getElementById("swal-input-holderName").value;
+                    const caducidad_tarjeta = document.getElementById("swal-input-expiryDate").value;
+                    const cvv_tarjeta = document.getElementById("swal-input-cvv").value;
+
+
+                    if (!n_tarjeta || !titular_tarjeta || !caducidad_tarjeta || !cvv_tarjeta) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false;
+                    }
+                    // validar valores
+
+                    if (!regFormCheck.checkTarjeta(n_tarjeta)) {
+                        Swal.showValidationMessage('El numero no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNombre(titular_tarjeta)) {
+                        Swal.showValidationMessage('El titular no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkExpTarjeta(caducidad_tarjeta)) {
+                        Swal.showValidationMessage('La caducidad no es válida.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkCvcTarjeta(cvv_tarjeta)) {
+                        Swal.showValidationMessage('La cvv no es válida.');
+                        return false;
+                    }
+
+                    return { n_tarjeta, titular_tarjeta, caducidad_tarjeta, cvv_tarjeta };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
+        },
+        async showEditBankInfo(data) {
+            const { value: formValues } = await Swal.fire({
+                title: "Actualizar Informacion Bancaria y licencia",
+                html: `
+             <div>
+                <label for="swal-input-iban" style="width: 4.5rem;">Iban</label>
+                <input id="swal-input-iban" class="swal2-input" placeholder="Iban" value="${data.iban}" >
+                
+                <label for="swal-input-titular" style="width: 4.5rem;">Titular</label>
+                <input id="swal-input-titular" class="swal2-input" placeholder="Titular" value="${data.titular}" >
+                
+                <label for="swal-input-licencia" style="width: 4.5rem;">licencia</label>
+                <input id="swal-input-licencia" class="swal2-input" placeholder="licencia" value="${data.licencia}" >
+            </div>
+              `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                cancelButtonText: "Cancelar",
+                preConfirm: async () => {
+                    const n_tarjeta = document.getElementById("swal-input-iban").value;
+                    const titular_tarjeta = document.getElementById("swal-input-titular").value;
+                    const licenciaVTC = document.getElementById("swal-input-licencia").value;
+
+
+                    if (!n_tarjeta || !titular_tarjeta || !licenciaVTC) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false;
+                    }
+                    // validar valores
+
+                    if (!regFormCheck.checkIban(n_tarjeta)) {
+                        Swal.showValidationMessage('El iban no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkNombre(titular_tarjeta)) {
+                        Swal.showValidationMessage('El titular no es válido.');
+                        return false;
+                    }
+                    if (!regFormCheck.checkVTC(licenciaVTC)) {
+                        Swal.showValidationMessage('La licencia no es válida.');
+                        return false;
+                    }
+
+                    return { licenciaVTC, titular_tarjeta, n_tarjeta };
+                },
+            });
+
+            if (formValues) {
+                return formValues;
+            } else {
+                return null;
+            }
         }
     }
 }

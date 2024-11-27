@@ -13,18 +13,27 @@ export default {
 
   async getHorario(horario) {
     try {
-      return await AuthQuery(`/api/horarios/buscarHora`,horario);
+      return await AuthQuery(`/api/horarios/buscarHora`, horario);
     } catch (err) {
       console.error(err);
     }
   },
   async actualizarHorario(horario) {
     try {
-        return await AuthQuery(`/api/horarios/${horario.id}`,horario,'PATCH');
+      return await AuthQuery(`/api/horarios/${horario.id}`, horario, 'PATCH');
     } catch (err) {
-        console.error(err);
+      console.error(err);
     }
-},
+  },
+  async getHorarioUsuario(user) {
+    try {
+      const response = await simpleAuthQuery(`/api/horarios/${user.id}`);
+      if (!response || !response.success) return null;
+      return response.horario;
+    } catch (err) {
+      console.error(err);
+    }
+  },
 
 
 

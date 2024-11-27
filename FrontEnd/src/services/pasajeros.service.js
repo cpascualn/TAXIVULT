@@ -18,5 +18,11 @@ export default {
             console.error(err);
             return null
         }
-    }
+    }, async actualizarPasajero(pasajero) {
+        try {
+            return await AuthQuery(`/api/pasajeros/actualizar/${pasajero.id}`, pasajero, 'PATCH');
+        } catch (err) {
+            console.error(err);
+        }
+    },
 }

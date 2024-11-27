@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Entities\Horario;
 use App\Models\DaoHorario;
+use App\models\DaoUsuario;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
@@ -10,12 +11,14 @@ use Slim\Psr7\Response;
 class HorarioController
 {
     private DaoHorario $daoHorario;
+    private DaoUsuario $daoUsuario;
 
     public function __construct(
         DaoHorario $daoHorario,
-
+        DaoUsuario $daoUsuario
     ) {
         $this->daoHorario = $daoHorario;
+        $this->daoUsuario = $daoUsuario;
     }
 
 
@@ -41,6 +44,30 @@ class HorarioController
         }
 
         $response->getBody()->write(json_encode(['horario' => $horario, 'success' => true]));
+        return $response->withStatus(200);
+    }
+
+    public function handleObtenerHorarioUsuario(Request $request, Response $response, $id)
+    {
+        //comprobar que existe
+        $user = $this->daoUsuario->obtener($id);
+        if ($user === null) {
+            $response->getBody()->write(json_encode([
+                'message' => 'El Usuario no existe',
+                'success' => false
+            ]));
+            return $response->withStatus(400);
+        }
+
+        $horario = $this->daoHorario->obtenerHorarioUsuario($id);
+
+        $body = json_encode([
+            'horario' => $horario,
+            'success' => true
+        ]);
+
+        $response->getBody()->write($body);
+
         return $response->withStatus(200);
     }
 

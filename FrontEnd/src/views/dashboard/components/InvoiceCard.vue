@@ -3,7 +3,7 @@
     <div class="card-header pb-0 p-3">
       <div class="row">
         <div class="col-6 d-flex align-items-center">
-          <h6 class="mb-0">Viajes</h6>
+          <h6 class="mb-0">Ultimos Viajes</h6>
         </div>
         <div class="col-6 text-end">
           <material-button
@@ -18,87 +18,31 @@
     </div>
     <div class="card-body p-3 mb-0">
       <ul class="list-group">
+        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg" style="color: red" v-if="viajes.length == 0">No tienes viajes</li>
+
         <li
           class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg"
+          v-for="viaje in viajes"
+          :key="viaje.id"
         >
           <div class="d-flex flex-column">
             <h6 class="mb-1 text-dark font-weight-bold text-sm">
-              27/11/2024 01:48:00
+              {{ viaje.fin }}
             </h6>
-            <span class="text-xs">Madrid</span>
+            <span class="text-xs">{{ viaje.ciudad }}</span>
           </div>
           <div class="d-flex align-items-center text-sm">
-            <i class="fa fa-credit-card text-lg me-1" aria-hidden="true"></i>
-            <i class="fa fa-coins text-lg me-1" aria-hidden="true"></i>
-            20€
-          </div>
-        </li>
-        <li
-          class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg"
-        >
-          <div class="d-flex flex-column">
-            <h6 class="text-dark mb-1 font-weight-bold text-sm">
-              February, 10, 2021
-            </h6>
-            <span class="text-xs">#RV-126749</span>
-          </div>
-          <div class="d-flex align-items-center text-sm">
-            $250
-            <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4">
-              <i class="fas fa-file-pdf text-lg me-1" aria-hidden="true"></i>
-              PDF
-            </button>
-          </div>
-        </li>
-        <li
-          class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg"
-        >
-          <div class="d-flex flex-column">
-            <h6 class="text-dark mb-1 font-weight-bold text-sm">
-              April, 05, 2020
-            </h6>
-            <span class="text-xs">#FB-212562</span>
-          </div>
-          <div class="d-flex align-items-center text-sm">
-            $560
-            <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4">
-              <i class="fas fa-file-pdf text-lg me-1" aria-hidden="true"></i>
-              PDF
-            </button>
-          </div>
-        </li>
-        <li
-          class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg"
-        >
-          <div class="d-flex flex-column">
-            <h6 class="text-dark mb-1 font-weight-bold text-sm">
-              June, 25, 2019
-            </h6>
-            <span class="text-xs">#QW-103578</span>
-          </div>
-          <div class="d-flex align-items-center text-sm">
-            $120
-            <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4">
-              <i class="fas fa-file-pdf text-lg me-1" aria-hidden="true"></i>
-              PDF
-            </button>
-          </div>
-        </li>
-        <li
-          class="list-group-item border-0 d-flex justify-content-between ps-0 border-radius-lg"
-        >
-          <div class="d-flex flex-column">
-            <h6 class="text-dark mb-1 font-weight-bold text-sm">
-              March, 01, 2019
-            </h6>
-            <span class="text-xs">#AR-803481</span>
-          </div>
-          <div class="d-flex align-items-center text-sm">
-            $300
-            <button class="btn btn-link text-dark text-sm mb-0 px-0 ms-4">
-              <i class="fas fa-file-pdf text-lg me-1" aria-hidden="true"></i>
-              PDF
-            </button>
+            <i
+              class="fa fa-credit-card text-lg me-1"
+              aria-hidden="true"
+              v-if="viaje.metodo_pago == 'efectivo'"
+            ></i>
+            <i
+              class="fa fa-coins text-lg me-1"
+              aria-hidden="true"
+              v-if="viaje.metodo_pago == 'tarjeta'"
+            ></i>
+            {{ viaje.precio }}€
           </div>
         </li>
       </ul>
@@ -114,11 +58,13 @@ export default {
   components: {
     MaterialButton,
   },
+  props: {
+    viajes: Array,
+  },
   methods: {
     redirigir() {
       window.location.href = "/dashboard/viajes";
     },
   },
-
 };
 </script>

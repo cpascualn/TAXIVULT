@@ -58,12 +58,13 @@ $app->group('/api', function (RouteCollectorProxy $group) {
     });
     $group->group('/pasajeros', function (RouteCollectorProxy $group) {
         $group->get('', [PasajeroController::class, 'HandleListar']);
-        $group->patch('/{accion:(?:ocupar|liberar)}/{id:[0-9]+}', [PasajeroController::class, 'HandleEstado']);
+        $group->patch('/actualizar/{id:[0-9]+}', [PasajeroController::class, 'HandleActualizar']);
         $group->get('/obtener/{id:[0-9]+}', [PasajeroController::class, 'HandleObtener']);
     });
     $group->group('/horarios', function (RouteCollectorProxy $group) {
         $group->get('', [HorarioController::class, 'HandleListar']);
         $group->post('/buscarHora', [HorarioController::class, 'handleBuscarHorario']);
+        $group->get('/{id:[0-9]+}', [HorarioController::class, 'handleObtenerHorarioUsuario']);
         $group->patch('/{id:[0-9]+}', [HorarioController::class, 'handleActualizar']);
     });
     $group->group('/viajes', function (RouteCollectorProxy $group) {

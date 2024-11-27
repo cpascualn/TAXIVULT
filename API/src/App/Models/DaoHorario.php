@@ -96,6 +96,32 @@ class DaoHorario
         return $horario;
     }
 
+    public function obtenerHorarioUsuario($id)
+    {
+        $consulta = 'SELECT h.* from Horario h join Conductor c on c.horario = h.id where c.id = :ID';
+
+        $param[':ID'] = $id;
+        $this->db->ConsultaDatos($consulta, $param);
+
+        $horario = null;
+        //Si la consulta devuelve un resultado, creamos un objeto Ciudad con los valores de esa fila y lo añadimos al array de objetos
+        if (count($this->db->filas) == 1) {
+            $fila = $this->db->filas[0];  //Recuperamos la fila devuelta
+            $horario = new Horario();
+            $horario->setId($fila['id']);
+            $horario->setNombre($fila['nombre']);
+            $horario->setHoraIni1($fila['hora_ini1']);
+            $horario->setHoraFin1($fila['hora_fin1']);
+            $horario->setHoraIni2($fila['hora_ini2']);
+            $horario->setHoraFin2($fila['hora_fin2']);
+            $horario->setTarifaDia($fila['tarifa_dia']);
+            $horario->setTarifaMinuto($fila['tarifa_minuto']);
+
+        }
+
+        return $horario;
+    }
+
     public function actualizar($id, $horario, $nuevo)          //Obtenemos el elemento a partir de su Id
     {
         $consulta = "UPDATE `Horario` SET tarifa_dia=:TARIFA_DIA, tarifa_minuto=:TARIFA_MINU WHERE id=:ID ";

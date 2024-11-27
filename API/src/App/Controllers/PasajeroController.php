@@ -72,8 +72,6 @@ class PasajeroController
     public function HandleActualizar(Request $request, Response $response, $id)
     {
 
-
-
         //comprobar que existe
         $pasajero = $this->daoPas->obtener($id);
         if ($pasajero === null) {
@@ -98,12 +96,9 @@ class PasajeroController
         $nuevo = $this->crearPasajero($id, $body);
         $this->daoPas->actualizar($id, $pasajero, $nuevo);
         $nuevo = $this->daoPas->obtener($id);
-        $valores = ': ';
-        foreach ($body as $key => $value) {
-            $valores .= $key . ', ';
-        }
+
         $body = json_encode([
-            'message' => 'valores' . $valores . 'actualizados en el usuario ' . $id,
+            'message' => 'valores actualizados en el usuario ' . $id,
             'success' => true
         ]);
 

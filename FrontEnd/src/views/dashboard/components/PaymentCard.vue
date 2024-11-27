@@ -11,7 +11,8 @@
       <div class="row">
         <div class="col-md-12">
           <div
-            class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row"
+            class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row cursor-pointer"
+            @click="onEdit"
           >
             <img
               class="w-5 me-3 mb-0"
@@ -19,7 +20,7 @@
               alt="logo"
             />
             <h6 class="mb-0">
-              ****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;5248
+              ****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****
             </h6>
             <i
               class="fas fa-pencil-alt ms-auto text-dark cursor-pointer"
@@ -47,6 +48,9 @@ export default {
   name: "payment-card",
   components: {
     MaterialButton,
+  },
+  props: {
+    onEdit: Function,
   },
   data() {
     return {
