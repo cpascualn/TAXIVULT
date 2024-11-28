@@ -53,7 +53,7 @@
             </ul>
           </li>
 
-          <li class="nav-item d-xl-none px-3 d-flex align-items-center">
+          <li class="nav-item d-xl-none  d-flex align-items-center">
             <a
               @click="toggleSidebar"
               class="p-0 nav-link text-body lh-1"

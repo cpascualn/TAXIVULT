@@ -20,12 +20,7 @@
           <span class="feature-detail">La mayor red de usuarios del país.</span>
         </div>
         <div class="feature--item col-4">
-          <img
-            loading="lazy"
-            :src="star"
-            alt="Feature 2"
-            class="feature-img"
-          />
+          <img loading="lazy" :src="star" alt="Feature 2" class="feature-img" />
           <span class="feature-detail">Aplicacion mejor valorada.</span>
         </div>
         <div class="feature--item col-4">
@@ -43,12 +38,7 @@
       <h2>Cómo empezar</h2>
       <div class="steps-container">
         <div class="step">
-          <img
-            loading="lazy"
-            :src="write"
-            alt="Step 1"
-            class="step-img"
-          />
+          <img loading="lazy" :src="write" alt="Step 1" class="step-img" />
           <p class="step-detail">
             <span class="highlight">Registro y seguro:</span><br />
             Registra tu vehículo en la plataforma y asegúrate de tener el seguro
@@ -56,12 +46,7 @@
           </p>
         </div>
         <div class="step">
-          <img
-            loading="lazy"
-            :src="list"
-            alt="Step 2"
-            class="step-img"
-          />
+          <img loading="lazy" :src="list" alt="Step 2" class="step-img" />
           <p class="step-detail">
             <span class="highlight">Licencia de conducir:</span><br />
             Debes tener una licencia de conducir válida y cumplir con los
@@ -69,12 +54,7 @@
           </p>
         </div>
         <div class="step">
-          <img
-            loading="lazy"
-            :src="check"
-            alt="Step 3"
-            class="step-img"
-          />
+          <img loading="lazy" :src="check" alt="Step 3" class="step-img" />
           <p class="step-detail">
             <span class="highlight">Vehículo apto:</span><br />
             Tu vehículo debe cumplir con los estándares de seguridad y calidad
@@ -167,6 +147,18 @@ h2 {
   .features-images {
     flex-wrap: wrap;
     margin-top: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .features-section {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+  }
+
+  .feature--item {
+    width: 100%;
   }
 }
 

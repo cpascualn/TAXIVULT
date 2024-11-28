@@ -107,6 +107,7 @@ import conductoresService from "@/services/conductores.service";
 import viajeService from "@/services/viaje.service";
 
 import setNavPills from "@/assets/js/nav-pills.js";
+import setTooltip from "@/assets/js/tooltip.js";
 
 export default {
   name: "profile-overview",
@@ -182,6 +183,7 @@ export default {
   async mounted() {
     this.$store.state.isAbsolute = true;
     setNavPills();
+    setTooltip();
     const ciudad = await ciudadService.getCiudadUsuario();
     this.profile = await profileService.getProfile();
     const date = new Date(this.profile.fecha_creacion);
