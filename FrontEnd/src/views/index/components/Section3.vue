@@ -5,33 +5,21 @@
       <div class="container">
         <div class="column">
           <div class="element">
-            <img
-              loading="lazy"
-              :src="speedmeter"
-              class="img"
-            />
+            <img loading="lazy" :src="speedmeter" class="img" />
             <div class="element__h1">10000</div>
             <div class="element__subtxt">KM CONDUCIDOS</div>
           </div>
         </div>
         <div class="column">
           <div class="element">
-            <img
-              loading="lazy"
-              :src="people2"
-              class="img"
-            />
+            <img loading="lazy" :src="people2" class="img" />
             <div class="element__h1">100</div>
             <div class="element__subtxt">PASAJEROS</div>
           </div>
         </div>
         <div class="column">
           <div class="element">
-            <img
-              loading="lazy"
-              :src="carfill"
-              class="img"
-            />
+            <img loading="lazy" :src="carfill" class="img" />
             <div class="element__h1">100</div>
             <div class="element__subtxt">CONDUCTORES</div>
           </div>
@@ -76,6 +64,7 @@ import carfill from "@/assets/img/index/carfill.svg";
   text-align: center;
   align-self: center;
   font: 400 55px/41% K2D, sans-serif;
+  line-height: 1;
 }
 
 @media (max-width: 991px) {
