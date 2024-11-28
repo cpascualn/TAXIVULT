@@ -141,6 +141,7 @@ const redirigirViajes = () => {
   .nav {
     margin-top: 2rem !important;
     gap: 1rem !important;
+    flex-wrap: nowrap;
   }
 }
 
