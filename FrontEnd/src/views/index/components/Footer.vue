@@ -1,4 +1,7 @@
-<script setup></script>
+<script setup>
+import logo from "@/assets/img/logo.jpg";
+import social from "@/assets/img/index/social.svg";
+</script>
 <template>
   <footer class="footer">
     <div class="footer-container">
@@ -7,7 +10,7 @@
           <div class="footer-logo-container">
             <img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/e406f87081855b9eb1baf0a7b08a27074762d19cfa96755e12dd822c8d24d88c?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+              :src="logo"
               alt="Company logo"
               class="footer-logo"
             />
@@ -22,21 +25,6 @@
                   <div class="footer-link">Insights</div>
                 </div>
               </div>
-              <div class="footer-links-column">
-                <div class="footer-links">
-                  <div class="footer-link-title">Categorías</div>
-                  <div class="footer-link">Contratar Talento</div>
-                  <div class="footer-link">Desarrollar Talento</div>
-                  <div class="footer-link">Herramientas de Gamificación</div>
-                </div>
-              </div>
-              <div class="footer-links-column">
-                <div class="footer-links">
-                  <div class="footer-link-title">Competencias Digitales</div>
-                  <div class="footer-link">Competencias Comerciales</div>
-                  <div class="footer-link">Liderazgo</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -45,7 +33,7 @@
       <div class="footer-bottom">
         <img
           loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/dc47f7097b8d90af98224282559e9b24cff7e34859c27111968dbe50bd3f030f?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+          :src="social"
           alt="Company logo"
           class="footer-bottom-logo"
         />

@@ -69,6 +69,12 @@ body {
   padding: 2rem;
 }
 
+@media (max-width: 991px) {
+  .opciones {
+    flex-direction: column;
+  }
+}
+
 .head__wrapper {
   display: flex;
   flex-direction: column;

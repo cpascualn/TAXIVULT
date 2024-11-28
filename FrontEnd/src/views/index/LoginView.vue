@@ -13,7 +13,7 @@
           <div class="form-wrapper">
             <header class="logo-wrapper">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/b15c9c15460a878efaa70989d161f75b407bf1e3e628374e2df3d2f62b99a1d3?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+                :src="logo"
                 alt="Company logo"
                 class="logo-image"
               />
@@ -60,7 +60,7 @@
                       />
                       <div @click="showPassword" class="password-toggle">
                         <img
-                          src="https://cdn.builder.io/api/v1/image/assets/TEMP/09ca2b0c86ba8f95547f11d5cfe48f5ffbdb8cfd050e5d4a2809f41a8290b8c1?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+                          :src="eye"
                           alt="Toggle password visibility"
                           class="toggle-icon"
                         />
@@ -108,6 +108,9 @@ import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import authService from "@/services/auth.service";
 import ErrorModal from "@/components/index/ErrorModal.vue";
+import logo from "@/assets/img/logo-ct.jpg";
+import eye from "@/assets/img/index/eye.svg";
+
 
 const mail = ref("");
 const password = ref("");
@@ -198,12 +201,14 @@ const checkPass = () => {
   background-color: var(--oscuro2, #162430);
   padding: 3rem 10vw;
   width: 100%;
+  height: 100vh;
 }
 
 @media (max-width: 991px) {
   .login-container {
     max-width: 100%;
     padding-right: 20px;
+    height: 100vh;
   }
 }
 
@@ -536,7 +541,6 @@ const checkPass = () => {
 @media (max-width: 991px) {
   .login-button {
     max-width: 100%;
-    padding: 0 20px;
   }
 }
 

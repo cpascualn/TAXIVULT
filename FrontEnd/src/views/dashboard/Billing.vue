@@ -174,7 +174,6 @@ export default {
       usuario.totalViajes = totalViajes.toFixed(2);
 
       this.user = usuario;
-      console.log(this.user);
     } catch (error) {
     } 
     this.isReady = true;

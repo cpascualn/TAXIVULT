@@ -568,7 +568,6 @@ import authService from "@/services/auth.service";
 import encodeImageToBase64 from "@/assets/utils/imageEncoder";
 import formatCoords from "@/assets/utils/formatCoords";
 
-
 const step = ref(1);
 const titulos = [
   "PERSONAL",
@@ -1344,5 +1343,15 @@ input[type="submit"]::after {
 
 .congrats-subtitle strong {
   font-size: 2rem;
+}
+
+@media (max-width: 500px) {
+  .register-stepper .stepp::before {
+    display: none;
+  }
+
+  .register-stepper .step-done::before {
+    display: none;
+  }
 }
 </style>

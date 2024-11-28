@@ -24,7 +24,6 @@
             </h6>
             <i
               class="fas fa-pencil-alt ms-auto text-dark cursor-pointer"
-              data-bs-toggle="tooltip"
               data-bs-placement="top"
               title
               aria-hidden="true"

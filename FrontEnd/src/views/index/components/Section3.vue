@@ -7,7 +7,7 @@
           <div class="element">
             <img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/1c2fab37cb5f79e1eb3b9d5a848963d622b9ca8502f4f4589f7c738c222a104b?"
+              :src="speedmeter"
               class="img"
             />
             <div class="element__h1">10000</div>
@@ -18,7 +18,7 @@
           <div class="element">
             <img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/3aaf3a5335ec9f85d94d71d880da9f25ddf7b065d118a368c4dc1fdbfc0adb2a?"
+              :src="people2"
               class="img"
             />
             <div class="element__h1">100</div>
@@ -29,7 +29,7 @@
           <div class="element">
             <img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/46ff6f3f4694f98e5c124cc57526aa43e5a025a301c49f4307b93959f5235895?"
+              :src="carfill"
               class="img"
             />
             <div class="element__h1">100</div>
@@ -40,6 +40,11 @@
     </div>
   </section>
 </template>
+<script setup>
+import speedmeter from "@/assets/img/index/speedmeter.svg";
+import people2 from "@/assets/img/index/people2.svg";
+import carfill from "@/assets/img/index/carfill.svg";
+</script>
 
 <style scoped>
 .section {

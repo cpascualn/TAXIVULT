@@ -1,14 +1,5 @@
 <template>
   <LoadingPage ref="loading" v-if="usrRol == 1"></LoadingPage>
-  <div class="modal fade show" v-if="usrRol != 1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div style="color: #c00000">Acceso Denegado</div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="py-4 container-fluid" v-if="usrRol == 1">
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
@@ -125,6 +116,11 @@
           />
         </timeline-list>
       </div>
+    </div>
+  </div>
+  <div class="py-4 container-fluid" v-if="usrRol != 1">
+    <div class="modal-body">
+      <div style="color: #c00000">Acceso Denegado</div>
     </div>
   </div>
 </template>

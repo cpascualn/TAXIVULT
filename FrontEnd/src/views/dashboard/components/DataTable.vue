@@ -31,19 +31,19 @@
                 :value="searchQuery"
                 type="text"
                 label="Buscar..."
-                class="col-9"
+                class="col-lg-9 col-sm-12"
                 @update:value="upval"
               />
 
               <material-button
-                class="float-right btn btm-sm col-2"
+                class="float-right btn btm-sm col-lg-2 col-sm-12"
                 @click="resetFilter()"
               >
                 <i class="fa fa-undo" aria-hidden="true"></i>
                 Resetear filtros
               </material-button>
               <material-button
-                class="float-right btn btm-sm col-1 ml-3"
+                class="float-right btn btm-sm col-lg-1 col-sm-12 ml-3"
                 @click="reload()"
                 color="info"
               >

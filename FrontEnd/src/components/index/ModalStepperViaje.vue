@@ -89,7 +89,7 @@
                 <div class="col-12 text-center">
                   <h4>Método de pago</h4>
                 </div>
-                <div class="col-6 col-md-4 d-flex justify-content-center">
+                <div class="col-sm-12  col-md-4 d-flex justify-content-center">
                   &nbsp;
                   <button
                     :class="[
@@ -104,7 +104,7 @@
                     </label>
                   </button>
                 </div>
-                <div class="col-6 col-md-4 d-flex justify-content-center">
+                <div class="col-sm-12 col-md-4 d-flex justify-content-center">
                   <button
                     :class="[
                       'driver-button',
@@ -204,14 +204,14 @@
             <div v-if="step == 3">
               <div class="row justify-content-center align-items-center mb-3">
                 <div
-                  class="col-6 col-md-4 d-flex justify-content-center align-items-center"
+                  class="col-sm-12 col-lg-6 col-md-4 d-flex justify-content-center align-items-center"
                 >
                   <i class="bi bi-person-vcard fs-2"></i>
                   <strong> Conductor:</strong>&nbsp;
                   {{ selecConductor.nombre }}
                 </div>
                 <div
-                  class="col-6 col-md-4 d-flex justify-content-center align-items-center"
+                  class="col-sm-12 col-lg-6 col-md-4 d-flex justify-content-center align-items-center"
                 >
                   <i class="bi bi-person-square fs-2"></i>
                   <strong> Pasajero:</strong>&nbsp;
@@ -495,6 +495,7 @@ defineExpose({
   transform: translate(-50%, -50%);
   width: 80%;
   height: 80%;
+  overflow: auto;
 }
 
 .modal-header {
@@ -559,10 +560,17 @@ defineExpose({
   border-width: 3px;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 768px) {
+  .contenido-conductor{
+    display: contents  !important;
+  }
   .driver-button {
-    /* flex-wrap: wrap; */
+    flex-direction: column;
     overflow: auto;
+  }
+
+  .car_type{
+    display: none !important;
   }
 }
 .driver-button:first-child {

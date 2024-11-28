@@ -5,7 +5,7 @@
       <div class="trip-booking__inputs">
         <div class="trip-booking__input-group" id="start">
           <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/fcafba4e0cf3c74e2c7474823eb15a538cfd1653ff2bbf1f023eedf28fd4d5b7?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+            :src="marker"
             alt="Pickup location icon"
             class="trip-booking__icon"
           />
@@ -17,7 +17,7 @@
         </div>
         <div class="trip-booking__input-group" id="end">
           <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/1556693e9937325d0df6c1ed8d094db6e780f90308f699ba09080b0679612811?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+            :src="locationSearch"
             alt="Destination location icon"
             class="trip-booking__icon trip-booking__icon--destination"
           />
@@ -29,7 +29,7 @@
         >
           <div class="trip-booking__datetime">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/afe5a4162f9c7ce570476fa73e405da096d14194273672bc75493620662219d9?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+              :src="timer"
               alt="Clock icon"
               class="trip-booking__icon"
             />
@@ -37,7 +37,7 @@
           </div>
 
           <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d0b219658ea78712624c17e2878d82d65be05f6c6dc9275f9736d106b1708a3a?apiKey=601f2040cd0c43f79e782a307ce6d5d5&"
+            :src="location"
             alt="Right arrow icon"
             class="trip-booking__arrow-icon"
           />
@@ -79,6 +79,11 @@ import showSwal from "@/mixins/showSwal";
 import { ref, defineProps, onMounted, computed, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import profileService from "@/services/profile.service";
+
+import marker from "@/assets/img/index/marker.svg";
+import locationSearch from "@/assets/img/index/locationSearch.svg";
+import location from "@/assets/img/index/location.svg";
+import timer from "@/assets/img/index/timer.svg";
 
 // Definir los eventos que puede emitir este componente
 const emits = defineEmits(["send-datos"]);

@@ -32,7 +32,7 @@
           <div class="viajes" @click="redirigirViajes">
             <img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/7d78f584f4528b1b3fa093f16102020cbac643872414eba8da81aab8620f1319?"
+              :src="listTrips"
               class="img--viaje"
             />
             <p class="viaje--txt">Mis viajes</p>
@@ -41,7 +41,7 @@
           <div @click="redirigirDash" class="usuario">
             <img
               loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/18070c5c704d2146192df4332b603c7d0418703aec817cbd2c1fb32679b39bf4?"
+              :src="userIcon"
               class="acc--img"
             />
           </div>
@@ -60,6 +60,9 @@
 </template>
 
 <script setup>
+import userIcon from "@/assets/img/index/userIcon.svg";
+import listTrips from "@/assets/img/index/listTrips.svg";
+
 const token = localStorage.getItem("authToken");
 const redirigirDash = () => {
   window.location.href = "/dashboard/profile";
@@ -128,6 +131,16 @@ const redirigirViajes = () => {
 @media (max-width: 991px) {
   .header {
     flex-wrap: wrap;
+    justify-content: center;
+  }
+  .img {
+    display: none !important;
+  }
+}
+@media (max-width: 600px) {
+  .nav {
+    margin-top: 2rem !important;
+    gap: 1rem !important;
   }
 }
 

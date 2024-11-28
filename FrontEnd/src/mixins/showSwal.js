@@ -42,6 +42,23 @@ export default {
 
             return swalDelete;
         },
+        showSwalConfirmationCookies() {
+            const swalCookie = new Swal({
+                title: "Aviso de uso de cookies",
+                text: "Este sitio web almacenda datos en cookies para activar su funcionalidad, entre las que se encuentra datos analíticos y personalización. Para poder utilizar este sitio, estás automáticamente aceptando que utilizamos cookies.",
+                showCancelButton: true,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Denegar",
+                reverseButtons: true,
+                customClass: {
+                    confirmButton: "btn bg-gradient-success",
+                    cancelButton: "btn bg-gradient-danger",
+                },
+                buttonsStyling: false,
+            });
+
+            return swalCookie;
+        },
         async showAddUser() {
             const { value: formValues } = await Swal.fire({
                 title: "Crear un Administrador",

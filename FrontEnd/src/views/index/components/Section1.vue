@@ -1,4 +1,7 @@
-<script></script>
+<script setup>
+import car from "@/assets/img/index/car.svg";
+import timer2 from "@/assets/img/index/timer2.svg";
+</script>
 
 <template>
   <section class="div">
@@ -6,11 +9,7 @@
       <div class="separador--flex">
         <div class="container2">
           <div class="icon">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/554cfde192841d9d5f734ba5189bb7325ab2213f1570b23445c98ce63170c350?"
-              class="img"
-            />
+            <img loading="lazy" :src="car" class="img" />
           </div>
           <div class="separador"></div>
           <div class="icon">
@@ -18,11 +17,7 @@
           </div>
           <div class="separador"></div>
           <div class="icon">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/7be12cd8dd522dbe0061016e023c0515ddc3858ffff693bcd4109a7dabd2a7ca?"
-              class="img"
-            />
+            <img loading="lazy" :src="timer2" class="img" />
           </div>
         </div>
       </div>
@@ -38,6 +33,38 @@
           <div class="second--txt">
             ELIJA LA UBICACION DE SALIDA Y LLEGADA EN CUALQUIER ZONA
           </div>
+        </div>
+        <div class="container">
+          <div class="main--txt">RAPIDEZ</div>
+          <div class="second--txt">
+            CUMPLIMOS CON LOS PLAZOS DE PUNTUALIDAD CON SERIEDAD
+          </div>
+        </div>
+      </div>
+
+      <div class="adapted">
+        <div class="icon">
+          <img loading="lazy" :src="car" class="img" />
+        </div>
+        <div class="container">
+          <div class="main--txt">EN 2 CLICKS</div>
+          <div class="second--txt">CONTACTE CON SU CONDUCTOR EN SEGUNDOS</div>
+        </div>
+      </div>
+      <div class="adapted">
+        <div class="icon">
+          <img loading="lazy" src="/img/ubipng.png" class="img" />
+        </div>
+        <div class="container">
+          <div class="main--txt">SELECCIONE UBICACION</div>
+          <div class="second--txt">
+            ELIJA LA UBICACION DE SALIDA Y LLEGADA EN CUALQUIER ZONA
+          </div>
+        </div>
+      </div>
+      <div class="adapted">
+        <div class="icon">
+          <img loading="lazy" :src="timer2" class="img" />
         </div>
         <div class="container">
           <div class="main--txt">RAPIDEZ</div>
@@ -172,5 +199,24 @@
   text-align: center;
   margin-top: 40px;
   font: 400 20px/22px K2D, sans-serif;
+}
+
+.adapted {
+  display: none;
+  color: white;
+}
+
+@media (max-width: 1350px) {
+  .adapted {
+    display: flex;
+    color: white;
+  }
+
+  .separador--flex {
+    display: none;
+  }
+  .texts {
+    display: none;
+  }
 }
 </style>

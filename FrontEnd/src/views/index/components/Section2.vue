@@ -21,7 +21,7 @@
             <div class="element__icon">3</div>
             <div class="element__txt">Ventajas exclusivas</div>
           </div>
-          <router-link :to="{name:'conduce'}" class="button"
+          <router-link :to="{ name: 'conduce' }" class="button"
             >PRIMEROS PASOS</router-link
           >
         </div>
@@ -148,7 +148,7 @@
 
 @media (max-width: 991px) {
   .element__txt {
-    max-width: 100%;
+    max-width: 70%;
   }
 }
 
@@ -198,10 +198,6 @@
   margin-left: 20px;
 }
 
-@media (max-width: 991px) {
- 
-}
-
 .img {
   aspect-ratio: 0.63;
   object-fit: cover;
@@ -214,6 +210,21 @@
   .img {
     max-width: 100%;
     margin-top: 21px;
+  }
+}
+
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
+  .col {
+    width: 100%;
+  }
+  .col-2 {
+    width: 100%;
+  }
+  .element__txt {
+    max-width: 60%;
   }
 }
 </style>

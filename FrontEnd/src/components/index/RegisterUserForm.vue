@@ -892,4 +892,14 @@ input[type="submit"]::after {
 .congrats-subtitle strong {
   font-size: 2rem;
 }
+
+@media (max-width: 500px) {
+  .register-stepper .step::before {
+    display: none;
+  }
+
+  .register-stepper .step-done::before {
+    display: none;
+  }
+}
 </style>

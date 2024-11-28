@@ -1,6 +1,6 @@
 <script setup>
 import Header from "./Header.vue";
-
+import profileService from "@/services/profile.service";
 import { defineProps } from "vue";
 
 const props = defineProps({
@@ -13,15 +13,25 @@ const props = defineProps({
     required: true,
   },
 });
+const rol = profileService.getRol();
 </script>
 
 <template>
   <div class="div">
     <img loading="lazy" :srcSet="imagen" class="img" />
     <Header></Header>
-    <router-link :to="botones ? 'login' : 'register/driver'" class="button">{{
-      botones ? "RESERVA YA" : "REGISTRATE"
-    }}</router-link>
+    <router-link
+      :to="botones ? 'login' : 'register/driver'"
+      class="button"
+      v-if="rol == 0"
+      >{{ botones ? "RESERVA YA" : "REGISTRATE" }}</router-link
+    >
+    <router-link
+      :to="botones ? 'viaja' : 'register/driver'"
+      class="button"
+      v-if="rol != 0"
+      >{{ botones ? "RESERVA YA" : "REGISTRATE" }}</router-link
+    >
   </div>
 </template>
 
