@@ -1,5 +1,5 @@
 <template>
-  <div class="input-group" :class="`input-group-${variant} ${getStatus(error, success)}`">
+  <div :class="`input-group-${variant} ${getStatus(error, success)}`" class="input-group" >
     <label :class="[
       variant === 'static' ? '' : 'form-label',
       color === 'dark' ? 'text-black' : 'text-white'

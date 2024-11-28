@@ -26,24 +26,25 @@
           <div class="px-0 pb-0 card-body">
             <!-- Options -->
             <div class="row">
-              <material-input
-                id="buscar"
-                :value="searchQuery"
-                type="text"
-                label="Buscar..."
-                class="col-lg-9 col-sm-12"
-                @update:value="upval"
-              />
-
+              <div class="col-lg-8 col-sm-12 col-md-8">
+                <material-input
+                  id="buscar"
+                  :value="searchQuery"
+                  type="text"
+                  label="Buscar..."
+                  class="col-lg-8 col-sm-12 col-md-8"
+                  @update:value="upval"
+                />
+              </div>
               <material-button
-                class="float-right btn btm-sm col-lg-2 col-sm-12"
+                class="col-lg-2 col-sm-12 col-md-2 float-right btn btm-sm"
                 @click="resetFilter()"
               >
                 <i class="fa fa-undo" aria-hidden="true"></i>
                 Resetear filtros
               </material-button>
               <material-button
-                class="float-right btn btm-sm col-lg-1 col-sm-12 ml-3"
+                class="col-lg-1 col-sm-12 col-md-1 float-right btn btm-sm ml-3"
                 @click="reload()"
                 color="info"
               >
@@ -254,6 +255,6 @@ select {
   gap: 0.5rem;
 }
 .row > * {
-  padding-right: 0
+  padding-right: 0;
 }
 </style>
