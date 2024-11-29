@@ -2,9 +2,8 @@
 namespace App\Models;
 use App\Database\Database;
 use App\Entities\Viaje;
-
-
-
+use DateTime;
+use DateTimeZone;
 
 class DaoViaje
 {
@@ -28,6 +27,9 @@ class DaoViaje
 
         foreach ($this->db->filas as $fila) {
             $viaje = new Viaje();
+            $fechaIni = (new DateTime('@' . $fila['fecha_ini']))->setTimezone(new DateTimeZone('Europe/Madrid'));
+            $fechaFin = (new DateTime('@' . $fila['fecha_fin']))->setTimezone(new DateTimeZone('Europe/Madrid'));
+
             $viaje->setId($fila['id']);
             $viaje->setIdConductor($fila['conductor_mail']);
             $viaje->setIdPasajero($fila['pasajero_mail']);
@@ -35,8 +37,8 @@ class DaoViaje
             $viaje->setLongiIni($fila['longi_ini']);
             $viaje->setLatiFin($fila['lati_fin']);
             $viaje->setLongiFin($fila['longi_fin']);
-            $viaje->setFechaIni(date(' d/m/Y H:i:s', $fila['fecha_ini']));
-            $viaje->setFechaFin(date(' d/m/Y H:i:s', $fila['fecha_fin']));
+            $viaje->setFechaIni($fechaIni->format('d/m/Y H:i:s'));
+            $viaje->setFechaFin($fechaFin->format('d/m/Y H:i:s'));
             $viaje->setMetodoPago($fila['metodo_pago']);
             $viaje->setDistancia($fila['distancia']);
             $viaje->setDuracionMin($fila['duracion_min']);
@@ -79,6 +81,10 @@ class DaoViaje
 
         foreach ($this->db->filas as $fila) {
             $viaje = new Viaje();
+            $fechaIni = (new DateTime('@' . $fila['fecha_ini']))->setTimezone(new DateTimeZone('Europe/Madrid'));
+            $fechaFin = (new DateTime('@' . $fila['fecha_fin']))->setTimezone(new DateTimeZone('Europe/Madrid'));
+
+
             $viaje->setId($fila['id']);
             $viaje->setIdConductor($fila['conductor_mail']);
             $viaje->setIdPasajero($fila['pasajero_mail']);
@@ -86,8 +92,8 @@ class DaoViaje
             $viaje->setLongiIni($fila['longi_ini']);
             $viaje->setLatiFin($fila['lati_fin']);
             $viaje->setLongiFin($fila['longi_fin']);
-            $viaje->setFechaIni(date(' d/m/Y H:i:s ', $fila['fecha_ini']));
-            $viaje->setFechaFin(date(' d/m/Y H:i:s', $fila['fecha_fin']));
+            $viaje->setFechaIni($fechaIni->format('d/m/Y H:i:s'));
+            $viaje->setFechaFin($fechaFin->format('d/m/Y H:i:s'));
             $viaje->setMetodoPago($fila['metodo_pago']);
             $viaje->setDistancia($fila['distancia']);
             $viaje->setDuracionMin($fila['duracion_min']);
