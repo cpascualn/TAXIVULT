@@ -47,6 +47,21 @@ class ConductorController
     public function HandleObtener(Request $request, Response $response, $id)
     {
 
+        try {
+            //refrescar estados de conductores
+            $app = AppFactory::create();
+            $auxResponse = $app->getResponseFactory()->createResponse();
+            $this->HandleReload($request, $auxResponse);
+
+
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'error' => 'error al buscar: ' . $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
 
         $conductor = $this->daoCon->obtener($id);
 
@@ -62,6 +77,22 @@ class ConductorController
     }
     public function HandleObtenerFormated(Request $request, Response $response, $id)
     {
+
+        try {
+            //refrescar estados de conductores
+            $app = AppFactory::create();
+            $auxResponse = $app->getResponseFactory()->createResponse();
+            $this->HandleReload($request, $auxResponse);
+
+
+        } catch (\Throwable $th) {
+            $body = json_encode([
+                'error' => 'error al buscar: ' . $th->getMessage(),
+                'success' => false
+            ]);
+            $response->getBody()->write($body);
+            return $response->withStatus(400);
+        }
 
 
         $conductor = $this->daoCon->obtenerFormated($id);
@@ -167,7 +198,7 @@ class ConductorController
     public function HandleEliminar(Request $request, Response $response, $id)
     {
 
-        
+
 
 
         $conductor = $this->daoCon->obtener($id);
